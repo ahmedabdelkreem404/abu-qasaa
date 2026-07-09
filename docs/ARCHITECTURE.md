@@ -43,3 +43,11 @@ Phase 3 adds a `CMS` module with Clean Architecture-inspired boundaries: enums i
 CMS pages may be company-level or scoped to a business unit. Public routes only expose published pages and active sections. Dashboard CMS routes require Sanctum plus CMS or lead permissions, and non-super-admin users are limited to their assigned business units.
 
 The Next.js public routes render CMS data for `/`, `/about`, `/contact`, and business-unit pages. The dashboard CMS screens call the same API client used by the rest of the admin app.
+
+## Catalog Foundation
+
+Phase 4 adds a real `Catalog` module around the existing modular monolith boundaries. Catalog records are scoped by `business_unit_id`, and dashboard writes require both permission checks and an enabled `products` module for the target business unit.
+
+The Catalog module owns categories, brands, products, variants, images, price lists, and product prices. Flexible product specs remain JSON-based through `specs_json` and variant `option_values_json`; there is no attribute-builder subsystem yet.
+
+Public product APIs resolve the business-unit slug, require an active business unit with the `products` module enabled, expose only published/public products, and omit admin-only cost fields.

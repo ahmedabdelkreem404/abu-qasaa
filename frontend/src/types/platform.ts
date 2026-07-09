@@ -181,13 +181,133 @@ export type PaginatedResponse<T> = ApiResponse<T[]> & {
   };
 };
 
+export type CategoryStatus = "active" | "inactive" | "archived";
+export type BrandStatus = "active" | "inactive" | "archived";
+export type ProductStatus = "draft" | "published" | "archived";
+export type ProductType = "simple" | "variable" | "bundle";
+export type ProductVisibility = "public" | "hidden" | "private";
+export type PriceListType = "retail" | "wholesale" | "distributor" | "special";
+
+export type Category = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  parent_id?: number | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  description_ar?: string | null;
+  description_en?: string | null;
+  image?: string | null;
+  status: CategoryStatus;
+  sort_order: number;
+  seo_title_ar?: string | null;
+  seo_title_en?: string | null;
+  seo_description_ar?: string | null;
+  seo_description_en?: string | null;
+};
+
+export type Brand = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  description_ar?: string | null;
+  description_en?: string | null;
+  logo?: string | null;
+  status: BrandStatus;
+  sort_order: number;
+};
+
+export type ProductVariant = {
+  id?: number;
+  product_id?: number;
+  name_ar?: string | null;
+  name_en?: string | null;
+  sku?: string | null;
+  barcode?: string | null;
+  option_values_json?: Record<string, unknown>;
+  price_adjustment?: string | number;
+  sort_order?: number;
+  is_active?: boolean;
+};
+
+export type ProductImage = {
+  id?: number;
+  product_id?: number;
+  image: string;
+  alt_ar?: string | null;
+  alt_en?: string | null;
+  sort_order?: number;
+  is_primary?: boolean;
+};
+
+export type PriceList = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  name: string;
+  key: string;
+  type: PriceListType;
+  description?: string | null;
+  is_default: boolean;
+  is_active: boolean;
+};
+
+export type ProductPrice = {
+  id?: number;
+  business_unit_id?: number;
+  product_id?: number;
+  product_variant_id?: number | null;
+  price_list_id: number;
+  price_list?: PriceList;
+  min_quantity?: number;
+  price: string | number;
+  compare_at_price?: string | number | null;
+  starts_at?: string | null;
+  ends_at?: string | null;
+  is_active?: boolean;
+};
+
 export type Product = {
   id: number;
-  businessUnitId?: number;
-  name: string;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en" | "type"> | null;
+  category_id?: number | null;
+  category?: Category | null;
+  brand_id?: number | null;
+  brand?: Brand | null;
+  name_ar: string;
+  name_en?: string | null;
   slug: string;
-  sku?: string;
-  status: string;
+  sku?: string | null;
+  product_type: ProductType;
+  status?: ProductStatus;
+  visibility?: ProductVisibility;
+  short_description_ar?: string | null;
+  short_description_en?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  featured_image?: string | null;
+  base_price?: string | null;
+  compare_at_price?: string | null;
+  cost_price?: string | null;
+  currency: string;
+  is_featured: boolean;
+  is_taxable?: boolean;
+  min_order_quantity: number;
+  max_order_quantity?: number | null;
+  specs_json?: Record<string, unknown>;
+  seo_title_ar?: string | null;
+  seo_title_en?: string | null;
+  seo_description_ar?: string | null;
+  seo_description_en?: string | null;
+  published_at?: string | null;
+  variants?: ProductVariant[];
+  images?: ProductImage[];
+  prices?: ProductPrice[];
 };
 
 export type Order = {

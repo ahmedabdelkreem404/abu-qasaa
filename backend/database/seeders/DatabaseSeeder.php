@@ -14,5 +14,6 @@ class DatabaseSeeder extends Seeder
         $this->call(BusinessUnitFoundationSeeder::class);
         $this->call(AccessControlSeeder::class);
         $this->call(CmsContentSeeder::class);
+        $this->call(CatalogSeeder::class);
     }
 }

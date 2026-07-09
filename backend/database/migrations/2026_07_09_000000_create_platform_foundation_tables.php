@@ -154,40 +154,102 @@ return new class extends Migration
 
         Schema::create('categories', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('parent_id')->nullable()->constrained('categories')->nullOnDelete();
-            $table->string('name');
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
             $table->string('slug');
+            $table->text('description_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->string('image')->nullable();
+            $table->string('status')->default('active');
+            $table->integer('sort_order')->default(0);
+            $table->string('seo_title_ar')->nullable();
+            $table->string('seo_title_en')->nullable();
+            $table->text('seo_description_ar')->nullable();
+            $table->text('seo_description_en')->nullable();
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
         });
 
         Schema::create('brands', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('name');
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
             $table->string('slug');
+            $table->text('description_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->string('logo')->nullable();
+            $table->string('status')->default('active');
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
         });
 
         Schema::create('products', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('category_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('brand_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('name');
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
             $table->string('slug');
             $table->string('sku')->nullable();
+            $table->string('product_type');
             $table->string('status')->default('draft');
-            $table->json('attributes')->nullable();
+            $table->string('visibility')->default('public');
+            $table->text('short_description_ar')->nullable();
+            $table->text('short_description_en')->nullable();
+            $table->longText('description_ar')->nullable();
+            $table->longText('description_en')->nullable();
+            $table->string('featured_image')->nullable();
+            $table->decimal('base_price', 12, 2)->nullable();
+            $table->decimal('compare_at_price', 12, 2)->nullable();
+            $table->decimal('cost_price', 12, 2)->nullable();
+            $table->string('currency', 3)->default('EGP');
+            $table->boolean('is_featured')->default(false);
+            $table->boolean('is_taxable')->default(true);
+            $table->unsignedInteger('min_order_quantity')->default(1);
+            $table->unsignedInteger('max_order_quantity')->nullable();
+            $table->json('specs_json')->nullable();
+            $table->string('seo_title_ar')->nullable();
+            $table->string('seo_title_en')->nullable();
+            $table->text('seo_description_ar')->nullable();
+            $table->text('seo_description_en')->nullable();
+            $table->timestamp('published_at')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
+            $table->unique(['business_unit_id', 'sku']);
         });
 
         Schema::create('product_variants', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->string('name_ar')->nullable();
+            $table->string('name_en')->nullable();
             $table->string('sku')->nullable();
-            $table->json('options')->nullable();
+            $table->string('barcode')->nullable();
+            $table->json('option_values_json')->nullable();
+            $table->decimal('price_adjustment', 12, 2)->default(0);
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('product_images', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->string('image');
+            $table->string('alt_ar')->nullable();
+            $table->string('alt_en')->nullable();
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_primary')->default(false);
             $table->timestamps();
         });
 
@@ -195,17 +257,27 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->string('name');
-            $table->string('currency', 3)->default('EGP');
+            $table->string('key');
+            $table->string('type');
+            $table->text('description')->nullable();
+            $table->boolean('is_default')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->unique(['business_unit_id', 'key']);
         });
 
         Schema::create('product_prices', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('price_list_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_variant_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->decimal('amount', 12, 2);
+            $table->foreignId('price_list_id')->constrained()->cascadeOnDelete();
+            $table->unsignedInteger('min_quantity')->default(1);
+            $table->decimal('price', 12, 2);
+            $table->decimal('compare_at_price', 12, 2)->nullable();
+            $table->timestamp('starts_at')->nullable();
+            $table->timestamp('ends_at')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
@@ -501,6 +573,7 @@ return new class extends Migration
             'orders',
             'product_prices',
             'price_lists',
+            'product_images',
             'product_variants',
             'products',
             'brands',

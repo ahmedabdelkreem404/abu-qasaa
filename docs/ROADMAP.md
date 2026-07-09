@@ -18,26 +18,32 @@ Implemented now: CMS pages, sections, menus, contact inquiries, public CMS APIs,
 
 Remaining: media library, menu editor UI, localization workflow, page revision history, and richer section builders.
 
-## Phase 4: Ecommerce For Oils And Dates
+## Phase 4: Product Catalog Foundation
+
+Implemented now: category, brand, product, variant, product image, price list, and product price foundation; public product browsing; dashboard catalog management; local catalog seed data; and catalog tests.
+
+Remaining: visual image uploads, richer section-level merchandising, product import/export, attribute builder, and final product browsing polish.
+
+## Phase 5: Ecommerce For Oils And Dates
 
 Implement catalog browsing, pricing, carts, checkout, orders, and customer flows for product-based business units.
 
-## Phase 5: Wholesale, Inventory, Warehouses
+## Phase 6: Wholesale, Inventory, Warehouses
 
 Add price lists, wholesale workflows, branches, warehouses, stock items, and stock movements.
 
-## Phase 6: Payments, Paymob, Manual Payments
+## Phase 7: Payments, Paymob, Manual Payments
 
 Implement generic payments, manual proof review, and Paymob integration.
 
-## Phase 7: Real Estate Leads And Appointments
+## Phase 8: Real Estate Leads And Appointments
 
 Implement projects, properties, units, lead capture, and appointment scheduling.
 
-## Phase 8: Import/Export RFQ Workflow
+## Phase 9: Import/Export RFQ Workflow
 
 Implement services, RFQ requests, RFQ items, quotation handling, and follow-up workflows.
 
-## Phase 9: Reports And Audit Logs
+## Phase 10: Reports And Audit Logs
 
 Implement operational reports, exports, audit trails, and admin visibility.

@@ -100,6 +100,19 @@ The CMS module now powers the public website pages and business-unit landing pag
 
 Run `php artisan migrate:fresh --seed` from `backend/` to create the CMS seed content.
 
+## Phase 4 Product Catalog Foundation
+
+The Catalog module now supports product-based business units with business-unit scoped categories, brands, products, variants, product images, price lists, and product prices.
+
+Implemented catalog scope:
+
+- Dashboard APIs and screens for products, categories, brands, and price lists.
+- Public product listing/detail pages under `/{businessSlug}/products`.
+- Featured products on business-unit landing pages when the `products` module is enabled.
+- Seed catalog data for Oils & Lubricants and Ghosoun Dates.
+
+This phase does not include cart, checkout, orders, payments, or inventory stock movements.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

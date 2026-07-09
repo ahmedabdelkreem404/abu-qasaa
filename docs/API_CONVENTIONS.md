@@ -95,3 +95,41 @@ Protected CMS endpoints:
 - `PUT /api/v1/cms/contact-inquiries/{contactInquiry}/status`
 
 Dashboard CMS endpoints return `Forbidden.` when the authenticated user has the permission but not the required business-unit scope.
+
+## Catalog Routes
+
+Protected catalog endpoints:
+
+- `GET /api/v1/catalog/categories`
+- `POST /api/v1/catalog/categories`
+- `GET /api/v1/catalog/categories/{category}`
+- `PATCH /api/v1/catalog/categories/{category}`
+- `DELETE /api/v1/catalog/categories/{category}`
+- `GET /api/v1/catalog/brands`
+- `POST /api/v1/catalog/brands`
+- `GET /api/v1/catalog/brands/{brand}`
+- `PATCH /api/v1/catalog/brands/{brand}`
+- `DELETE /api/v1/catalog/brands/{brand}`
+- `GET /api/v1/catalog/products`
+- `POST /api/v1/catalog/products`
+- `GET /api/v1/catalog/products/{product}`
+- `PATCH /api/v1/catalog/products/{product}`
+- `DELETE /api/v1/catalog/products/{product}`
+- `POST /api/v1/catalog/products/{product}/publish`
+- `PUT /api/v1/catalog/products/{product}/variants`
+- `PUT /api/v1/catalog/products/{product}/images`
+- `PUT /api/v1/catalog/products/{product}/prices`
+- `GET /api/v1/catalog/price-lists`
+- `POST /api/v1/catalog/price-lists`
+- `GET /api/v1/catalog/price-lists/{priceList}`
+- `PATCH /api/v1/catalog/price-lists/{priceList}`
+- `DELETE /api/v1/catalog/price-lists/{priceList}`
+
+Public catalog endpoints:
+
+- `GET /api/v1/public/{businessSlug}/products`
+- `GET /api/v1/public/{businessSlug}/products/{productSlug}`
+- `GET /api/v1/public/{businessSlug}/categories`
+- `GET /api/v1/public/{businessSlug}/brands`
+
+Public product responses do not expose `cost_price`.

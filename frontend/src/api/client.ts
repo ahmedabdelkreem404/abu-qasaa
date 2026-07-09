@@ -2,9 +2,13 @@ import type {
   ActivityModule,
   ActivityTemplate,
   ApiResponse,
+  Brand,
+  BrandStatus,
   BusinessUnit,
   BusinessUnitModule,
   BusinessUnitSetting,
+  Category,
+  CategoryStatus,
   CmsMenu,
   CmsPage,
   CmsPageStatus,
@@ -15,6 +19,15 @@ import type {
   FeatureFlag,
   LoginResponse,
   PaginatedResponse,
+  PriceList,
+  PriceListType,
+  Product,
+  ProductImage,
+  ProductPrice,
+  ProductStatus,
+  ProductType,
+  ProductVariant,
+  ProductVisibility,
 } from "@/types/platform";
 
 const API_URL =
@@ -294,4 +307,150 @@ export async function updateContactInquiryStatus(id: string | number, status: In
     method: "PUT",
     body: JSON.stringify({ status }),
   });
+}
+
+export type CategoryPayload = Partial<Category> & {
+  business_unit_id: number;
+  name_ar: string;
+  slug: string;
+  status: CategoryStatus;
+};
+
+export type BrandPayload = Partial<Brand> & {
+  business_unit_id: number;
+  name_ar: string;
+  slug: string;
+  status: BrandStatus;
+};
+
+export type ProductPayload = Partial<Product> & {
+  business_unit_id: number;
+  name_ar: string;
+  slug: string;
+  product_type: ProductType;
+  status: ProductStatus;
+  visibility: ProductVisibility;
+};
+
+export type PriceListPayload = Partial<PriceList> & {
+  business_unit_id: number;
+  name: string;
+  key: string;
+  type: PriceListType;
+};
+
+function withQuery(path: string, params?: URLSearchParams) {
+  return params ? `${path}?${params.toString()}` : path;
+}
+
+export async function listCategories(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Category>>(withQuery("/catalog/categories", params));
+}
+
+export async function getCategory(id: string | number) {
+  return apiRequest<ApiResponse<Category>>(`/catalog/categories/${id}`);
+}
+
+export async function createCategory(payload: CategoryPayload) {
+  return apiRequest<ApiResponse<Category>>("/catalog/categories", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updateCategory(id: string | number, payload: Partial<CategoryPayload>) {
+  return apiRequest<ApiResponse<Category>>(`/catalog/categories/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deleteCategory(id: string | number) {
+  return apiRequest<ApiResponse<Category>>(`/catalog/categories/${id}`, { method: "DELETE" });
+}
+
+export async function listBrands(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Brand>>(withQuery("/catalog/brands", params));
+}
+
+export async function getBrand(id: string | number) {
+  return apiRequest<ApiResponse<Brand>>(`/catalog/brands/${id}`);
+}
+
+export async function createBrand(payload: BrandPayload) {
+  return apiRequest<ApiResponse<Brand>>("/catalog/brands", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updateBrand(id: string | number, payload: Partial<BrandPayload>) {
+  return apiRequest<ApiResponse<Brand>>(`/catalog/brands/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deleteBrand(id: string | number) {
+  return apiRequest<ApiResponse<Brand>>(`/catalog/brands/${id}`, { method: "DELETE" });
+}
+
+export async function listProducts(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Product>>(withQuery("/catalog/products", params));
+}
+
+export async function getProduct(id: string | number) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}`);
+}
+
+export async function createProduct(payload: ProductPayload) {
+  return apiRequest<ApiResponse<Product>>("/catalog/products", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updateProduct(id: string | number, payload: Partial<ProductPayload>) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deleteProduct(id: string | number) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}`, { method: "DELETE" });
+}
+
+export async function publishProduct(id: string | number) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}/publish`, { method: "POST" });
+}
+
+export async function updateProductVariants(id: string | number, variants: ProductVariant[]) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}/variants`, { method: "PUT", body: JSON.stringify({ variants }) });
+}
+
+export async function updateProductImages(id: string | number, images: ProductImage[]) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}/images`, { method: "PUT", body: JSON.stringify({ images }) });
+}
+
+export async function updateProductPrices(id: string | number, prices: ProductPrice[]) {
+  return apiRequest<ApiResponse<Product>>(`/catalog/products/${id}/prices`, { method: "PUT", body: JSON.stringify({ prices }) });
+}
+
+export async function listPriceLists(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<PriceList>>(withQuery("/catalog/price-lists", params));
+}
+
+export async function getPriceList(id: string | number) {
+  return apiRequest<ApiResponse<PriceList>>(`/catalog/price-lists/${id}`);
+}
+
+export async function createPriceList(payload: PriceListPayload) {
+  return apiRequest<ApiResponse<PriceList>>("/catalog/price-lists", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updatePriceList(id: string | number, payload: Partial<PriceListPayload>) {
+  return apiRequest<ApiResponse<PriceList>>(`/catalog/price-lists/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deletePriceList(id: string | number) {
+  return apiRequest<ApiResponse<PriceList>>(`/catalog/price-lists/${id}`, { method: "DELETE" });
+}
+
+export async function listPublicProducts(businessSlug: string, params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Product>>(withQuery(`/public/${businessSlug}/products`, params));
+}
+
+export async function getPublicProductBySlug(businessSlug: string, productSlug: string) {
+  return apiRequest<ApiResponse<Product>>(`/public/${businessSlug}/products/${productSlug}`);
+}
+
+export async function listPublicCategories(businessSlug: string) {
+  return apiRequest<ApiResponse<Category[]>>(`/public/${businessSlug}/categories`);
+}
+
+export async function listPublicBrands(businessSlug: string) {
+  return apiRequest<ApiResponse<Brand[]>>(`/public/${businessSlug}/brands`);
 }

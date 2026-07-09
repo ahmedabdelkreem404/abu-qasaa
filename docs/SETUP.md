@@ -61,3 +61,12 @@ php artisan migrate:fresh --seed
 ```
 
 The seed creates company pages, business-unit landing pages, a main menu, demo roles, permissions, and demo users. The public site expects `NEXT_PUBLIC_API_URL` to point at the Laravel `/api/v1` base URL.
+
+## Seeded Catalog Data
+
+The default seed also creates product catalog data for:
+
+- `oils`: categories, brands, retail/wholesale/distributor price lists, sample lubricants, variants, and prices.
+- `dates`: categories, the Ghosoun brand, retail price list, sample dates products, variants, and prices.
+
+Use `oils.admin@abuqasaa.test` or `dates.admin@abuqasaa.test` for scoped dashboard catalog testing.
