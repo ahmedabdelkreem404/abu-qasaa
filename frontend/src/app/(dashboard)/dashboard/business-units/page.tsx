@@ -1,23 +1,35 @@
+"use client";
+
 import Link from "next/link";
 import { listBusinessUnits, toggleBusinessUnitStatus } from "@/api/client";
 import { ApiErrorState, EmptyState } from "@/components/shared/api-state";
 import type { BusinessUnit } from "@/types/platform";
+import { useEffect, useState } from "react";
 
-async function loadBusinessUnits(): Promise<BusinessUnit[] | null> {
-  try {
-    const response = await listBusinessUnits();
-    return response.data;
-  } catch {
-    return null;
+export default function DashboardBusinessUnitsPage() {
+  const [businessUnits, setBusinessUnits] = useState<BusinessUnit[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
+  async function load() {
+    try {
+      const response = await listBusinessUnits();
+      setBusinessUnits(response.data);
+      setError(null);
+    } catch (caught) {
+      setError(caught instanceof Error && caught.name === "403" ? "Forbidden." : "Business units could not be loaded.");
+    }
   }
-}
 
-export default async function DashboardBusinessUnitsPage() {
-  const businessUnits = await loadBusinessUnits();
+  useEffect(() => {
+    const timeout = window.setTimeout(() => {
+      void load();
+    }, 0);
 
-  if (businessUnits === null) {
-    return <ApiErrorState message="Business units could not be loaded. Check that the Laravel API is running." />;
-  }
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  if (error) return <ApiErrorState message={error} />;
+  if (businessUnits === null) return <div className="text-sm text-slate-600">Loading business units...</div>;
 
   return (
     <section className="space-y-6">
@@ -31,7 +43,7 @@ export default async function DashboardBusinessUnitsPage() {
         </Link>
       </div>
       {businessUnits.length === 0 ? (
-        <EmptyState message="No business units have been created yet." />
+        <EmptyState message="No business units are available for your account." />
       ) : (
         <div className="overflow-hidden rounded-md border border-slate-200 bg-white">
           <table className="w-full text-left text-sm">
@@ -61,12 +73,9 @@ export default async function DashboardBusinessUnitsPage() {
                       <Link href={`/dashboard/business-units/${unit.id}/edit`}>Edit</Link>
                       <Link href={`/dashboard/business-units/${unit.id}/modules`}>Modules</Link>
                       <Link href={`/dashboard/business-units/${unit.id}/settings`}>Settings</Link>
-                      <form action={async () => {
-                        "use server";
-                        await toggleBusinessUnitStatus(unit.id);
-                      }}>
-                        <button className="text-teal-700">Toggle</button>
-                      </form>
+                      <button onClick={async () => { await toggleBusinessUnitStatus(unit.id); await load(); }} className="text-teal-700">
+                        Toggle
+                      </button>
                     </div>
                   </td>
                 </tr>

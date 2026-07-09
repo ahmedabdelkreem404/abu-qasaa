@@ -32,3 +32,21 @@ cd frontend && npm run lint && npm run build
 ```
 
 The root `scripts/check.ps1` runs the basic backend and frontend checks.
+
+## Development Login
+
+After seeding, use the local-only Super Admin:
+
+```text
+Email: admin@abuqasaa.test
+Password: password
+```
+
+Business-unit demo admins use the same `DEMO_USER_PASSWORD` default:
+
+- `oils.admin@abuqasaa.test`
+- `dates.admin@abuqasaa.test`
+- `realestate.admin@abuqasaa.test`
+- `importexport.admin@abuqasaa.test`
+
+Override these values in `.env` with `SUPER_ADMIN_*` and `DEMO_USER_PASSWORD`. Do not use these defaults outside local development.

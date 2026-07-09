@@ -72,6 +72,27 @@ export type ApiResponse<T> = {
   errors?: Record<string, string[]>;
 };
 
+export type AuthUser = {
+  id: number;
+  name: string;
+  email: string;
+  status: string;
+  roles: string[];
+  permissions: string[];
+  business_units: Array<{
+    id: number;
+    name_ar: string;
+    name_en?: string | null;
+    slug: string;
+    role?: string | null;
+  }>;
+};
+
+export type LoginResponse = {
+  user: AuthUser;
+  token: string;
+};
+
 export type PaginatedResponse<T> = ApiResponse<T[]> & {
   meta: {
     current_page: number;

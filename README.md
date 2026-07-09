@@ -66,7 +66,27 @@ cd backend
 php artisan migrate:fresh --seed
 ```
 
-Phase 2 should focus on ecommerce/catalog workflows for oils and dates. Auth, permissions, and richer CMS work remain follow-up work.
+Auth, permissions, and richer CMS work remain follow-up work from the broader foundation track.
+
+## Phase 2 Auth Foundation
+
+The platform uses Laravel Sanctum bearer tokens for dashboard authentication. Seeded local development credentials are controlled by safe `.env` defaults:
+
+```text
+SUPER_ADMIN_EMAIL=admin@abuqasaa.test
+SUPER_ADMIN_PASSWORD=password
+DEMO_USER_PASSWORD=password
+```
+
+Local demo users:
+
+- `admin@abuqasaa.test`
+- `oils.admin@abuqasaa.test`
+- `dates.admin@abuqasaa.test`
+- `realestate.admin@abuqasaa.test`
+- `importexport.admin@abuqasaa.test`
+
+Protected dashboard APIs require `Authorization: Bearer <token>`. Public business unit lookup endpoints remain unauthenticated.
 
 ## Git Workflow
 

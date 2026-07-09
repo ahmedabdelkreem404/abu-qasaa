@@ -48,6 +48,38 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('roles', function (Blueprint $table): void {
+            $table->id();
+            $table->string('key')->unique();
+            $table->string('name');
+            $table->boolean('is_global')->default(false);
+            $table->timestamps();
+        });
+
+        Schema::create('permissions', function (Blueprint $table): void {
+            $table->id();
+            $table->string('key')->unique();
+            $table->string('name');
+            $table->string('group')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('permission_role', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('permission_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
+            $table->unique(['permission_id', 'role_id']);
+        });
+
+        Schema::create('user_roles', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->constrained()->cascadeOnDelete();
+            $table->timestamps();
+            $table->unique(['user_id', 'role_id']);
+        });
+
         Schema::create('business_unit_modules', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
@@ -102,7 +134,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('role_id')->nullable()->constrained()->nullOnDelete();
             $table->string('role_key')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->json('permissions')->nullable();
             $table->timestamps();
             $table->unique(['user_id', 'business_unit_id']);
@@ -402,6 +436,10 @@ return new class extends Migration
             'feature_flags',
             'business_unit_settings',
             'business_unit_modules',
+            'user_roles',
+            'permission_role',
+            'permissions',
+            'roles',
             'activity_modules',
             'activity_templates',
             'business_units',

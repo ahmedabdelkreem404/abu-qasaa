@@ -30,11 +30,43 @@ Paginated responses should return records in `data` and pagination details in `m
 
 ## Phase 1 Routes
 
-Phase 1 adds `/api/v1/business-units`, `/api/v1/activity-templates`, `/api/v1/activity-modules`, `/api/v1/feature-flags`, and `/api/v1/public/business-units` endpoints. Admin routes include TODO comments for Sanctum and authorization middleware in the auth phase.
+Phase 1 adds `/api/v1/business-units`, `/api/v1/activity-templates`, `/api/v1/activity-modules`, `/api/v1/feature-flags`, and `/api/v1/public/business-units` endpoints.
+
+Phase 2 protects dashboard/admin endpoints with Sanctum bearer tokens and permission middleware.
+
+Public endpoints:
+
+- `GET /api/v1/public/business-units`
+- `GET /api/v1/public/business-units/{slug}`
+
+Auth endpoints:
+
+- `POST /api/v1/auth/login`
+- `POST /api/v1/auth/logout`
+- `GET /api/v1/auth/me`
+
+Unauthorized response:
+
+```json
+{
+  "success": false,
+  "message": "Unauthenticated."
+}
+```
+
+Forbidden response:
+
+```json
+{
+  "success": false,
+  "message": "Forbidden.",
+  "errors": {}
+}
+```
 
 ## Auth Notes
 
-The backend is prepared for API authentication suitable for a Next.js frontend. Laravel Sanctum is the preferred first implementation for cookie/session or token-based auth, depending on deployment needs.
+The backend uses Laravel Sanctum personal access tokens for the dashboard. Send `Authorization: Bearer <token>` for protected endpoints.
 
 ## Business Unit Scoping
 

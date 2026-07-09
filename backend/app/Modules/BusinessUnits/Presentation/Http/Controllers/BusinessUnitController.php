@@ -33,7 +33,7 @@ class BusinessUnitController extends Controller
 {
     public function index(ListBusinessUnitsAction $action): JsonResponse
     {
-        $paginator = $action->handle((int) request('per_page', 15));
+        $paginator = $action->handle((int) request('per_page', 15), request()->user());
 
         return ApiResponse::paginated(
             $paginator->through(fn (BusinessUnit $businessUnit) => BusinessUnitResource::make($businessUnit)->resolve()),

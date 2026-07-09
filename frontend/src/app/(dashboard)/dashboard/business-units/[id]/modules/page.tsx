@@ -1,37 +1,34 @@
+"use client";
+
 import { getActivityModules, getBusinessUnitModules } from "@/api/client";
 import { ModuleManager } from "@/business-units/module-manager";
 import { ApiErrorState } from "@/components/shared/api-state";
 import type { ActivityModule, BusinessUnitModule } from "@/types/platform";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-async function loadModuleData(id: string): Promise<{ modules: ActivityModule[]; assignments: BusinessUnitModule[] } | null> {
-  try {
-    const [modules, assignments] = await Promise.all([
-      getActivityModules(),
-      getBusinessUnitModules(id),
-    ]);
+export default function BusinessUnitModulesPage() {
+  const { id } = useParams<{ id: string }>();
+  const [modules, setModules] = useState<ActivityModule[] | null>(null);
+  const [assignments, setAssignments] = useState<BusinessUnitModule[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-    return { modules: modules.data, assignments: assignments.data };
-  } catch {
-    return null;
-  }
-}
+  useEffect(() => {
+    Promise.all([getActivityModules(), getBusinessUnitModules(id)])
+      .then(([moduleResponse, assignmentResponse]) => {
+        setModules(moduleResponse.data);
+        setAssignments(assignmentResponse.data);
+      })
+      .catch((caught) => setError(caught instanceof Error && caught.name === "403" ? "Forbidden." : "Modules could not be loaded."));
+  }, [id]);
 
-export default async function BusinessUnitModulesPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const data = await loadModuleData(id);
-
-  if (data === null) {
-    return <ApiErrorState message="Modules could not be loaded." />;
-  }
+  if (error) return <ApiErrorState message={error} />;
+  if (!modules || !assignments) return <div className="text-sm text-slate-600">Loading modules...</div>;
 
   return (
     <section className="space-y-6">
       <h1 className="text-2xl font-semibold">Business Unit Modules</h1>
-      <ModuleManager businessUnitId={Number(id)} modules={data.modules} assignments={data.assignments} />
+      <ModuleManager businessUnitId={Number(id)} modules={modules} assignments={assignments} />
     </section>
   );
 }

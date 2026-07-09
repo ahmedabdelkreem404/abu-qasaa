@@ -1,28 +1,25 @@
+"use client";
+
 import Link from "next/link";
 import { getBusinessUnit } from "@/api/client";
 import { ApiErrorState } from "@/components/shared/api-state";
 import type { BusinessUnit } from "@/types/platform";
+import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 
-async function loadBusinessUnit(id: string): Promise<BusinessUnit | null> {
-  try {
-    const response = await getBusinessUnit(id);
-    return response.data;
-  } catch {
-    return null;
-  }
-}
+export default function BusinessUnitDetailsPage() {
+  const { id } = useParams<{ id: string }>();
+  const [unit, setUnit] = useState<BusinessUnit | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
-export default async function BusinessUnitDetailsPage({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const unit = await loadBusinessUnit(id);
+  useEffect(() => {
+    getBusinessUnit(id)
+      .then((response) => setUnit(response.data))
+      .catch((caught) => setError(caught instanceof Error && caught.name === "403" ? "Forbidden." : "Business unit could not be loaded."));
+  }, [id]);
 
-  if (unit === null) {
-    return <ApiErrorState message="Business unit could not be loaded." />;
-  }
+  if (error) return <ApiErrorState message={error} />;
+  if (!unit) return <div className="text-sm text-slate-600">Loading business unit...</div>;
 
   return (
     <section className="space-y-6">
@@ -49,16 +46,6 @@ export default async function BusinessUnitDetailsPage({
         <div className="rounded-md border border-slate-200 bg-white p-4">
           <h2 className="font-medium">Settings</h2>
           <p className="mt-2 text-3xl font-semibold">{unit.settings?.length ?? 0}</p>
-        </div>
-      </div>
-      <div className="rounded-md border border-slate-200 bg-white p-4">
-        <h2 className="font-medium">Modules</h2>
-        <div className="mt-3 flex flex-wrap gap-2 text-sm">
-          {unit.modules?.map((module) => (
-            <span key={module.id} className="rounded-md bg-slate-100 px-2 py-1">
-              {module.key} {module.is_enabled ? "" : "(off)"}
-            </span>
-          ))}
         </div>
       </div>
     </section>

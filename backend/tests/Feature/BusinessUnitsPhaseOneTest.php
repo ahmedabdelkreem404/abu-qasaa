@@ -2,10 +2,12 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
 use App\Modules\BusinessUnits\Infrastructure\Models\ActivityModule;
 use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
 use App\Modules\BusinessUnits\Infrastructure\Models\FeatureFlag;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Laravel\Sanctum\Sanctum;
 use Tests\TestCase;
 
 class BusinessUnitsPhaseOneTest extends TestCase
@@ -15,6 +17,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_lists_seeded_business_units(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
 
         $this->getJson('/api/v1/business-units')
             ->assertOk()
@@ -27,6 +30,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_creates_a_business_unit_from_a_template(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
 
         $this->postJson('/api/v1/business-units', [
             'name_ar' => 'وحدة اختبار',
@@ -52,6 +56,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_updates_a_business_unit(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
         $businessUnit = BusinessUnit::query()->where('slug', 'dates')->firstOrFail();
 
         $this->patchJson("/api/v1/business-units/{$businessUnit->id}", [
@@ -66,6 +71,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_enables_and_disables_modules(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
         $businessUnit = BusinessUnit::query()->where('slug', 'import-export')->firstOrFail();
 
         $this->putJson("/api/v1/business-units/{$businessUnit->id}/modules", [
@@ -91,6 +97,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_updates_business_unit_settings(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
         $businessUnit = BusinessUnit::query()->where('slug', 'real-estate')->firstOrFail();
 
         $this->putJson("/api/v1/business-units/{$businessUnit->id}/settings", [
@@ -123,6 +130,7 @@ class BusinessUnitsPhaseOneTest extends TestCase
     public function test_it_updates_feature_flags(): void
     {
         $this->seed();
+        $this->actingAsSuperAdmin();
         $featureFlag = FeatureFlag::query()->where('key', 'maintenance_mode')->firstOrFail();
 
         $this->putJson("/api/v1/feature-flags/{$featureFlag->id}", [
@@ -133,5 +141,10 @@ class BusinessUnitsPhaseOneTest extends TestCase
             ->assertJsonPath('data.value', true);
 
         $this->assertTrue($featureFlag->refresh()->value);
+    }
+
+    private function actingAsSuperAdmin(): void
+    {
+        Sanctum::actingAs(User::query()->where('email', 'admin@abuqasaa.test')->firstOrFail());
     }
 }

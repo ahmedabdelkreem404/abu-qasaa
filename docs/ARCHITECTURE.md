@@ -26,6 +26,12 @@ Business units are data, not separate applications or tables. A future Super Adm
 
 Phase 1 now implements this control plane in the `BusinessUnits` module: business units, activity templates, activity modules, module assignments, settings, feature flags, seeders, public lookups, and dashboard management screens. Controllers remain thin and delegate writes to application actions.
 
+## Authentication And Authorization
+
+Phase 2 adds Laravel Sanctum token authentication and a custom role/permission layer in the `Identity` module. Global roles attach through `user_roles`; business-unit scoped roles attach through `user_business_units`.
+
+Super Admin bypasses business-unit scope. Other users must have an active business unit assignment and the required permission for protected actions. Future modules should enforce permissions in backend middleware or policies; frontend permission checks are for navigation and user experience only.
+
 ## API First
 
-The Laravel backend exposes `/api/v1/*` routes for the Next.js frontend. Sanctum is the preferred authentication path once auth work begins.
+The Laravel backend exposes `/api/v1/*` routes for the Next.js frontend. Protected dashboard APIs use Sanctum bearer tokens.

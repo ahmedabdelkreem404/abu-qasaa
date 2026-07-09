@@ -6,30 +6,84 @@ import type {
   BusinessUnitModule,
   BusinessUnitSetting,
   FeatureFlag,
+  LoginResponse,
   PaginatedResponse,
 } from "@/types/platform";
 
 const API_URL =
   process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8000/api/v1";
+const TOKEN_KEY = "abu_qasaa_auth_token";
+
+export function getStoredToken() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  return window.localStorage.getItem(TOKEN_KEY);
+}
+
+export function setStoredToken(token: string) {
+  window.localStorage.setItem(TOKEN_KEY, token);
+}
+
+export function clearStoredToken() {
+  window.localStorage.removeItem(TOKEN_KEY);
+}
 
 export async function apiRequest<T>(
   path: string,
   init?: RequestInit,
 ): Promise<T> {
+  const token = getStoredToken();
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
       ...init?.headers,
     },
   });
 
   if (!response.ok) {
-    throw new Error(`API request failed with ${response.status}`);
+    const error = new Error(`API request failed with ${response.status}`);
+    error.name = String(response.status);
+    throw error;
   }
 
   return response.json() as Promise<T>;
+}
+
+export async function login(email: string, password: string) {
+  const response = await apiRequest<ApiResponse<LoginResponse>>("/auth/login", {
+    method: "POST",
+    body: JSON.stringify({ email, password }),
+  });
+  setStoredToken(response.data.token);
+
+  return response;
+}
+
+export async function logout() {
+  try {
+    await apiRequest<ApiResponse<null>>("/auth/logout", { method: "POST" });
+  } finally {
+    clearStoredToken();
+  }
+}
+
+export async function getCurrentUser() {
+  return apiRequest<ApiResponse<LoginResponse["user"]>>("/auth/me");
+}
+
+export async function getCurrentUserPermissions() {
+  const response = await getCurrentUser();
+  return response.data.permissions;
+}
+
+export async function getCurrentUserBusinessUnits() {
+  const response = await getCurrentUser();
+  return response.data.business_units;
 }
 
 export type BusinessUnitPayload = {
