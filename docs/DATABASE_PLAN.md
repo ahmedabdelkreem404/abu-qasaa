@@ -6,6 +6,15 @@ The platform uses one MySQL database. Business-specific records must include `bu
 
 `business_units`, `activity_templates`, `activity_modules`, `business_unit_modules`, `business_unit_settings`, `feature_flags`, and `user_business_units` provide the platform control plane.
 
+Phase 1 hardens the control-plane schema:
+
+- `business_units`: hierarchy, Arabic/English names, slug, type, status, branding fields, settings JSON, and creator placeholder.
+- `activity_templates`: default module keys and settings for new business units.
+- `activity_modules`: code-backed capabilities that Super Admins can enable.
+- `business_unit_modules`: per-business-unit module enablement.
+- `business_unit_settings`: typed key/value settings per business unit.
+- `feature_flags`: global flags when `business_unit_id` is null and scoped flags when present.
+
 ## Catalog And Ecommerce
 
 `categories`, `brands`, `products`, `product_variants`, `price_lists`, and `product_prices` support product-based activities. `orders` and `order_items` support ecommerce workflows.

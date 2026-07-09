@@ -8,9 +8,9 @@ All public API routes are versioned under `/api/v1`.
 
 ```json
 {
+  "success": true,
   "message": "OK",
-  "data": {},
-  "meta": {}
+  "data": {}
 }
 ```
 
@@ -18,6 +18,7 @@ All public API routes are versioned under `/api/v1`.
 
 ```json
 {
+  "success": false,
   "message": "Validation failed",
   "errors": {}
 }
@@ -26,6 +27,10 @@ All public API routes are versioned under `/api/v1`.
 ## Pagination
 
 Paginated responses should return records in `data` and pagination details in `meta`, including `current_page`, `per_page`, `total`, and `last_page`.
+
+## Phase 1 Routes
+
+Phase 1 adds `/api/v1/business-units`, `/api/v1/activity-templates`, `/api/v1/activity-modules`, `/api/v1/feature-flags`, and `/api/v1/public/business-units` endpoints. Admin routes include TODO comments for Sanctum and authorization middleware in the auth phase.
 
 ## Auth Notes
 

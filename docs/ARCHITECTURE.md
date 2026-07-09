@@ -24,6 +24,8 @@ The frontend uses the Next.js App Router with route groups for public pages, bus
 
 Business units are data, not separate applications or tables. A future Super Admin workflow will create a business unit, select an activity template, enable modules, and configure settings or feature flags.
 
+Phase 1 now implements this control plane in the `BusinessUnits` module: business units, activity templates, activity modules, module assignments, settings, feature flags, seeders, public lookups, and dashboard management screens. Controllers remain thin and delegate writes to application actions.
+
 ## API First
 
 The Laravel backend exposes `/api/v1/*` routes for the Next.js frontend. Sanctum is the preferred authentication path once auth work begins.

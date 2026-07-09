@@ -48,6 +48,26 @@ Build backend features inside `backend/app/Modules/{ModuleName}` using Domain, A
 
 The platform uses one backend, one frontend, and one MySQL database. Business units are represented as data through `business_units`, `activity_templates`, and enabled modules. The system is prepared for oils and lubricants, import/export RFQs, dates ecommerce, real estate, CMS, payments, inventory, reports, and audit logs without splitting into microservices.
 
+## Phase 1 Foundation
+
+Implemented in this phase:
+
+- Business Units API and dashboard management pages.
+- Activity Templates and Activity Modules.
+- Business Unit Modules for enabling/disabling capabilities.
+- Business Unit Settings and Feature Flags.
+- Seed data for the four current business units.
+- Public business unit lookup pages.
+
+Seed the foundation data:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+```
+
+Phase 2 should focus on ecommerce/catalog workflows for oils and dates. Auth, permissions, and richer CMS work remain follow-up work.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

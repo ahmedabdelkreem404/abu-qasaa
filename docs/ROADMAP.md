@@ -2,11 +2,13 @@
 
 ## Phase 1: Foundation, Auth, Business Units, CMS
 
-Implement authentication, dashboard access, business unit CRUD, activity templates, module enablement, settings, and CMS basics.
+Implemented now: business unit CRUD foundation, activity templates, activity modules, module enablement, settings, feature flags, seeders, dashboard management placeholders, public business unit lookups, and tests.
+
+Remaining for the broader Phase 1 theme: real authentication, permissions, user management, and CMS feature implementation.
 
 ## Phase 2: Ecommerce For Oils And Dates
 
-Implement catalog browsing, pricing, carts, orders, and customer flows for product-based business units.
+Implement catalog browsing, pricing, carts, checkout, orders, and customer flows for product-based business units.
 
 ## Phase 3: Wholesale, Inventory, Warehouses
 

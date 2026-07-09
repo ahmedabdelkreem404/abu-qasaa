@@ -10,30 +10,41 @@ return new class extends Migration
     {
         Schema::create('business_units', function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
+            $table->foreignId('parent_id')->nullable()->constrained('business_units')->nullOnDelete();
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
             $table->string('slug')->unique();
             $table->string('type');
             $table->string('status')->default('draft');
+            $table->string('logo')->nullable();
+            $table->string('cover_image')->nullable();
             $table->text('description')->nullable();
-            $table->json('metadata')->nullable();
+            $table->string('primary_color')->nullable();
+            $table->string('secondary_color')->nullable();
+            $table->json('settings_json')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
 
         Schema::create('activity_templates', function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
             $table->string('key')->unique();
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->json('default_modules')->nullable();
+            $table->string('type');
+            $table->json('default_modules_json')->nullable();
+            $table->json('default_settings_json')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
         Schema::create('activity_modules', function (Blueprint $table): void {
             $table->id();
-            $table->string('name');
             $table->string('key')->unique();
+            $table->string('name');
             $table->text('description')->nullable();
-            $table->json('capabilities')->nullable();
+            $table->string('category')->nullable();
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
 
@@ -41,9 +52,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('activity_module_id')->constrained()->cascadeOnDelete();
-            $table->boolean('enabled')->default(true);
-            $table->json('settings')->nullable();
+            $table->boolean('is_enabled')->default(true);
+            $table->json('settings_json')->nullable();
             $table->timestamps();
+            $table->unique(['business_unit_id', 'activity_module_id']);
         });
 
         Schema::create('business_unit_settings', function (Blueprint $table): void {
@@ -51,6 +63,8 @@ return new class extends Migration
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->string('key');
             $table->json('value')->nullable();
+            $table->string('type')->nullable();
+            $table->string('group')->nullable();
             $table->timestamps();
             $table->unique(['business_unit_id', 'key']);
         });
@@ -59,8 +73,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
             $table->string('key');
-            $table->boolean('enabled')->default(false);
-            $table->json('rules')->nullable();
+            $table->boolean('value')->default(false);
+            $table->text('description')->nullable();
             $table->timestamps();
             $table->unique(['business_unit_id', 'key']);
         });
