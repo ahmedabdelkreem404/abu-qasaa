@@ -1,10 +1,22 @@
-import { PlaceholderPage } from "@/components/shared/placeholder-page";
+import { getPublicCmsPageBySlug } from "@/api/client";
+import { ContactForm } from "@/cms/contact-form";
+import { SectionRenderer } from "@/cms/section-renderer";
+import type { CmsSection } from "@/types/platform";
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  let sections: CmsSection[] = [];
+
+  try {
+    const page = await getPublicCmsPageBySlug("contact");
+    sections = page.data.sections ?? [];
+  } catch {
+    sections = [];
+  }
+
   return (
-    <PlaceholderPage
-      title="Contact"
-      description="Contact and lead capture placeholder. Forms will connect to the API when feature work begins."
-    />
+    <section className="space-y-8">
+      {sections.length > 0 ? <SectionRenderer sections={sections} /> : <h1 className="text-3xl font-semibold">Contact</h1>}
+      <ContactForm />
+    </section>
   );
 }

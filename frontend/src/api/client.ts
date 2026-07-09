@@ -5,6 +5,13 @@ import type {
   BusinessUnit,
   BusinessUnitModule,
   BusinessUnitSetting,
+  CmsMenu,
+  CmsPage,
+  CmsPageStatus,
+  CmsPageType,
+  CmsSection,
+  ContactInquiry,
+  InquiryStatus,
   FeatureFlag,
   LoginResponse,
   PaginatedResponse,
@@ -200,4 +207,91 @@ export async function listPublicBusinessUnits() {
 
 export async function getPublicBusinessUnitBySlug(slug: string) {
   return apiRequest<ApiResponse<BusinessUnit>>(`/public/business-units/${slug}`);
+}
+
+export type CmsPagePayload = Partial<CmsPage> & {
+  title_ar: string;
+  slug: string;
+  page_type: CmsPageType;
+  status: CmsPageStatus;
+};
+
+export async function listCmsPages(params?: URLSearchParams) {
+  const query = params ? `?${params.toString()}` : "";
+  return apiRequest<PaginatedResponse<CmsPage>>(`/cms/pages${query}`);
+}
+
+export async function getCmsPage(id: string | number) {
+  return apiRequest<ApiResponse<CmsPage>>(`/cms/pages/${id}`);
+}
+
+export async function createCmsPage(payload: CmsPagePayload) {
+  return apiRequest<ApiResponse<CmsPage>>("/cms/pages", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateCmsPage(id: string | number, payload: Partial<CmsPagePayload>) {
+  return apiRequest<ApiResponse<CmsPage>>(`/cms/pages/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function deleteCmsPage(id: string | number) {
+  return apiRequest<ApiResponse<CmsPage>>(`/cms/pages/${id}`, { method: "DELETE" });
+}
+
+export async function publishCmsPage(id: string | number) {
+  return apiRequest<ApiResponse<CmsPage>>(`/cms/pages/${id}/publish`, { method: "POST" });
+}
+
+export async function updateCmsPageSections(id: string | number, sections: CmsSection[]) {
+  return apiRequest<ApiResponse<CmsPage>>(`/cms/pages/${id}/sections`, {
+    method: "PUT",
+    body: JSON.stringify({ sections }),
+  });
+}
+
+export async function listPublicCmsPages() {
+  return apiRequest<ApiResponse<CmsPage[]>>("/public/cms/pages");
+}
+
+export async function getPublicCmsPageBySlug(slug: string) {
+  return apiRequest<ApiResponse<CmsPage>>(`/public/cms/pages/${slug}`);
+}
+
+export async function getBusinessUnitPublicCmsPage(slug: string) {
+  return apiRequest<ApiResponse<CmsPage>>(`/public/cms/business-units/${slug}/page`);
+}
+
+export async function getMenuByLocation(location: string) {
+  return apiRequest<ApiResponse<CmsMenu>>(`/public/cms/menus/${location}`);
+}
+
+export async function submitContactInquiry(payload: {
+  business_unit_id?: number | null;
+  name: string;
+  email?: string;
+  phone?: string;
+  subject?: string;
+  message: string;
+  source_page?: string;
+}) {
+  return apiRequest<ApiResponse<ContactInquiry>>("/public/contact-inquiries", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function listContactInquiries() {
+  return apiRequest<PaginatedResponse<ContactInquiry>>("/cms/contact-inquiries");
+}
+
+export async function updateContactInquiryStatus(id: string | number, status: InquiryStatus) {
+  return apiRequest<ApiResponse<ContactInquiry>>(`/cms/contact-inquiries/${id}/status`, {
+    method: "PUT",
+    body: JSON.stringify({ status }),
+  });
 }

@@ -88,6 +88,18 @@ Local demo users:
 
 Protected dashboard APIs require `Authorization: Bearer <token>`. Public business unit lookup endpoints remain unauthenticated.
 
+## Phase 3 CMS And Public Website Foundation
+
+The CMS module now powers the public website pages and business-unit landing pages from seeded content instead of frontend hardcoding. It includes:
+
+- Company pages for `/`, `/about`, and `/contact`.
+- Business-unit landing content for `/[businessSlug]`.
+- CMS sections, menus, and contact inquiries.
+- Dashboard CMS pages, section editing, publishing, and inquiry status workflow.
+- Public APIs for published CMS pages, menus, business-unit pages, and contact inquiry submission.
+
+Run `php artisan migrate:fresh --seed` from `backend/` to create the CMS seed content.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

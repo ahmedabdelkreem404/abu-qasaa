@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { listPublicBusinessUnits } from "@/api/client";
+import { getPublicCmsPageBySlug, listPublicBusinessUnits } from "@/api/client";
+import { SectionRenderer } from "@/cms/section-renderer";
 import { ApiErrorState, EmptyState } from "@/components/shared/api-state";
-import type { BusinessUnit } from "@/types/platform";
+import type { BusinessUnit, CmsSection } from "@/types/platform";
 
 async function loadBusinessUnits(): Promise<BusinessUnit[] | null> {
   try {
@@ -13,7 +14,11 @@ async function loadBusinessUnits(): Promise<BusinessUnit[] | null> {
 }
 
 export default async function BusinessUnitsPage() {
-  const businessUnits = await loadBusinessUnits();
+  const [businessUnits, cmsPage] = await Promise.all([
+    loadBusinessUnits(),
+    getPublicCmsPageBySlug("business-units").then((response) => response.data).catch(() => null),
+  ]);
+  const sections: CmsSection[] = cmsPage?.sections ?? [];
 
   if (businessUnits === null) {
     return <ApiErrorState message="Business units could not be loaded from the API." />;
@@ -21,12 +26,12 @@ export default async function BusinessUnitsPage() {
 
   return (
     <section className="space-y-6">
-      <div>
+      {sections.length > 0 ? <SectionRenderer sections={sections} /> : <div>
         <h1 className="text-3xl font-semibold">Business Units</h1>
         <p className="mt-2 max-w-2xl text-slate-600">
           Active business units managed by Abnaa Abu Qasaa Trading.
         </p>
-      </div>
+      </div>}
       {businessUnits.length === 0 ? (
         <EmptyState message="No active business units are published yet." />
       ) : (

@@ -1,16 +1,16 @@
-import { PlaceholderPage } from "@/components/shared/placeholder-page";
+import { getPublicCmsPageBySlug } from "@/api/client";
+import { SectionRenderer } from "@/cms/section-renderer";
+import { ApiErrorState } from "@/components/shared/api-state";
+import type { CmsPage } from "@/types/platform";
 
-export default function HomePage() {
-  return (
-    <PlaceholderPage
-      title="Abnaa Abu Qasaa Trading"
-      description="A modular platform foundation for the umbrella company and its current and future business units."
-      items={[
-        "Oils & Lubricants",
-        "Import & Export",
-        "Ghosoun Dates",
-        "Real Estate",
-      ]}
-    />
-  );
+export default async function HomePage() {
+  let page: CmsPage | null = null;
+
+  try {
+    page = (await getPublicCmsPageBySlug("home")).data;
+  } catch {
+    return <ApiErrorState message="Home content is not available right now." />;
+  }
+
+  return <SectionRenderer sections={page.sections} />;
 }

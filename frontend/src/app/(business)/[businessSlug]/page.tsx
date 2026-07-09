@@ -1,6 +1,7 @@
-import { getPublicBusinessUnitBySlug } from "@/api/client";
+import { getBusinessUnitPublicCmsPage, getPublicBusinessUnitBySlug } from "@/api/client";
+import { SectionRenderer } from "@/cms/section-renderer";
 import { ApiErrorState } from "@/components/shared/api-state";
-import type { BusinessUnit } from "@/types/platform";
+import type { BusinessUnit, CmsPage } from "@/types/platform";
 
 const typeMessages: Record<string, string> = {
   product_store: "Product store coming soon",
@@ -30,6 +31,19 @@ export default async function BusinessHomePage({
 
   if (unit === null) {
     return <ApiErrorState message="This business unit is not available yet." />;
+  }
+
+  const page: CmsPage | null = await getBusinessUnitPublicCmsPage(businessSlug)
+    .then((response) => response.data)
+    .catch(() => null);
+
+  if (page) {
+    return (
+      <section className="space-y-6">
+        <h1 className="text-3xl font-semibold">{page.title_en ?? page.title_ar}</h1>
+        <SectionRenderer sections={page.sections} />
+      </section>
+    );
   }
 
   return (

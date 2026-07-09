@@ -50,3 +50,14 @@ Business-unit demo admins use the same `DEMO_USER_PASSWORD` default:
 - `importexport.admin@abuqasaa.test`
 
 Override these values in `.env` with `SUPER_ADMIN_*` and `DEMO_USER_PASSWORD`. Do not use these defaults outside local development.
+
+## Seeded CMS Content
+
+Use a fresh seed when working on the public website or CMS dashboard:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+```
+
+The seed creates company pages, business-unit landing pages, a main menu, demo roles, permissions, and demo users. The public site expects `NEXT_PUBLIC_API_URL` to point at the Laravel `/api/v1` base URL.

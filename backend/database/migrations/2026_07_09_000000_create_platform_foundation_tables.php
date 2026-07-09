@@ -372,10 +372,82 @@ return new class extends Migration
         Schema::create('cms_pages', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->string('title');
+            $table->string('title_ar');
+            $table->string('title_en')->nullable();
             $table->string('slug');
+            $table->string('page_type');
             $table->string('status')->default('draft');
-            $table->longText('content')->nullable();
+            $table->text('excerpt_ar')->nullable();
+            $table->text('excerpt_en')->nullable();
+            $table->longText('content_ar')->nullable();
+            $table->longText('content_en')->nullable();
+            $table->string('seo_title_ar')->nullable();
+            $table->string('seo_title_en')->nullable();
+            $table->text('seo_description_ar')->nullable();
+            $table->text('seo_description_en')->nullable();
+            $table->string('featured_image')->nullable();
+            $table->integer('sort_order')->default(0);
+            $table->timestamp('published_at')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
+        });
+
+        Schema::create('cms_sections', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('cms_page_id')->constrained()->cascadeOnDelete();
+            $table->string('section_type');
+            $table->string('title_ar')->nullable();
+            $table->string('title_en')->nullable();
+            $table->string('subtitle_ar')->nullable();
+            $table->string('subtitle_en')->nullable();
+            $table->longText('body_ar')->nullable();
+            $table->longText('body_en')->nullable();
+            $table->string('image')->nullable();
+            $table->string('button_label_ar')->nullable();
+            $table->string('button_label_en')->nullable();
+            $table->string('button_url')->nullable();
+            $table->json('data_json')->nullable();
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('cms_menus', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('location');
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('cms_menu_items', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('cms_menu_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('parent_id')->nullable()->constrained('cms_menu_items')->nullOnDelete();
+            $table->string('label_ar');
+            $table->string('label_en')->nullable();
+            $table->string('url');
+            $table->integer('sort_order')->default(0);
+            $table->boolean('is_active')->default(true);
+            $table->timestamps();
+        });
+
+        Schema::create('contact_inquiries', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->string('name');
+            $table->string('email')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('subject')->nullable();
+            $table->text('message');
+            $table->string('source_page')->nullable();
+            $table->string('status')->default('new');
+            $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
+            $table->json('metadata_json')->nullable();
             $table->timestamps();
         });
 
@@ -407,6 +479,10 @@ return new class extends Migration
         foreach ([
             'audit_logs',
             'media',
+            'contact_inquiries',
+            'cms_menu_items',
+            'cms_menus',
+            'cms_sections',
             'cms_pages',
             'appointments',
             'leads',

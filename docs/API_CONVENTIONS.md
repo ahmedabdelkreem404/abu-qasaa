@@ -71,3 +71,27 @@ The backend uses Laravel Sanctum personal access tokens for the dashboard. Send 
 ## Business Unit Scoping
 
 Business-specific endpoints must resolve the current business unit from route parameters, headers, authenticated access, or dashboard context before querying scoped data.
+
+## CMS Routes
+
+Public CMS endpoints:
+
+- `GET /api/v1/public/cms/pages`
+- `GET /api/v1/public/cms/pages/{slug}`
+- `GET /api/v1/public/cms/business-units/{businessSlug}/page`
+- `GET /api/v1/public/cms/menus/{location}`
+- `POST /api/v1/public/contact-inquiries`
+
+Protected CMS endpoints:
+
+- `GET /api/v1/cms/pages`
+- `POST /api/v1/cms/pages`
+- `GET /api/v1/cms/pages/{cmsPage}`
+- `PATCH /api/v1/cms/pages/{cmsPage}`
+- `DELETE /api/v1/cms/pages/{cmsPage}`
+- `POST /api/v1/cms/pages/{cmsPage}/publish`
+- `PUT /api/v1/cms/pages/{cmsPage}/sections`
+- `GET /api/v1/cms/contact-inquiries`
+- `PUT /api/v1/cms/contact-inquiries/{contactInquiry}/status`
+
+Dashboard CMS endpoints return `Forbidden.` when the authenticated user has the permission but not the required business-unit scope.

@@ -35,3 +35,11 @@ Super Admin bypasses business-unit scope. Other users must have an active busine
 ## API First
 
 The Laravel backend exposes `/api/v1/*` routes for the Next.js frontend. Protected dashboard APIs use Sanctum bearer tokens.
+
+## CMS And Public Website
+
+Phase 3 adds a `CMS` module with Clean Architecture-inspired boundaries: enums in `Domain`, actions in `Application`, Eloquent models in `Infrastructure`, and requests/resources/controllers/routes in `Presentation`.
+
+CMS pages may be company-level or scoped to a business unit. Public routes only expose published pages and active sections. Dashboard CMS routes require Sanctum plus CMS or lead permissions, and non-super-admin users are limited to their assigned business units.
+
+The Next.js public routes render CMS data for `/`, `/about`, `/contact`, and business-unit pages. The dashboard CMS screens call the same API client used by the rest of the admin app.

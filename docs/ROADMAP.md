@@ -1,10 +1,10 @@
 # Roadmap
 
-## Phase 1: Foundation, Auth, Business Units, CMS
+## Phase 1: Foundation And Business Units
 
 Implemented now: business unit CRUD foundation, activity templates, activity modules, module enablement, settings, feature flags, seeders, dashboard management placeholders, public business unit lookups, and tests.
 
-Remaining for the broader foundation theme: user-management UI and CMS feature implementation.
+Remaining: deeper operational features for each business unit.
 
 ## Phase 2: Authentication, Authorization, Roles, Permissions
 
@@ -12,26 +12,32 @@ Implemented now: Sanctum token login/logout/me endpoints, user status, roles, pe
 
 Remaining: production password reset/invitations, richer user-management UI, audit events for auth changes, and finer policies as feature modules become real.
 
-## Phase 3: Ecommerce For Oils And Dates
+## Phase 3: CMS And Public Website Foundation
+
+Implemented now: CMS pages, sections, menus, contact inquiries, public CMS APIs, CMS dashboard screens, seeded public website content, and CMS tests.
+
+Remaining: media library, menu editor UI, localization workflow, page revision history, and richer section builders.
+
+## Phase 4: Ecommerce For Oils And Dates
 
 Implement catalog browsing, pricing, carts, checkout, orders, and customer flows for product-based business units.
 
-## Phase 4: Wholesale, Inventory, Warehouses
+## Phase 5: Wholesale, Inventory, Warehouses
 
 Add price lists, wholesale workflows, branches, warehouses, stock items, and stock movements.
 
-## Phase 5: Payments, Paymob, Manual Payments
+## Phase 6: Payments, Paymob, Manual Payments
 
 Implement generic payments, manual proof review, and Paymob integration.
 
-## Phase 6: Real Estate Leads And Appointments
+## Phase 7: Real Estate Leads And Appointments
 
 Implement projects, properties, units, lead capture, and appointment scheduling.
 
-## Phase 7: Import/Export RFQ Workflow
+## Phase 8: Import/Export RFQ Workflow
 
 Implement services, RFQ requests, RFQ items, quotation handling, and follow-up workflows.
 
-## Phase 8: Reports And Audit Logs
+## Phase 9: Reports And Audit Logs
 
 Implement operational reports, exports, audit trails, and admin visibility.
