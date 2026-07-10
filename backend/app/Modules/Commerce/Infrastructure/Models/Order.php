@@ -4,6 +4,7 @@ namespace App\Modules\Commerce\Infrastructure\Models;
 
 use App\Models\User;
 use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
+use App\Modules\Inventory\Infrastructure\Models\StockReservation;
 use App\Modules\Payments\Infrastructure\Models\ManualPaymentProof;
 use App\Modules\Payments\Infrastructure\Models\Payment;
 use Illuminate\Database\Eloquent\Model;
@@ -50,6 +51,11 @@ class Order extends Model
     public function manualPaymentProofs(): HasMany
     {
         return $this->hasMany(ManualPaymentProof::class);
+    }
+
+    public function stockReservations(): HasMany
+    {
+        return $this->hasMany(StockReservation::class);
     }
 
     public function createdBy(): BelongsTo

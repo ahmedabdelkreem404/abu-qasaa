@@ -65,3 +65,7 @@ Phase 6 adds a real `Payments` module inside the same modular monolith. Payment 
 Controllers remain thin and delegate manual proof submission, review, COD selection, and admin mark-paid flows to application actions. No Paymob provider, card payment callback flow, microservice, or DevOps-heavy setup is introduced in this phase.
 
 Phase 7 extends the same module boundary with a Paymob provider interface, client, signature verifier, and payload mapper. The provider supports fake mode for local/test execution and keeps exact Paymob field assumptions isolated for later replacement when direct official docs access is available.
+
+## Inventory Foundation
+
+Phase 8 adds the `Inventory` module for business-unit scoped branches, warehouses, stock items, stock movements, reservations, and transfers. Commerce calls Inventory for reservation, release, and fulfillment, while Inventory does not own pricing, payment confirmation, shipping, RFQ, real estate, or supplier procurement.

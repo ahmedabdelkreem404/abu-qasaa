@@ -4,8 +4,10 @@ namespace App\Modules\Commerce\Infrastructure\Models;
 
 use App\Modules\Catalog\Infrastructure\Models\Product;
 use App\Modules\Catalog\Infrastructure\Models\ProductVariant;
+use App\Modules\Inventory\Infrastructure\Models\StockReservation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class OrderItem extends Model
 {
@@ -29,5 +31,10 @@ class OrderItem extends Model
     public function variant(): BelongsTo
     {
         return $this->belongsTo(ProductVariant::class, 'product_variant_id');
+    }
+
+    public function stockReservations(): HasMany
+    {
+        return $this->hasMany(StockReservation::class);
     }
 }

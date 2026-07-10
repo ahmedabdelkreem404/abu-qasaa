@@ -9,7 +9,7 @@ export function cartKey(slug: string) {
   return `abu_qasaa_cart_${slug}`;
 }
 
-export function AddToCartButton({ businessSlug, product }: { businessSlug: string; product: Product }) {
+export function AddToCartButton({ businessSlug, product, disabled = false }: { businessSlug: string; product: Product; disabled?: boolean }) {
   const [message, setMessage] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -29,13 +29,17 @@ export function AddToCartButton({ businessSlug, product }: { businessSlug: strin
     }
   }
 
+  if (disabled) {
+    return <p className="mt-3 text-sm font-medium text-amber-700">Out of stock</p>;
+  }
+
   if (!product.base_price) {
     return <p className="mt-3 text-sm text-slate-500">Ordering currently unavailable</p>;
   }
 
   return (
     <div className="mt-4 space-y-2">
-      <button onClick={onAdd} disabled={loading} className="rounded-md bg-teal-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-60">
+      <button onClick={onAdd} disabled={loading || disabled} className="rounded-md bg-teal-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-60">
         {loading ? "Adding..." : "Add to cart"}
       </button>
       {message ? <p className="text-sm text-slate-600">{message} <Link href={`/${businessSlug}/cart`} className="text-teal-700">View cart</Link></p> : null}

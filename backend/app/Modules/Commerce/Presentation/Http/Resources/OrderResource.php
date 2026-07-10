@@ -2,6 +2,7 @@
 
 namespace App\Modules\Commerce\Presentation\Http\Resources;
 
+use App\Modules\Inventory\Presentation\Http\Resources\StockReservationResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -46,6 +47,7 @@ class OrderResource extends JsonResource
             'confirmed_at' => $this->confirmed_at,
             'cancelled_at' => $this->cancelled_at,
             'items' => OrderItemResource::collection($this->whenLoaded('items')),
+            'stock_reservations' => $this->when(! $this->public, StockReservationResource::collection($this->whenLoaded('stockReservations'))),
             'status_histories' => $this->when(! $this->public, OrderStatusHistoryResource::collection($this->whenLoaded('statusHistories'))),
         ];
     }

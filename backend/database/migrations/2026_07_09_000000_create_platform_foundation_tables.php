@@ -114,20 +114,47 @@ return new class extends Migration
         Schema::create('branches', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
-            $table->string('name');
-            $table->string('code')->nullable();
-            $table->json('address')->nullable();
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->string('slug');
+            $table->string('status')->default('active');
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->text('address_ar')->nullable();
+            $table->text('address_en')->nullable();
+            $table->string('governorate')->nullable();
+            $table->string('city')->nullable();
+            $table->string('area')->nullable();
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->boolean('is_public')->default(true);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
         });
 
         Schema::create('warehouses', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('branch_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('name');
-            $table->string('code')->nullable();
-            $table->json('address')->nullable();
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->string('slug');
+            $table->string('type')->default('main');
+            $table->string('status')->default('active');
+            $table->string('phone')->nullable();
+            $table->text('address_ar')->nullable();
+            $table->text('address_en')->nullable();
+            $table->string('governorate')->nullable();
+            $table->string('city')->nullable();
+            $table->string('area')->nullable();
+            $table->boolean('is_default')->default(false);
+            $table->boolean('is_sellable')->default(true);
+            $table->integer('sort_order')->default(0);
             $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'slug']);
         });
 
         Schema::create('user_business_units', function (Blueprint $table): void {
@@ -499,10 +526,16 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('warehouse_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('product_id')->nullable()->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_variant_id')->nullable()->constrained()->cascadeOnDelete();
-            $table->decimal('quantity', 12, 3)->default(0);
+            $table->string('sku')->nullable();
+            $table->decimal('quantity_on_hand', 12, 3)->default(0);
+            $table->decimal('quantity_reserved', 12, 3)->default(0);
+            $table->decimal('reorder_level', 12, 3)->default(0);
+            $table->decimal('max_stock_level', 12, 3)->nullable();
+            $table->timestamp('last_movement_at')->nullable();
             $table->timestamps();
+            $table->unique(['warehouse_id', 'product_id', 'product_variant_id'], 'stock_items_unique_sku_scope');
         });
 
         Schema::create('stock_movements', function (Blueprint $table): void {
@@ -510,9 +543,63 @@ return new class extends Migration
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('warehouse_id')->constrained()->cascadeOnDelete();
             $table->foreignId('stock_item_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_variant_id')->nullable()->constrained()->nullOnDelete();
             $table->string('type');
+            $table->string('reason')->nullable();
             $table->decimal('quantity', 12, 3);
-            $table->text('notes')->nullable();
+            $table->decimal('quantity_before', 12, 3)->nullable();
+            $table->decimal('quantity_after', 12, 3)->nullable();
+            $table->string('reference_type')->nullable();
+            $table->unsignedBigInteger('reference_id')->nullable();
+            $table->text('note')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->json('metadata_json')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('stock_reservations', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('order_item_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('warehouse_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_variant_id')->nullable()->constrained()->nullOnDelete();
+            $table->decimal('quantity', 12, 3);
+            $table->string('status')->default('reserved');
+            $table->timestamp('reserved_at');
+            $table->timestamp('released_at')->nullable();
+            $table->timestamp('fulfilled_at')->nullable();
+            $table->json('metadata_json')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('stock_transfers', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->string('transfer_number')->unique();
+            $table->foreignId('from_warehouse_id')->constrained('warehouses')->cascadeOnDelete();
+            $table->foreignId('to_warehouse_id')->constrained('warehouses')->cascadeOnDelete();
+            $table->string('status')->default('pending');
+            $table->foreignId('requested_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('approved_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('completed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('requested_at')->nullable();
+            $table->timestamp('approved_at')->nullable();
+            $table->timestamp('completed_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->text('note')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('stock_transfer_items', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('stock_transfer_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_variant_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('sku')->nullable();
+            $table->decimal('quantity', 12, 3);
             $table->timestamps();
         });
 
@@ -722,6 +809,9 @@ return new class extends Migration
             'rfq_requests',
             'services',
             'stock_movements',
+            'stock_transfer_items',
+            'stock_transfers',
+            'stock_reservations',
             'stock_items',
             'manual_payment_proofs',
             'payment_transactions',

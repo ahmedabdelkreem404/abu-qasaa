@@ -9,6 +9,6 @@ class GetOrderAction extends BaseAction
 {
     public function handle(mixed ...$arguments): Order
     {
-        return $arguments[0]->load(['businessUnit', 'customer.addresses', 'items', 'statusHistories.changedBy']);
+        return $arguments[0]->load(['businessUnit', 'customer.addresses', 'items', 'stockReservations.warehouse', 'statusHistories.changedBy']);
     }
 }

@@ -197,3 +197,24 @@ Paymob public endpoints:
 Paymob dashboard endpoint:
 
 - `GET /api/v1/payments/paymob/transactions`
+
+Inventory dashboard endpoints:
+
+- `GET /api/v1/inventory/summary`
+- `GET|POST /api/v1/inventory/branches`
+- `GET|PATCH|DELETE /api/v1/inventory/branches/{branch}`
+- `GET|POST /api/v1/inventory/warehouses`
+- `GET|PATCH|DELETE /api/v1/inventory/warehouses/{warehouse}`
+- `GET /api/v1/inventory/stock-items`
+- `POST /api/v1/inventory/stock-items/receive`
+- `POST /api/v1/inventory/stock-items/adjust`
+- `GET /api/v1/inventory/movements`
+- `GET|POST /api/v1/inventory/transfers`
+- `POST /api/v1/inventory/transfers/{transfer}/approve`
+- `POST /api/v1/inventory/transfers/{transfer}/complete`
+- `POST /api/v1/inventory/orders/{order}/fulfill-stock`
+
+Inventory public endpoints:
+
+- `GET /api/v1/public/{businessSlug}/branches`
+- `GET /api/v1/public/{businessSlug}/products/{productSlug}/availability`

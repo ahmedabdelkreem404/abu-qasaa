@@ -11,7 +11,7 @@ class ListOrdersAction extends BaseAction
     public function handle(mixed ...$arguments): mixed
     {
         [$user, $filters] = $arguments + [null, []];
-        $query = Order::query()->with(['businessUnit', 'customer'])->latest();
+        $query = Order::query()->with(['businessUnit', 'customer', 'stockReservations'])->latest();
         if ($user instanceof User && ! $user->isSuperAdmin()) {
             $query->whereIn('business_unit_id', $user->businessUnitAssignments()->where('is_active', true)->select('business_unit_id'));
         }

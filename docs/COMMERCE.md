@@ -62,3 +62,7 @@ Paymob, card payments, inventory deduction, and shipping provider integrations a
 ## Phase 7 Paymob
 
 Paymob Card can now be initiated from the public order payment page. Initiation sets order `payment_status` to `pending`; only a verified backend callback can mark it `paid` and confirm the order. Return URLs show processing status only.
+
+## Phase 8 Inventory
+
+Checkout now reserves available stock when the business unit has inventory enabled. Cancelling an order releases reservations, and moving an order to `shipped` or `delivered` fulfills reserved stock idempotently. The return URL and payment redirects do not fulfill stock.

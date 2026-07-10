@@ -57,3 +57,7 @@ Oils and Dates get Vodafone Cash, Instapay, Bank Transfer, and COD. Import/Expor
 Phase 7 adds a Paymob provider foundation with backend initiation, callback HMAC verification, fake/local mode, and public redirect UX. The return URL never marks payment paid; only verified callbacks update order/payment status.
 
 Future phases can add richer Paymob reconciliation, refunds, production Paymob field confirmation once docs are directly accessible, inventory deduction after payment/fulfillment decisions, and payment reports.
+
+## Phase 8 Inventory Boundary
+
+Payments still do not deduct inventory directly. Verified payment callbacks may confirm payment state, while stock confirmation remains webhook/status driven through Commerce and Inventory fulfillment rules.

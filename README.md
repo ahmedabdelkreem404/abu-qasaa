@@ -139,6 +139,12 @@ Paymob is now represented as a provider inside the Payments module. Backend init
 
 Inventory deduction, shipping integrations, refunds, and production Paymob field refinements remain follow-up work.
 
+## Phase 8 Inventory And Warehouse Foundation
+
+Inventory now supports branches, warehouses, stock items, movements, stock reservations, and same-business-unit transfers. Backend checkout reserves stock when inventory is enabled, cancellation releases reservations, and shipped/delivered order states fulfill reserved stock. Public product pages show availability and do not collect or manage stock directly.
+
+Shipping integrations, inventory valuation, supplier procurement, RFQ, real estate, and microservice/DevOps complexity remain outside this phase.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

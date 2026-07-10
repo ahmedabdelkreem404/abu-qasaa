@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AccessControlSeeder::class);
         $this->call(CmsContentSeeder::class);
         $this->call(CatalogSeeder::class);
+        $this->call(InventorySeeder::class);
         $this->call(PaymentSeeder::class);
     }
 }

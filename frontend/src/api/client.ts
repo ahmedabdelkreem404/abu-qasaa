@@ -41,6 +41,13 @@ import type {
   PaymobInitiationResponse,
   PublicPaymentStatus,
   PublicOrderPaymentOptions,
+  Branch,
+  Warehouse,
+  StockItem,
+  StockMovement,
+  StockTransfer,
+  InventorySummary,
+  PublicAvailability,
 } from "@/types/platform";
 
 const API_URL =
@@ -460,6 +467,14 @@ export async function getPublicProductBySlug(businessSlug: string, productSlug: 
   return apiRequest<ApiResponse<Product>>(`/public/${businessSlug}/products/${productSlug}`);
 }
 
+export async function getPublicProductAvailability(businessSlug: string, productSlug: string) {
+  return apiRequest<ApiResponse<PublicAvailability>>(`/public/${businessSlug}/products/${productSlug}/availability`);
+}
+
+export async function listPublicBranches(businessSlug: string) {
+  return apiRequest<ApiResponse<Branch[]>>(`/public/${businessSlug}/branches`);
+}
+
 export async function listPublicCategories(businessSlug: string) {
   return apiRequest<ApiResponse<Category[]>>(`/public/${businessSlug}/categories`);
 }
@@ -599,6 +614,88 @@ export async function cancelOrder(id: string | number, note?: string | null) {
     method: "POST",
     body: JSON.stringify({ note }),
   });
+}
+
+export type BranchPayload = Partial<Branch> & { business_unit_id: number; name_ar: string; slug: string };
+export type WarehousePayload = Partial<Warehouse> & { business_unit_id: number; name_ar: string; slug: string };
+export type StockReceivePayload = { business_unit_id: number; warehouse_id: number; product_id: number; product_variant_id?: number | null; sku?: string | null; quantity: string | number; note?: string | null };
+export type StockAdjustPayload = StockReceivePayload & { type: "adjustment_in" | "adjustment_out" };
+export type StockTransferPayload = { business_unit_id: number; from_warehouse_id: number; to_warehouse_id: number; note?: string | null; items: Array<{ product_id: number; product_variant_id?: number | null; sku?: string | null; quantity: string | number }> };
+
+export async function getInventorySummary(params?: URLSearchParams) {
+  return apiRequest<ApiResponse<InventorySummary>>(withQuery("/inventory/summary", params));
+}
+
+export async function listBranches(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Branch>>(withQuery("/inventory/branches", params));
+}
+
+export async function createBranch(payload: BranchPayload) {
+  return apiRequest<ApiResponse<Branch>>("/inventory/branches", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updateBranch(id: string | number, payload: BranchPayload) {
+  return apiRequest<ApiResponse<Branch>>(`/inventory/branches/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deleteBranch(id: string | number) {
+  return apiRequest<ApiResponse<Branch>>(`/inventory/branches/${id}`, { method: "DELETE" });
+}
+
+export async function listWarehouses(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Warehouse>>(withQuery("/inventory/warehouses", params));
+}
+
+export async function createWarehouse(payload: WarehousePayload) {
+  return apiRequest<ApiResponse<Warehouse>>("/inventory/warehouses", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updateWarehouse(id: string | number, payload: WarehousePayload) {
+  return apiRequest<ApiResponse<Warehouse>>(`/inventory/warehouses/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function deleteWarehouse(id: string | number) {
+  return apiRequest<ApiResponse<Warehouse>>(`/inventory/warehouses/${id}`, { method: "DELETE" });
+}
+
+export async function listStockItems(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<StockItem>>(withQuery("/inventory/stock-items", params));
+}
+
+export async function receiveStock(payload: StockReceivePayload) {
+  return apiRequest<ApiResponse<StockItem>>("/inventory/stock-items/receive", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function adjustStock(payload: StockAdjustPayload) {
+  return apiRequest<ApiResponse<StockItem>>("/inventory/stock-items/adjust", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function listStockMovements(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<StockMovement>>(withQuery("/inventory/movements", params));
+}
+
+export async function listStockTransfers(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<StockTransfer>>(withQuery("/inventory/transfers", params));
+}
+
+export async function createStockTransfer(payload: StockTransferPayload) {
+  return apiRequest<ApiResponse<StockTransfer>>("/inventory/transfers", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function approveStockTransfer(id: string | number) {
+  return apiRequest<ApiResponse<StockTransfer>>(`/inventory/transfers/${id}/approve`, { method: "POST" });
+}
+
+export async function completeStockTransfer(id: string | number) {
+  return apiRequest<ApiResponse<StockTransfer>>(`/inventory/transfers/${id}/complete`, { method: "POST" });
+}
+
+export async function cancelStockTransfer(id: string | number) {
+  return apiRequest<ApiResponse<StockTransfer>>(`/inventory/transfers/${id}/cancel`, { method: "POST" });
+}
+
+export async function fulfillOrderStock(id: string | number) {
+  return apiRequest<ApiResponse<unknown>>(`/inventory/orders/${id}/fulfill-stock`, { method: "POST" });
 }
 
 export type PaymentMethodPayload = Partial<PaymentMethod> & {

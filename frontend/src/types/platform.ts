@@ -412,6 +412,7 @@ export type Order = {
   internal_notes?: string | null;
   placed_at?: string | null;
   items?: OrderItem[];
+  stock_reservations?: StockReservation[];
   status_histories?: OrderStatusHistory[];
 };
 
@@ -537,6 +538,136 @@ export type PaymobInitiationResponse = {
 export type PublicPaymentStatus = {
   order: Pick<Order, "order_number" | "status" | "payment_status" | "grand_total" | "currency">;
   payment?: Pick<Payment, "id" | "provider" | "method_type" | "status" | "provider_status" | "provider_reference"> | null;
+};
+
+export type BranchStatus = "active" | "inactive" | "archived";
+export type WarehouseStatus = "active" | "inactive" | "archived";
+export type WarehouseType = "main" | "branch" | "returns" | "damaged" | "transit";
+export type StockMovementType = "receive" | "adjustment_in" | "adjustment_out" | "reserve" | "release_reservation" | "sale" | "return" | "transfer_out" | "transfer_in" | "correction";
+export type StockReservationStatus = "reserved" | "released" | "fulfilled" | "cancelled" | "expired";
+export type StockTransferStatus = "draft" | "pending" | "approved" | "completed" | "cancelled";
+
+export type Branch = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  status: BranchStatus;
+  phone?: string | null;
+  email?: string | null;
+  governorate?: string | null;
+  city?: string | null;
+  area?: string | null;
+  is_public: boolean;
+  sort_order: number;
+};
+
+export type Warehouse = {
+  id: number;
+  business_unit_id: number;
+  branch_id?: number | null;
+  branch?: Pick<Branch, "id" | "slug" | "name_ar" | "name_en"> | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  type: WarehouseType;
+  status: WarehouseStatus;
+  governorate?: string | null;
+  city?: string | null;
+  area?: string | null;
+  is_default: boolean;
+  is_sellable: boolean;
+  sort_order: number;
+};
+
+export type StockItem = {
+  id: number;
+  business_unit_id: number;
+  warehouse_id: number;
+  warehouse?: Pick<Warehouse, "id" | "slug" | "name_ar" | "name_en"> | null;
+  product_id: number;
+  product?: Pick<Product, "id" | "slug" | "name_ar" | "name_en"> | null;
+  product_variant_id?: number | null;
+  variant?: Pick<ProductVariant, "id" | "name_ar" | "name_en" | "sku"> | null;
+  sku?: string | null;
+  quantity_on_hand: string;
+  quantity_reserved: string;
+  quantity_available: string;
+  reorder_level: string;
+  max_stock_level?: string | null;
+  low_stock: boolean;
+  last_movement_at?: string | null;
+};
+
+export type StockMovement = {
+  id: number;
+  business_unit_id: number;
+  warehouse_id: number;
+  warehouse?: Pick<Warehouse, "id" | "name_ar" | "name_en"> | null;
+  product?: Pick<Product, "id" | "slug" | "name_ar" | "name_en"> | null;
+  type: StockMovementType;
+  reason: string;
+  quantity: string;
+  quantity_before: string;
+  quantity_after: string;
+  note?: string | null;
+  created_at?: string;
+};
+
+export type StockReservation = {
+  id: number;
+  business_unit_id: number;
+  order_id: number;
+  order_item_id?: number | null;
+  warehouse_id: number;
+  quantity: string;
+  status: StockReservationStatus;
+  reserved_at?: string | null;
+  released_at?: string | null;
+  fulfilled_at?: string | null;
+};
+
+export type StockTransferItem = {
+  id?: number;
+  product_id: number;
+  product_variant_id?: number | null;
+  sku?: string | null;
+  quantity: string | number;
+  product?: Pick<Product, "id" | "slug" | "name_ar" | "name_en"> | null;
+};
+
+export type StockTransfer = {
+  id: number;
+  business_unit_id: number;
+  transfer_number: string;
+  from_warehouse_id: number;
+  to_warehouse_id: number;
+  from_warehouse?: Warehouse | null;
+  to_warehouse?: Warehouse | null;
+  status: StockTransferStatus;
+  note?: string | null;
+  items?: StockTransferItem[];
+  requested_at?: string | null;
+  approved_at?: string | null;
+  completed_at?: string | null;
+};
+
+export type InventorySummary = {
+  branches_count: number;
+  warehouses_count: number;
+  stock_items_count: number;
+  low_stock_count: number;
+  reserved_quantity: string;
+  open_transfers_count: number;
+};
+
+export type PublicAvailability = {
+  inventory_enabled: boolean;
+  in_stock: boolean;
+  available_quantity?: number | null;
+  variants: Array<{ product_variant_id: number; sku?: string | null; in_stock: boolean; available_quantity: number }>;
 };
 
 export type Lead = {
