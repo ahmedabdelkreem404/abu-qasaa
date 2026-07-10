@@ -63,3 +63,5 @@ Orders store pricing snapshots from cart items so later catalog price changes do
 Phase 6 adds a real `Payments` module inside the same modular monolith. Payment methods, payments, payment transactions, and manual proofs are business-unit scoped and exposed through API-first public and dashboard routes.
 
 Controllers remain thin and delegate manual proof submission, review, COD selection, and admin mark-paid flows to application actions. No Paymob provider, card payment callback flow, microservice, or DevOps-heavy setup is introduced in this phase.
+
+Phase 7 extends the same module boundary with a Paymob provider interface, client, signature verifier, and payload mapper. The provider supports fake mode for local/test execution and keeps exact Paymob field assumptions isolated for later replacement when direct official docs access is available.

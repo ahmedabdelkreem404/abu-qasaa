@@ -16,7 +16,7 @@ export default function DashboardPaymentsPage() {
   }, []);
 
   if (error) return <ApiErrorState message={error} />;
-  return <section className="space-y-6"><div><h1 className="text-2xl font-semibold">Payments</h1><p className="text-sm text-slate-600">Manual payments foundation. No Paymob/card payments yet.</p></div><div className="grid gap-4 md:grid-cols-3"><Card title="Payment methods" value={counts.methods} href="/dashboard/payments/methods" /><Card title="Pending manual proofs" value={counts.pendingProofs} href="/dashboard/payments/manual-proofs" /><Card title="Payments" value={counts.payments} href="/dashboard/payments/list" /></div></section>;
+  return <section className="space-y-6"><div><h1 className="text-2xl font-semibold">Payments</h1><p className="text-sm text-slate-600">Manual payments and Paymob online payment foundation.</p></div><div className="grid gap-4 md:grid-cols-4"><Card title="Payment methods" value={counts.methods} href="/dashboard/payments/methods" /><Card title="Pending manual proofs" value={counts.pendingProofs} href="/dashboard/payments/manual-proofs" /><Card title="Payments" value={counts.payments} href="/dashboard/payments/list" /><Card title="Paymob transactions" value={0} href="/dashboard/payments/paymob-transactions" /></div></section>;
 }
 
 function Card({ title, value, href }: { title: string; value: number; href: string }) {

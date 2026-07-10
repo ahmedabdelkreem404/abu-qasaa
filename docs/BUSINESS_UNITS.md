@@ -53,3 +53,5 @@ Commerce checkout requires the business unit to be active, have `products` and `
 ## Manual Payment Rules
 
 Manual payments require an active business unit, enabled `orders`, `payments`, and `manual_payments` modules, and the `manual_payment_enabled` setting. Dashboard users can manage or review payments only for assigned business units unless they are Super Admin.
+
+Paymob initiation requires an active business unit, enabled `orders`, `payments`, and `paymob` modules, and the `paymob_enabled` setting. Seed data enables Paymob Card for product business units in fake/local mode.

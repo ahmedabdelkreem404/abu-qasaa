@@ -80,3 +80,7 @@ Public cart session tokens are stored by the frontend per business unit using `a
 ## Seeded Manual Payments
 
 The default seed creates placeholder manual payment methods. They intentionally use safe demo destination accounts only; replace them through dashboard configuration for real deployments and do not commit real payment account data.
+
+## Paymob Local Testing
+
+`PAYMOB_FAKE_MODE=true` lets local and automated tests initiate Paymob payments without real credentials. Real Paymob credentials must be configured only in `.env`, never committed.

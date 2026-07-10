@@ -12,11 +12,11 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Payment extends Model
 {
-    protected $fillable = ['business_unit_id', 'order_id', 'customer_id', 'payment_method_id', 'method_type', 'method_key', 'status', 'amount', 'currency', 'paid_at', 'failed_at', 'reference', 'notes', 'metadata_json', 'created_by', 'updated_by'];
+    protected $fillable = ['business_unit_id', 'order_id', 'customer_id', 'payment_method_id', 'method_type', 'method_key', 'provider', 'status', 'amount', 'currency', 'paid_at', 'failed_at', 'reference', 'provider_payment_id', 'provider_order_id', 'provider_session_id', 'provider_reference', 'provider_status', 'checkout_url', 'expires_at', 'notes', 'metadata_json', 'created_by', 'updated_by'];
 
     protected function casts(): array
     {
-        return ['amount' => 'decimal:2', 'metadata_json' => 'array', 'paid_at' => 'datetime', 'failed_at' => 'datetime'];
+        return ['amount' => 'decimal:2', 'metadata_json' => 'array', 'paid_at' => 'datetime', 'failed_at' => 'datetime', 'expires_at' => 'datetime'];
     }
 
     public function businessUnit(): BelongsTo

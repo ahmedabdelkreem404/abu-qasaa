@@ -16,6 +16,7 @@ class PaymentResource extends JsonResource
             'order' => $this->whenLoaded('order', fn () => $this->order ? ['id' => $this->order->id, 'order_number' => $this->order->order_number, 'status' => $this->order->status, 'payment_status' => $this->order->payment_status, 'grand_total' => $this->order->grand_total, 'currency' => $this->order->currency] : null),
             'customer' => $this->whenLoaded('customer', fn () => $this->customer ? ['id' => $this->customer->id, 'name' => $this->customer->name, 'phone' => $this->customer->phone, 'email' => $this->customer->email] : null),
             'payment_method' => $this->whenLoaded('paymentMethod', fn () => $this->paymentMethod ? PaymentMethodResource::make($this->paymentMethod) : null),
+            'provider' => $this->provider,
             'method_type' => $this->method_type,
             'method_key' => $this->method_key,
             'status' => $this->status,
@@ -24,6 +25,9 @@ class PaymentResource extends JsonResource
             'paid_at' => $this->paid_at,
             'failed_at' => $this->failed_at,
             'reference' => $this->reference,
+            'provider_reference' => $this->provider_reference,
+            'provider_status' => $this->provider_status,
+            'checkout_url' => $this->checkout_url,
             'notes' => $this->notes,
             'transactions' => PaymentTransactionResource::collection($this->whenLoaded('transactions')),
         ];

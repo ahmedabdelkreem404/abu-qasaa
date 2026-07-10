@@ -37,6 +37,9 @@ import type {
   Payment,
   PaymentMethod,
   PaymentMethodType,
+  PaymentTransaction,
+  PaymobInitiationResponse,
+  PublicPaymentStatus,
   PublicOrderPaymentOptions,
 } from "@/types/platform";
 
@@ -561,6 +564,21 @@ export async function selectCashOnDelivery(businessSlug: string, orderNumber: st
   });
 }
 
+export async function initiatePaymobPayment(businessSlug: string, orderNumber: string, payload: { phone: string; payment_method_id?: number; method_key?: string }) {
+  return apiRequest<ApiResponse<PaymobInitiationResponse>>(`/public/${businessSlug}/orders/${orderNumber}/paymob/initiate`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getPublicPaymentStatus(businessSlug: string, orderNumber: string, phone: string) {
+  return apiRequest<ApiResponse<PublicPaymentStatus>>(`/public/${businessSlug}/orders/${orderNumber}/payment-status?phone=${encodeURIComponent(phone)}`);
+}
+
+export async function getPaymobReturnStatus(params: URLSearchParams) {
+  return apiRequest<ApiResponse<{ payment_id?: number | null; status: string }>>(`/public/paymob/return?${params.toString()}`);
+}
+
 export async function listOrders(params?: URLSearchParams) {
   return apiRequest<PaginatedResponse<Order>>(withQuery("/commerce/orders", params));
 }
@@ -612,6 +630,10 @@ export async function togglePaymentMethod(id: string | number) {
 
 export async function listPayments(params?: URLSearchParams) {
   return apiRequest<PaginatedResponse<Payment>>(withQuery("/payments", params));
+}
+
+export async function listPaymobTransactions(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<PaymentTransaction>>(withQuery("/payments/paymob/transactions", params));
 }
 
 export async function getPayment(id: string | number) {

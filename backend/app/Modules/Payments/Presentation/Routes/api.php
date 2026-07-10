@@ -1,12 +1,19 @@
 <?php
 
+use App\Modules\Payments\Presentation\Http\Controllers\DashboardPaymobController;
 use App\Modules\Payments\Presentation\Http\Controllers\PaymentsController;
+use App\Modules\Payments\Presentation\Http\Controllers\PaymobWebhookController;
+use App\Modules\Payments\Presentation\Http\Controllers\PublicPaymobController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/public/{businessSlug}/payment-methods', [PaymentsController::class, 'publicMethods']);
 Route::get('/public/{businessSlug}/orders/{orderNumber}/payment-options', [PaymentsController::class, 'publicPaymentOptions']);
 Route::post('/public/{businessSlug}/orders/{orderNumber}/manual-payment-proofs', [PaymentsController::class, 'submitManualProof']);
 Route::post('/public/{businessSlug}/orders/{orderNumber}/cash-on-delivery', [PaymentsController::class, 'publicCashOnDelivery']);
+Route::get('/public/{businessSlug}/orders/{orderNumber}/payment-status', [PublicPaymobController::class, 'status']);
+Route::post('/public/{businessSlug}/orders/{orderNumber}/paymob/initiate', [PublicPaymobController::class, 'initiate']);
+Route::match(['get', 'post'], '/public/paymob/return', [PublicPaymobController::class, 'return']);
+Route::match(['get', 'post'], '/payments/paymob/callback', [PaymobWebhookController::class, 'callback']);
 
 Route::middleware('auth:sanctum')->prefix('payments')->group(function (): void {
     Route::get('/methods', [PaymentsController::class, 'methods'])->middleware('permission:payments.manage_methods');
@@ -17,6 +24,7 @@ Route::middleware('auth:sanctum')->prefix('payments')->group(function (): void {
 
     Route::get('/', [PaymentsController::class, 'payments'])->middleware('permission:payments.view');
     Route::get('/manual-proofs', [PaymentsController::class, 'manualProofs'])->middleware('permission:payments.review_manual');
+    Route::get('/paymob/transactions', [DashboardPaymobController::class, 'transactions'])->middleware('permission:payments.view');
     Route::get('/manual-proofs/{manualPaymentProof}', [PaymentsController::class, 'showManualProof'])->middleware('permission:payments.review_manual');
     Route::post('/manual-proofs/{manualPaymentProof}/approve', [PaymentsController::class, 'approveManualProof'])->middleware('permission:payments.review_manual');
     Route::post('/manual-proofs/{manualPaymentProof}/reject', [PaymentsController::class, 'rejectManualProof'])->middleware('permission:payments.review_manual');

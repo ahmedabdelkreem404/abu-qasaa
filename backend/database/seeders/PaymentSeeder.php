@@ -10,8 +10,8 @@ use Illuminate\Database\Seeder;
 class PaymentSeeder extends Seeder
 {
     private const METHODS = [
-        'oils' => ['vodafone_cash', 'instapay', 'bank_transfer', 'cash_on_delivery'],
-        'dates' => ['vodafone_cash', 'instapay', 'bank_transfer', 'cash_on_delivery'],
+        'oils' => ['vodafone_cash', 'instapay', 'bank_transfer', 'cash_on_delivery', 'paymob_card'],
+        'dates' => ['vodafone_cash', 'instapay', 'bank_transfer', 'cash_on_delivery', 'paymob_card'],
         'import-export' => ['bank_transfer', 'instapay'],
         'real-estate' => ['bank_transfer', 'instapay'],
     ];
@@ -31,8 +31,8 @@ class PaymentSeeder extends Seeder
                         'instructions_en' => $this->instructions($type),
                         'destination_account' => $this->destination($type),
                         'destination_account_name' => 'Abu Qasaa Placeholder',
-                        'config_json' => ['phase' => 'manual_payments_foundation'],
-                        'is_active' => true,
+                        'config_json' => $this->config($type),
+                        'is_active' => $this->active($slug, $type),
                         'sort_order' => $index + 1,
                     ],
                 );
@@ -46,8 +46,8 @@ class PaymentSeeder extends Seeder
                     'type' => PaymentMethodType::PaymobPlaceholder->value,
                     'name_ar' => 'Paymob Placeholder',
                     'name_en' => 'Paymob Placeholder',
-                    'instructions_ar' => 'Inactive placeholder only. No Paymob integration is enabled in Phase 6.',
-                    'instructions_en' => 'Inactive placeholder only. No Paymob integration is enabled in Phase 6.',
+                    'instructions_ar' => 'Inactive backward-compatible placeholder. Use Paymob Card for Phase 7 online payment initiation.',
+                    'instructions_en' => 'Inactive backward-compatible placeholder. Use Paymob Card for Phase 7 online payment initiation.',
                     'is_active' => false,
                     'sort_order' => 99,
                 ],
@@ -72,6 +72,7 @@ class PaymentSeeder extends Seeder
             PaymentMethodType::Instapay->value => 'Send the order total to the placeholder Instapay handle, then submit the reference for manual review.',
             PaymentMethodType::BankTransfer->value => 'Transfer the order total to the placeholder bank account details, then submit the transfer reference.',
             PaymentMethodType::CashOnDelivery->value => 'Pay in cash when the order is delivered. The order is not marked paid until an admin confirms collection.',
+            PaymentMethodType::PaymobCard->value => 'Pay securely online by card through Paymob. Final order status is confirmed by backend callback.',
             default => 'Manual payment placeholder.',
         };
     }
@@ -83,7 +84,26 @@ class PaymentSeeder extends Seeder
             PaymentMethodType::Instapay->value => 'Instapay',
             PaymentMethodType::BankTransfer->value => 'Bank Transfer',
             PaymentMethodType::CashOnDelivery->value => 'Cash on Delivery',
+            PaymentMethodType::PaymobCard->value => 'Paymob Card',
             default => 'Payment Method',
         };
+    }
+
+    private function config(string $type): array
+    {
+        if ($type !== PaymentMethodType::PaymobCard->value) {
+            return ['phase' => 'manual_payments_foundation'];
+        }
+
+        return ['phase' => 'paymob_foundation', 'currency' => env('PAYMOB_CURRENCY', 'EGP')];
+    }
+
+    private function active(string $slug, string $type): bool
+    {
+        if ($type !== PaymentMethodType::PaymobCard->value) {
+            return true;
+        }
+
+        return in_array($slug, ['oils', 'dates'], true) && (bool) env('PAYMOB_FAKE_MODE', true);
     }
 }

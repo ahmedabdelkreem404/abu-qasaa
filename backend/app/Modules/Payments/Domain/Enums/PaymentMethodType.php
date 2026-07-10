@@ -8,10 +8,17 @@ enum PaymentMethodType: string
     case Instapay = 'instapay';
     case BankTransfer = 'bank_transfer';
     case CashOnDelivery = 'cash_on_delivery';
+    case PaymobCard = 'paymob_card';
+    case PaymobWallet = 'paymob_wallet';
     case PaymobPlaceholder = 'paymob_placeholder';
 
     public function isManualProof(): bool
     {
         return in_array($this, [self::VodafoneCash, self::Instapay, self::BankTransfer], true);
+    }
+
+    public function isPaymob(): bool
+    {
+        return in_array($this, [self::PaymobCard, self::PaymobWallet], true);
     }
 }

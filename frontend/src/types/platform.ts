@@ -313,7 +313,8 @@ export type Product = {
 export type CartStatus = "active" | "converted" | "abandoned" | "expired";
 export type OrderStatus = "pending_review" | "pending_payment" | "confirmed" | "processing" | "ready_to_ship" | "shipped" | "delivered" | "cancelled" | "archived";
 export type PaymentStatus = "unpaid" | "pending" | "paid" | "failed" | "cancelled" | "refunded";
-export type PaymentMethodType = "vodafone_cash" | "instapay" | "bank_transfer" | "cash_on_delivery" | "paymob_placeholder";
+export type PaymentMethodType = "vodafone_cash" | "instapay" | "bank_transfer" | "cash_on_delivery" | "paymob_card" | "paymob_wallet" | "paymob_placeholder";
+export type PaymentProvider = "manual" | "cod" | "paymob";
 export type ManualPaymentProofStatus = "pending_review" | "approved" | "rejected" | "cancelled";
 export type PaymentTransactionType = "manual_proof_submitted" | "manual_approved" | "manual_rejected" | "cod_selected" | "admin_mark_paid" | "admin_mark_failed";
 export type FulfillmentStatus = "unfulfilled" | "preparing" | "ready" | "shipped" | "delivered" | "cancelled";
@@ -466,7 +467,12 @@ export type PaymentTransaction = {
   amount: string;
   currency: string;
   reference?: string | null;
+  provider?: PaymentProvider | null;
+  provider_transaction_id?: string | null;
+  provider_order_id?: string | null;
+  provider_status?: string | null;
   processed_at?: string | null;
+  verified_at?: string | null;
 };
 
 export type Payment = {
@@ -476,6 +482,7 @@ export type Payment = {
   order?: Pick<Order, "id" | "order_number" | "status" | "payment_status" | "grand_total" | "currency"> | null;
   customer?: Pick<Customer, "id" | "name" | "phone" | "email"> | null;
   payment_method?: PaymentMethod | null;
+  provider?: PaymentProvider | null;
   method_type: PaymentMethodType;
   method_key?: string | null;
   status: PaymentStatus;
@@ -484,6 +491,9 @@ export type Payment = {
   paid_at?: string | null;
   failed_at?: string | null;
   reference?: string | null;
+  provider_reference?: string | null;
+  provider_status?: string | null;
+  checkout_url?: string | null;
   notes?: string | null;
   transactions?: PaymentTransaction[];
 };
@@ -513,6 +523,20 @@ export type PublicOrderPaymentOptions = {
   order: Pick<Order, "id" | "order_number" | "status" | "payment_status" | "grand_total" | "currency" | "customer_name" | "customer_phone">;
   payment_methods: PaymentMethod[];
   proofs: ManualPaymentProof[];
+};
+
+export type PaymobInitiationResponse = {
+  payment_id: number;
+  payment_status: PaymentStatus;
+  checkout_url?: string | null;
+  iframe_url?: string | null;
+  provider_reference?: string | null;
+  message: string;
+};
+
+export type PublicPaymentStatus = {
+  order: Pick<Order, "order_number" | "status" | "payment_status" | "grand_total" | "currency">;
+  payment?: Pick<Payment, "id" | "provider" | "method_type" | "status" | "provider_status" | "provider_reference"> | null;
 };
 
 export type Lead = {

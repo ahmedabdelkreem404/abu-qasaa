@@ -58,3 +58,7 @@ Order status changes create `order_status_histories` records.
 Manual payment records now integrate with Commerce orders. Manual proof submission sets order `payment_status` to `pending`; admin approval marks the payment and order paid and can confirm a pending order; rejection keeps the proof and returns the order payment state to unpaid. Cash on Delivery records the selected method but does not mark the order paid until later manual confirmation.
 
 Paymob, card payments, inventory deduction, and shipping provider integrations are still deferred.
+
+## Phase 7 Paymob
+
+Paymob Card can now be initiated from the public order payment page. Initiation sets order `payment_status` to `pending`; only a verified backend callback can mark it `paid` and confirm the order. Return URLs show processing status only.

@@ -25,6 +25,15 @@ class PaymentScopeService
         return $businessUnit;
     }
 
+    public function publicPaymobBusinessUnit(string $slug): BusinessUnit
+    {
+        $businessUnit = BusinessUnit::query()->where('slug', $slug)->where('status', 'active')->firstOrFail();
+        abort_unless($this->moduleEnabled($businessUnit, 'orders') && $this->moduleEnabled($businessUnit, 'payments') && $this->moduleEnabled($businessUnit, 'paymob'), 404);
+        abort_if(! $this->settingEnabled($businessUnit, 'paymob_enabled'), 403);
+
+        return $businessUnit;
+    }
+
     public function publicOrder(BusinessUnit $businessUnit, string $orderNumber, string $phone): Order
     {
         $order = Order::query()

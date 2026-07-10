@@ -42,6 +42,8 @@ Add price lists, wholesale workflows, branches, warehouses, stock items, and sto
 
 ## Phase 8: Paymob And Online Payments
 
+Phase 7 now implements the Paymob online payment foundation. Phase 8 should deepen reconciliation, refunds, production Paymob field confirmation, and reporting rather than adding the first provider boundary.
+
 Implement generic payments, manual proof review, and Paymob integration.
 
 ## Phase 9: Real Estate Leads And Appointments

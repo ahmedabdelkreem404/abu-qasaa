@@ -186,3 +186,14 @@ Protected payment endpoints:
 - `POST /api/v1/payments/orders/{order}/cash-on-delivery`
 
 Public payment responses do not expose admin notes, sensitive method config, or raw transaction payloads.
+
+Paymob public endpoints:
+
+- `GET /api/v1/public/{businessSlug}/orders/{orderNumber}/payment-status?phone=...`
+- `POST /api/v1/public/{businessSlug}/orders/{orderNumber}/paymob/initiate`
+- `GET|POST /api/v1/public/paymob/return`
+- `GET|POST /api/v1/payments/paymob/callback`
+
+Paymob dashboard endpoint:
+
+- `GET /api/v1/payments/paymob/transactions`

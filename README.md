@@ -133,6 +133,12 @@ Payments now support business-unit scoped manual methods for existing orders:
 
 Paymob, card payments, wallet callbacks, automatic verification, inventory deduction, and shipping integrations remain outside this phase.
 
+## Phase 7 Paymob Payment Foundation
+
+Paymob is now represented as a provider inside the Payments module. Backend initiation creates a pending payment and returns a redirect URL, while verified callbacks are the only path that can mark an order paid. Fake/local mode supports automated tests without real credentials.
+
+Inventory deduction, shipping integrations, refunds, and production Paymob field refinements remain follow-up work.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.
