@@ -53,6 +53,8 @@ Order status changes create `order_status_histories` records.
 - Public checkout only accepts published/public products with resolvable prices.
 - Public order lookup requires order number and matching phone.
 
-## Phase 6
+## Phase 6 Manual Payments
 
-Next work should add real payment flows, manual proof review, inventory reservation/deduction, shipping calculation, and richer customer account flows.
+Manual payment records now integrate with Commerce orders. Manual proof submission sets order `payment_status` to `pending`; admin approval marks the payment and order paid and can confirm a pending order; rejection keeps the proof and returns the order payment state to unpaid. Cash on Delivery records the selected method but does not mark the order paid until later manual confirmation.
+
+Paymob, card payments, inventory deduction, and shipping provider integrations are still deferred.

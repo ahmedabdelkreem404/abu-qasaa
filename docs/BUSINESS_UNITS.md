@@ -49,3 +49,7 @@ Future product-based business units can use the same generic catalog tables and 
 ## Commerce Rules
 
 Commerce checkout requires the business unit to be active, have `products` and `orders` enabled, and have `checkout_enabled`, `allow_guest_checkout`, and `show_prices` enabled. Carts cannot mix products across business units.
+
+## Manual Payment Rules
+
+Manual payments require an active business unit, enabled `orders`, `payments`, and `manual_payments` modules, and the `manual_payment_enabled` setting. Dashboard users can manage or review payments only for assigned business units unless they are Super Admin.

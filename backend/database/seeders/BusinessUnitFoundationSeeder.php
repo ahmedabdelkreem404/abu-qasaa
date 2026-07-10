@@ -62,7 +62,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'name' => 'Services/RFQ',
             'type' => 'services_rfq',
             'description' => 'Services, document collection, leads, and request-for-quotation workflows.',
-            'modules' => ['cms', 'services', 'rfq', 'documents', 'leads', 'reports', 'audit_logs', 'settings'],
+            'modules' => ['cms', 'services', 'rfq', 'documents', 'payments', 'manual_payments', 'leads', 'reports', 'audit_logs', 'settings'],
             'settings' => ['registration_enabled' => false, 'checkout_enabled' => false, 'show_prices' => false, 'rfq_enabled' => true],
         ],
         [
@@ -70,7 +70,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'name' => 'Real Estate',
             'type' => 'real_estate',
             'description' => 'Projects, properties, units, leads, appointments, and content.',
-            'modules' => ['cms', 'real_estate_projects', 'properties', 'property_units', 'leads', 'appointments', 'manual_payments', 'reports', 'audit_logs', 'settings'],
+            'modules' => ['cms', 'real_estate_projects', 'properties', 'property_units', 'payments', 'manual_payments', 'leads', 'appointments', 'reports', 'audit_logs', 'settings'],
             'settings' => ['registration_enabled' => false, 'checkout_enabled' => false, 'show_prices' => false, 'appointments_enabled' => true],
         ],
         [
@@ -113,7 +113,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'name_en' => 'Abnaa Abu Qasaa Import & Export',
             'slug' => 'import-export',
             'type' => 'services_rfq',
-            'modules' => ['cms', 'services', 'rfq', 'documents', 'leads', 'reports', 'audit_logs', 'settings'],
+            'modules' => ['cms', 'services', 'rfq', 'documents', 'payments', 'manual_payments', 'leads', 'reports', 'audit_logs', 'settings'],
             'settings' => ['registration_enabled' => false, 'checkout_enabled' => false, 'show_prices' => false, 'rfq_enabled' => true, 'manual_payment_enabled' => true, 'paymob_enabled' => false],
         ],
         [
@@ -121,7 +121,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'name_en' => 'Abnaa Abu Qasaa Real Estate',
             'slug' => 'real-estate',
             'type' => 'real_estate',
-            'modules' => ['cms', 'real_estate_projects', 'properties', 'property_units', 'leads', 'appointments', 'manual_payments', 'reports', 'audit_logs', 'settings'],
+            'modules' => ['cms', 'real_estate_projects', 'properties', 'property_units', 'payments', 'manual_payments', 'leads', 'appointments', 'reports', 'audit_logs', 'settings'],
             'settings' => ['registration_enabled' => false, 'checkout_enabled' => false, 'show_prices' => false, 'appointments_enabled' => true, 'manual_payment_enabled' => true, 'paymob_enabled' => false],
         ],
     ];

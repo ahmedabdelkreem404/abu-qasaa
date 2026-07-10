@@ -33,6 +33,11 @@ import type {
   ProductVisibility,
   Order,
   OrderStatus,
+  ManualPaymentProof,
+  Payment,
+  PaymentMethod,
+  PaymentMethodType,
+  PublicOrderPaymentOptions,
 } from "@/types/platform";
 
 const API_URL =
@@ -522,6 +527,40 @@ export async function getPublicOrder(businessSlug: string, orderNumber: string, 
   return apiRequest<ApiResponse<Order>>(`/public/${businessSlug}/orders/${orderNumber}?phone=${encodeURIComponent(phone)}`);
 }
 
+export async function listPublicPaymentMethods(businessSlug: string) {
+  return apiRequest<ApiResponse<PaymentMethod[]>>(`/public/${businessSlug}/payment-methods`);
+}
+
+export async function getPublicOrderPaymentOptions(businessSlug: string, orderNumber: string, phone: string) {
+  return apiRequest<ApiResponse<PublicOrderPaymentOptions>>(`/public/${businessSlug}/orders/${orderNumber}/payment-options?phone=${encodeURIComponent(phone)}`);
+}
+
+export type ManualPaymentProofPayload = {
+  phone: string;
+  payment_method_id?: number;
+  method_key?: string;
+  amount: string | number;
+  payer_name?: string | null;
+  sender_account?: string | null;
+  transaction_reference?: string | null;
+  proof_image?: string | null;
+  notes?: string | null;
+};
+
+export async function submitManualPaymentProof(businessSlug: string, orderNumber: string, payload: ManualPaymentProofPayload) {
+  return apiRequest<ApiResponse<ManualPaymentProof>>(`/public/${businessSlug}/orders/${orderNumber}/manual-payment-proofs`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function selectCashOnDelivery(businessSlug: string, orderNumber: string, phone: string) {
+  return apiRequest<ApiResponse<Payment>>(`/public/${businessSlug}/orders/${orderNumber}/cash-on-delivery`, {
+    method: "POST",
+    body: JSON.stringify({ phone }),
+  });
+}
+
 export async function listOrders(params?: URLSearchParams) {
   return apiRequest<PaginatedResponse<Order>>(withQuery("/commerce/orders", params));
 }
@@ -542,6 +581,71 @@ export async function cancelOrder(id: string | number, note?: string | null) {
     method: "POST",
     body: JSON.stringify({ note }),
   });
+}
+
+export type PaymentMethodPayload = Partial<PaymentMethod> & {
+  business_unit_id: number;
+  key: string;
+  type: PaymentMethodType;
+  name_ar: string;
+};
+
+export async function listPaymentMethods(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<PaymentMethod>>(withQuery("/payments/methods", params));
+}
+
+export async function getPaymentMethod(id: string | number) {
+  return apiRequest<ApiResponse<PaymentMethod>>(`/payments/methods/${id}`);
+}
+
+export async function createPaymentMethod(payload: PaymentMethodPayload) {
+  return apiRequest<ApiResponse<PaymentMethod>>("/payments/methods", { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function updatePaymentMethod(id: string | number, payload: Partial<PaymentMethodPayload>) {
+  return apiRequest<ApiResponse<PaymentMethod>>(`/payments/methods/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function togglePaymentMethod(id: string | number) {
+  return apiRequest<ApiResponse<PaymentMethod>>(`/payments/methods/${id}/toggle`, { method: "POST" });
+}
+
+export async function listPayments(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Payment>>(withQuery("/payments", params));
+}
+
+export async function getPayment(id: string | number) {
+  return apiRequest<ApiResponse<Payment>>(`/payments/${id}`);
+}
+
+export async function listManualPaymentProofs(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ManualPaymentProof>>(withQuery("/payments/manual-proofs", params));
+}
+
+export async function getManualPaymentProof(id: string | number) {
+  return apiRequest<ApiResponse<ManualPaymentProof>>(`/payments/manual-proofs/${id}`);
+}
+
+export async function approveManualPaymentProof(id: string | number, admin_notes?: string | null) {
+  return apiRequest<ApiResponse<ManualPaymentProof>>(`/payments/manual-proofs/${id}/approve`, {
+    method: "POST",
+    body: JSON.stringify({ admin_notes }),
+  });
+}
+
+export async function rejectManualPaymentProof(id: string | number, rejected_reason: string, admin_notes?: string | null) {
+  return apiRequest<ApiResponse<ManualPaymentProof>>(`/payments/manual-proofs/${id}/reject`, {
+    method: "POST",
+    body: JSON.stringify({ rejected_reason, admin_notes }),
+  });
+}
+
+export async function markOrderPaidManually(id: string | number, payload: { amount?: string | number; reference?: string | null; notes?: string | null }) {
+  return apiRequest<ApiResponse<Payment>>(`/payments/orders/${id}/mark-paid-manually`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function markOrderCashOnDelivery(id: string | number) {
+  return apiRequest<ApiResponse<Payment>>(`/payments/orders/${id}/cash-on-delivery`, { method: "POST" });
 }
 
 export type CustomerPayload = Partial<Customer> & {

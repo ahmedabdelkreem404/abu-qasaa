@@ -404,37 +404,81 @@ return new class extends Migration
             $table->timestamps();
         });
 
+        Schema::create('payment_methods', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->string('key');
+            $table->string('type');
+            $table->string('name_ar');
+            $table->string('name_en')->nullable();
+            $table->text('description_ar')->nullable();
+            $table->text('description_en')->nullable();
+            $table->text('instructions_ar')->nullable();
+            $table->text('instructions_en')->nullable();
+            $table->string('destination_account')->nullable();
+            $table->string('destination_account_name')->nullable();
+            $table->json('config_json')->nullable();
+            $table->boolean('is_active')->default(true);
+            $table->integer('sort_order')->default(0);
+            $table->timestamps();
+            $table->softDeletes();
+            $table->unique(['business_unit_id', 'key']);
+        });
+
         Schema::create('payments', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
-            $table->nullableMorphs('payable');
-            $table->string('provider')->default('manual');
+            $table->foreignId('order_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('payment_method_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('method_type');
+            $table->string('method_key')->nullable();
             $table->string('status')->default('pending');
             $table->decimal('amount', 12, 2);
             $table->string('currency', 3)->default('EGP');
-            $table->json('metadata')->nullable();
+            $table->timestamp('paid_at')->nullable();
+            $table->timestamp('failed_at')->nullable();
+            $table->string('reference')->nullable();
+            $table->text('notes')->nullable();
+            $table->json('metadata_json')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
 
         Schema::create('payment_transactions', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('payment_id')->constrained()->cascadeOnDelete();
-            $table->string('provider_reference')->nullable();
+            $table->string('type');
             $table->string('status')->default('pending');
-            $table->json('payload')->nullable();
+            $table->decimal('amount', 12, 2);
+            $table->string('currency', 3)->default('EGP');
+            $table->string('reference')->nullable();
+            $table->json('payload_json')->nullable();
+            $table->timestamp('processed_at')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
         });
 
         Schema::create('manual_payment_proofs', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('payment_id')->constrained()->cascadeOnDelete();
-            $table->string('method');
-            $table->string('sender_reference')->nullable();
-            $table->string('attachment_path')->nullable();
-            $table->string('review_status')->default('pending');
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('payment_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('payment_method_id')->constrained()->cascadeOnDelete();
+            $table->string('status')->default('pending_review');
+            $table->decimal('amount', 12, 2);
+            $table->string('payer_name')->nullable();
+            $table->string('sender_account')->nullable();
+            $table->string('transaction_reference')->nullable();
+            $table->string('proof_image')->nullable();
+            $table->text('notes')->nullable();
+            $table->text('admin_notes')->nullable();
+            $table->foreignId('reviewed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('reviewed_at')->nullable();
+            $table->text('rejected_reason')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('stock_items', function (Blueprint $table): void {
@@ -668,6 +712,7 @@ return new class extends Migration
             'manual_payment_proofs',
             'payment_transactions',
             'payments',
+            'payment_methods',
             'cart_items',
             'carts',
             'order_status_histories',

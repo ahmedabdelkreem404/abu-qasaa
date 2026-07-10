@@ -57,3 +57,9 @@ Public product APIs resolve the business-unit slug, require an active business u
 Phase 5 adds public cart and order request flows inside the `Commerce` module. Carts and orders are scoped to one business unit, and checkout requires active product and order modules plus enabled checkout settings.
 
 Orders store pricing snapshots from cart items so later catalog price changes do not alter historical totals. Payment and fulfillment fields exist for future phases, but no payment processing, inventory deduction, or shipping integration is performed.
+
+## Payments Foundation
+
+Phase 6 adds a real `Payments` module inside the same modular monolith. Payment methods, payments, payment transactions, and manual proofs are business-unit scoped and exposed through API-first public and dashboard routes.
+
+Controllers remain thin and delegate manual proof submission, review, COD selection, and admin mark-paid flows to application actions. No Paymob provider, card payment callback flow, microservice, or DevOps-heavy setup is introduced in this phase.

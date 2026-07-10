@@ -122,6 +122,17 @@ Commerce foundation now supports public carts, checkout request submission, cust
 - Dashboard users can view scoped orders/customers and update order status.
 - No online payment, Paymob, manual proof review, shipping provider, or inventory deduction is implemented yet.
 
+## Phase 6 Manual Payments Foundation
+
+Payments now support business-unit scoped manual methods for existing orders:
+
+- Seeded Vodafone Cash, Instapay, Bank Transfer, Cash on Delivery, and inactive Paymob placeholders.
+- Public payment options and manual proof submission by order number plus matching phone.
+- Dashboard payment methods, payment records, manual proof review, approval, and rejection.
+- COD selection remains pending/unpaid until an admin marks collection paid.
+
+Paymob, card payments, wallet callbacks, automatic verification, inventory deduction, and shipping integrations remain outside this phase.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

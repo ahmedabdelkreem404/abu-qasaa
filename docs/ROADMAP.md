@@ -30,15 +30,17 @@ Implemented now: public carts, cart items, checkout request order creation, cust
 
 Remaining: online payments, manual payment proof review, inventory deduction, shipping integrations, customer accounts, coupons, and richer order fulfillment workflows.
 
-## Phase 6: Ecommerce Payments And Fulfillment
+## Phase 6: Manual Payments Foundation
 
-Implement catalog browsing, pricing, carts, checkout, orders, and customer flows for product-based business units.
+Implemented now: manual payment methods, public payment options, proof submission, dashboard proof review, payment records, COD selection, business-unit scoped payment rules, and payment seed data.
+
+Remaining: Paymob/card integration, automatic verification, refunds workflow, inventory deduction, and shipping integrations.
 
 ## Phase 7: Wholesale, Inventory, Warehouses
 
 Add price lists, wholesale workflows, branches, warehouses, stock items, and stock movements.
 
-## Phase 8: Payments, Paymob, Manual Payments
+## Phase 8: Paymob And Online Payments
 
 Implement generic payments, manual proof review, and Paymob integration.
 

@@ -76,3 +76,7 @@ Use `oils.admin@abuqasaa.test` or `dates.admin@abuqasaa.test` for scoped dashboa
 Dates supports guest checkout in seeded data. Oils supports carts and product browsing, but seeded `allow_guest_checkout` is disabled for Oils to reflect wholesale-style ordering rules.
 
 Public cart session tokens are stored by the frontend per business unit using `abu_qasaa_cart_{businessSlug}`.
+
+## Seeded Manual Payments
+
+The default seed creates placeholder manual payment methods. They intentionally use safe demo destination accounts only; replace them through dashboard configuration for real deployments and do not commit real payment account data.

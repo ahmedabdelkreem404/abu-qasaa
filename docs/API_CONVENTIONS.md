@@ -159,3 +159,30 @@ Protected commerce endpoints:
 - `POST /api/v1/commerce/orders/{order}/cancel`
 
 Public order responses do not expose internal notes.
+
+## Payment Routes
+
+Public payment endpoints:
+
+- `GET /api/v1/public/{businessSlug}/payment-methods`
+- `GET /api/v1/public/{businessSlug}/orders/{orderNumber}/payment-options?phone=...`
+- `POST /api/v1/public/{businessSlug}/orders/{orderNumber}/manual-payment-proofs`
+- `POST /api/v1/public/{businessSlug}/orders/{orderNumber}/cash-on-delivery`
+
+Protected payment endpoints:
+
+- `GET /api/v1/payments/methods`
+- `POST /api/v1/payments/methods`
+- `GET /api/v1/payments/methods/{paymentMethod}`
+- `PATCH /api/v1/payments/methods/{paymentMethod}`
+- `POST /api/v1/payments/methods/{paymentMethod}/toggle`
+- `GET /api/v1/payments`
+- `GET /api/v1/payments/{payment}`
+- `GET /api/v1/payments/manual-proofs`
+- `GET /api/v1/payments/manual-proofs/{manualPaymentProof}`
+- `POST /api/v1/payments/manual-proofs/{manualPaymentProof}/approve`
+- `POST /api/v1/payments/manual-proofs/{manualPaymentProof}/reject`
+- `POST /api/v1/payments/orders/{order}/mark-paid-manually`
+- `POST /api/v1/payments/orders/{order}/cash-on-delivery`
+
+Public payment responses do not expose admin notes, sensitive method config, or raw transaction payloads.

@@ -312,7 +312,10 @@ export type Product = {
 
 export type CartStatus = "active" | "converted" | "abandoned" | "expired";
 export type OrderStatus = "pending_review" | "pending_payment" | "confirmed" | "processing" | "ready_to_ship" | "shipped" | "delivered" | "cancelled" | "archived";
-export type PaymentStatus = "unpaid" | "pending" | "paid" | "failed" | "refunded";
+export type PaymentStatus = "unpaid" | "pending" | "paid" | "failed" | "cancelled" | "refunded";
+export type PaymentMethodType = "vodafone_cash" | "instapay" | "bank_transfer" | "cash_on_delivery" | "paymob_placeholder";
+export type ManualPaymentProofStatus = "pending_review" | "approved" | "rejected" | "cancelled";
+export type PaymentTransactionType = "manual_proof_submitted" | "manual_approved" | "manual_rejected" | "cod_selected" | "admin_mark_paid" | "admin_mark_failed";
 export type FulfillmentStatus = "unfulfilled" | "preparing" | "ready" | "shipped" | "delivered" | "cancelled";
 export type CustomerType = "individual" | "shop" | "company" | "distributor";
 export type AddressType = "shipping" | "billing";
@@ -436,13 +439,80 @@ export type OrderStatusHistory = {
   created_at?: string;
 };
 
+export type PaymentMethod = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  key: string;
+  type: PaymentMethodType;
+  name_ar: string;
+  name_en?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  instructions_ar?: string | null;
+  instructions_en?: string | null;
+  destination_account?: string | null;
+  destination_account_name?: string | null;
+  config_json?: Record<string, unknown>;
+  is_active: boolean;
+  sort_order: number;
+};
+
+export type PaymentTransaction = {
+  id: number;
+  payment_id: number;
+  type: PaymentTransactionType;
+  status: PaymentStatus;
+  amount: string;
+  currency: string;
+  reference?: string | null;
+  processed_at?: string | null;
+};
+
 export type Payment = {
   id: number;
-  businessUnitId: number;
-  provider: string;
-  status: string;
-  amount: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  order?: Pick<Order, "id" | "order_number" | "status" | "payment_status" | "grand_total" | "currency"> | null;
+  customer?: Pick<Customer, "id" | "name" | "phone" | "email"> | null;
+  payment_method?: PaymentMethod | null;
+  method_type: PaymentMethodType;
+  method_key?: string | null;
+  status: PaymentStatus;
+  amount: string;
   currency: string;
+  paid_at?: string | null;
+  failed_at?: string | null;
+  reference?: string | null;
+  notes?: string | null;
+  transactions?: PaymentTransaction[];
+};
+
+export type ManualPaymentProof = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  order?: Pick<Order, "id" | "order_number" | "status" | "payment_status" | "customer_name" | "customer_phone" | "grand_total" | "currency"> | null;
+  payment_method?: PaymentMethod | null;
+  payment?: Payment | null;
+  status: ManualPaymentProofStatus;
+  amount: string;
+  payer_name?: string | null;
+  sender_account?: string | null;
+  transaction_reference?: string | null;
+  proof_image?: string | null;
+  notes?: string | null;
+  admin_notes?: string | null;
+  reviewer?: { id: number; name: string } | null;
+  reviewed_at?: string | null;
+  rejected_reason?: string | null;
+  created_at?: string;
+};
+
+export type PublicOrderPaymentOptions = {
+  order: Pick<Order, "id" | "order_number" | "status" | "payment_status" | "grand_total" | "currency" | "customer_name" | "customer_phone">;
+  payment_methods: PaymentMethod[];
+  proofs: ManualPaymentProof[];
 };
 
 export type Lead = {

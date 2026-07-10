@@ -4,6 +4,8 @@ namespace App\Modules\Commerce\Infrastructure\Models;
 
 use App\Models\User;
 use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
+use App\Modules\Payments\Infrastructure\Models\ManualPaymentProof;
+use App\Modules\Payments\Infrastructure\Models\Payment;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -38,6 +40,16 @@ class Order extends Model
     public function statusHistories(): HasMany
     {
         return $this->hasMany(OrderStatusHistory::class)->latest();
+    }
+
+    public function payments(): HasMany
+    {
+        return $this->hasMany(Payment::class);
+    }
+
+    public function manualPaymentProofs(): HasMany
+    {
+        return $this->hasMany(ManualPaymentProof::class);
     }
 
     public function createdBy(): BelongsTo
