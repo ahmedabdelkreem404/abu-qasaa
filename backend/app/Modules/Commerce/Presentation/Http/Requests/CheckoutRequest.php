@@ -31,6 +31,8 @@ class CheckoutRequest extends FormRequest
             'shipping_address.apartment' => ['nullable', 'string', 'max:255'],
             'shipping_address.landmark' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string'],
+            'wholesale_phone' => ['nullable', 'string', 'max:255'],
+            'wholesale_token' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

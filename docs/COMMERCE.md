@@ -1,5 +1,9 @@
 # Commerce
 
+## Wholesale Cart And Orders
+
+Wholesale cart additions require approved phone/token context. Cart and order item metadata snapshot the price list, audience, minimum quantity, and price source. Retail carts continue to use retail pricing and do not expose wholesale prices.
+
 ## Scope
 
 Phase 5 implements cart, customers, checkout request, and orders foundation. It does not implement Paymob, manual payment proof review, Vodafone Cash, Instapay, inventory deduction, stock movements, or shipping provider integrations.

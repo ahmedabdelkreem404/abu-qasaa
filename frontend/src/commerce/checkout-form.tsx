@@ -2,6 +2,7 @@
 
 import { submitCheckout } from "@/api/client";
 import { cartKey } from "@/commerce/cart-tools";
+import { getStoredWholesaleAccess } from "@/commerce/wholesale-tools";
 import type { Order } from "@/types/platform";
 import Link from "next/link";
 import { FormEvent, useState } from "react";
@@ -37,6 +38,8 @@ export function CheckoutForm({ businessSlug }: { businessSlug: string }) {
           street_address: String(form.get("street_address") ?? ""),
         },
         notes: String(form.get("notes") ?? "") || null,
+        wholesale_phone: getStoredWholesaleAccess(businessSlug)?.phone,
+        wholesale_token: getStoredWholesaleAccess(businessSlug)?.token,
       });
       window.localStorage.removeItem(cartKey(businessSlug));
       setOrder(response.data);
@@ -51,7 +54,7 @@ export function CheckoutForm({ businessSlug }: { businessSlug: string }) {
 
   return <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
     {error ? <p className="text-sm text-red-600">{error}</p> : null}
-    <p className="text-sm text-slate-600">Manual payments and cash on delivery are available after the order is submitted. No Paymob or card payment is enabled yet.</p>
+    <p className="text-sm text-slate-600">Manual payments and cash on delivery are available after the order is submitted. Wholesale carts keep their approved price snapshots.</p>
     <Input name="name" label="Name" required />
     <Input name="phone" label="Phone" required />
     <Input name="email" label="Email" type="email" />

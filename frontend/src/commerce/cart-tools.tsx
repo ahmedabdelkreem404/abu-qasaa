@@ -1,6 +1,7 @@
 "use client";
 
 import { addCartItem, clearCart, getCart, getOrCreateCart, removeCartItem, updateCartItem } from "@/api/client";
+import { getStoredWholesaleAccess } from "@/commerce/wholesale-tools";
 import type { Cart, Product } from "@/types/platform";
 import Link from "next/link";
 import { useEffect, useState } from "react";
@@ -20,7 +21,13 @@ export function AddToCartButton({ businessSlug, product, disabled = false }: { b
       const token = window.localStorage.getItem(cartKey(businessSlug));
       const cart = await getOrCreateCart(businessSlug, token);
       window.localStorage.setItem(cartKey(businessSlug), cart.data.session_token);
-      await addCartItem(businessSlug, cart.data.session_token, { product_id: product.id, quantity: 1 });
+      const access = getStoredWholesaleAccess(businessSlug);
+      await addCartItem(businessSlug, cart.data.session_token, {
+        product_id: product.id,
+        quantity: access ? Math.max(1, product.min_order_quantity, 12) : 1,
+        wholesale_phone: access?.phone,
+        wholesale_token: access?.token,
+      });
       setMessage("Added to cart.");
     } catch {
       setMessage("Ordering currently unavailable.");
@@ -75,6 +82,7 @@ export function CartManager({ businessSlug }: { businessSlug: string }) {
             <div>
               <h2 className="font-semibold">{item.product_name_en ?? item.product_name_ar}</h2>
               <p className="text-sm text-slate-600">{item.sku ?? ""} · {item.unit_price} {cart.currency}</p>
+              {item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail" ? <p className="mt-1 text-xs font-medium text-teal-700">Wholesale · minimum {String(item.metadata_json.min_quantity_applied ?? 1)}</p> : null}
             </div>
             <div className="flex items-center gap-2">
               <input type="number" min={1} defaultValue={item.quantity} onBlur={(event) => refresh(updateCartItem(businessSlug, cart.session_token, item.id, Number(event.currentTarget.value)))} className="w-20 rounded-md border border-slate-300 px-2 py-1 text-sm" />
@@ -85,6 +93,7 @@ export function CartManager({ businessSlug }: { businessSlug: string }) {
       </div>
       <div className="rounded-md border border-slate-200 bg-white p-5">
         <p className="text-sm text-slate-600">Subtotal: {cart.subtotal} {cart.currency}</p>
+        {cart.items?.some((item) => item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail") ? <p className="mt-1 text-sm font-medium text-teal-700">Wholesale cart</p> : null}
         <p className="mt-2 text-xl font-semibold">Total: {cart.grand_total} {cart.currency}</p>
         <div className="mt-4 flex gap-2">
           <Link href={`/${businessSlug}/checkout`} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Checkout</Link>

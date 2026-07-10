@@ -3,6 +3,9 @@
 namespace App\Modules\Commerce\Application\Actions;
 
 use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
+use App\Modules\Commerce\Application\Services\WholesaleAccessService;
+use App\Modules\Commerce\Domain\Enums\WholesaleCustomerStatus;
+use App\Modules\Commerce\Infrastructure\Models\Customer;
 use App\Modules\Commerce\Infrastructure\Models\Order;
 use App\Modules\Commerce\Infrastructure\Models\OrderItem;
 use App\Modules\Commerce\Infrastructure\Models\OrderStatusHistory;
@@ -21,8 +24,9 @@ class CreateOrderFromCartAction extends BaseAction
         }
 
         return DB::transaction(function () use ($businessUnit, $cart, $data): Order {
-            $customer = app(FindOrCreateCustomerAction::class)->handle($businessUnit->id, $data['customer']);
+            $customer = $this->resolveCustomer($businessUnit, $cart, $data);
             app(CreateCustomerAddressAction::class)->handle($customer, [...$data['shipping_address'], 'type' => 'shipping', 'is_default' => true]);
+            $isWholesale = (bool) $cart->items->first(fn ($item) => (($item->metadata_json ?? [])['price_audience'] ?? 'retail') !== 'retail');
             $order = Order::query()->create([
                 'business_unit_id' => $businessUnit->id,
                 'customer_id' => $customer->id,
@@ -41,8 +45,12 @@ class CreateOrderFromCartAction extends BaseAction
                 'customer_phone' => $data['customer']['phone'],
                 'shipping_address_json' => $data['shipping_address'],
                 'notes' => $data['notes'] ?? null,
-                'source' => 'public_checkout',
+                'source' => $isWholesale ? 'public_wholesale_checkout' : 'public_checkout',
                 'placed_at' => now(),
+                'metadata_json' => [
+                    'price_audience' => $isWholesale ? 'wholesale' : 'retail',
+                    'wholesale_customer_id' => $isWholesale ? $customer->id : null,
+                ],
             ]);
             foreach ($cart->items as $item) {
                 OrderItem::query()->create($item->only(['product_id', 'product_variant_id', 'sku', 'product_name_ar', 'product_name_en', 'variant_name_ar', 'variant_name_en', 'quantity', 'unit_price', 'subtotal', 'metadata_json']) + ['order_id' => $order->id]);
@@ -53,6 +61,22 @@ class CreateOrderFromCartAction extends BaseAction
 
             return $order->load(['businessUnit', 'customer', 'items', 'statusHistories', 'stockReservations']);
         });
+    }
+
+    private function resolveCustomer(BusinessUnit $businessUnit, $cart, array $data): Customer
+    {
+        $customer = null;
+        if ($cart->customer_id) {
+            $customer = Customer::query()
+                ->whereKey($cart->customer_id)
+                ->where('business_unit_id', $businessUnit->id)
+                ->where('wholesale_status', WholesaleCustomerStatus::Approved->value)
+                ->first();
+        }
+
+        $customer ??= app(WholesaleAccessService::class)->approvedCustomer($businessUnit, $data['wholesale_phone'] ?? null, $data['wholesale_token'] ?? null);
+
+        return $customer ?: app(FindOrCreateCustomerAction::class)->handle($businessUnit->id, $data['customer']);
     }
 
     private function number(BusinessUnit $businessUnit): string

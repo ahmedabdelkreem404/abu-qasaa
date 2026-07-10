@@ -43,6 +43,7 @@ class OrderResource extends JsonResource
             'notes' => $this->notes,
             'internal_notes' => $this->when(! $this->public, $this->internal_notes),
             'source' => $this->source,
+            'metadata_json' => $this->metadata_json,
             'placed_at' => $this->placed_at,
             'confirmed_at' => $this->confirmed_at,
             'cancelled_at' => $this->cancelled_at,

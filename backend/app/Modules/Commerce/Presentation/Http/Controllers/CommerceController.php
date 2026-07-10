@@ -20,6 +20,7 @@ use App\Modules\Commerce\Application\Actions\RemoveCartItemAction;
 use App\Modules\Commerce\Application\Actions\UpdateCartItemAction;
 use App\Modules\Commerce\Application\Actions\UpdateCustomerAction;
 use App\Modules\Commerce\Application\Actions\UpdateOrderStatusAction;
+use App\Modules\Commerce\Application\Services\WholesaleAccessService;
 use App\Modules\Commerce\Infrastructure\Models\CartItem;
 use App\Modules\Commerce\Infrastructure\Models\Customer;
 use App\Modules\Commerce\Infrastructure\Models\Order;
@@ -39,7 +40,7 @@ use Illuminate\Http\Request;
 
 class CommerceController extends Controller
 {
-    public function __construct(private readonly AccessControlService $accessControl) {}
+    public function __construct(private readonly AccessControlService $accessControl, private readonly WholesaleAccessService $wholesaleAccess) {}
 
     public function getOrCreateCart(Request $request, string $businessSlug, GetOrCreateCartAction $action): JsonResponse
     {
@@ -85,10 +86,11 @@ class CommerceController extends Controller
 
     public function checkout(CheckoutRequest $request, string $businessSlug, GetCartAction $getCart, CreateOrderFromCartAction $action): JsonResponse
     {
-        $businessUnit = $this->publicBusinessUnit($businessSlug, true);
+        $data = $request->validated();
+        $businessUnit = $this->publicBusinessUnit($businessSlug, true, ! empty($data['wholesale_token']));
         $cart = $getCart->handle($businessUnit, $request->validated('session_token'));
 
-        return ApiResponse::success(new OrderResource($action->handle($businessUnit, $cart, $request->validated()), true), 'Order submitted successfully', 201);
+        return ApiResponse::success(new OrderResource($action->handle($businessUnit, $cart, $data), true), 'Order submitted successfully', 201);
     }
 
     public function publicOrder(Request $request, string $businessSlug, string $orderNumber): JsonResponse
@@ -197,12 +199,13 @@ class CommerceController extends Controller
             : ApiResponse::error('Price list must belong to the same business unit.', 422);
     }
 
-    private function publicBusinessUnit(string $slug, bool $checkout): BusinessUnit
+    private function publicBusinessUnit(string $slug, bool $checkout, bool $wholesaleCheckout = false): BusinessUnit
     {
         $businessUnit = BusinessUnit::query()->where('slug', $slug)->where('status', 'active')->firstOrFail();
         abort_unless($this->moduleEnabled($businessUnit, 'products') && $this->moduleEnabled($businessUnit, 'orders'), 404);
         abort_if($checkout && ! $this->settingEnabled($businessUnit, 'checkout_enabled'), 403);
-        abort_if($checkout && ! $this->settingEnabled($businessUnit, 'allow_guest_checkout'), 403);
+        abort_if($checkout && ! $wholesaleCheckout && ! $this->settingEnabled($businessUnit, 'allow_guest_checkout'), 403);
+        abort_if($checkout && $wholesaleCheckout && ! $this->wholesaleAccess->wholesaleEnabled($businessUnit), 403);
         abort_if(! $this->settingEnabled($businessUnit, 'show_prices'), 403);
 
         return $businessUnit;

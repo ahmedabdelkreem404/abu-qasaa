@@ -187,6 +187,7 @@ export type ProductStatus = "draft" | "published" | "archived";
 export type ProductType = "simple" | "variable" | "bundle";
 export type ProductVisibility = "public" | "hidden" | "private";
 export type PriceListType = "retail" | "wholesale" | "distributor" | "special";
+export type PriceAudience = "retail" | "wholesale" | "distributor" | "special";
 
 export type Category = {
   id: number;
@@ -353,7 +354,11 @@ export type Customer = {
   tax_number?: string | null;
   commercial_record?: string | null;
   approval_status?: string | null;
+  wholesale_status?: WholesaleCustomerStatus | null;
   price_list_id?: number | null;
+  approved_at?: string | null;
+  credit_limit?: string | null;
+  payment_terms?: string | null;
   notes?: string | null;
   addresses?: CustomerAddress[];
 };
@@ -371,6 +376,7 @@ export type CartItem = {
   quantity: number;
   unit_price: string;
   subtotal: string;
+  metadata_json?: Record<string, unknown> | null;
 };
 
 export type Cart = {
@@ -410,6 +416,8 @@ export type Order = {
   billing_address_json?: Record<string, unknown> | null;
   notes?: string | null;
   internal_notes?: string | null;
+  source?: string | null;
+  metadata_json?: Record<string, unknown> | null;
   placed_at?: string | null;
   items?: OrderItem[];
   stock_reservations?: StockReservation[];
@@ -429,6 +437,65 @@ export type OrderItem = {
   quantity: number;
   unit_price: string;
   subtotal: string;
+  metadata_json?: Record<string, unknown> | null;
+};
+
+export type WholesaleApplicationStatus = "pending" | "under_review" | "approved" | "rejected" | "archived";
+export type WholesaleCustomerStatus = "pending" | "approved" | "rejected" | "suspended";
+
+export type WholesaleApplication = {
+  id?: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  customer_id?: number | null;
+  status: WholesaleApplicationStatus;
+  applicant_name: string;
+  phone: string;
+  email?: string | null;
+  company_name?: string | null;
+  shop_name?: string | null;
+  tax_number?: string | null;
+  commercial_record?: string | null;
+  governorate?: string | null;
+  city?: string | null;
+  address?: string | null;
+  requested_price_list_id?: number | null;
+  message?: string | null;
+  reviewed_at?: string | null;
+  rejection_reason?: string | null;
+  admin_rejection_reason?: string | null;
+  created_at?: string | null;
+};
+
+export type WholesaleCustomer = Customer & {
+  wholesale_status: WholesaleCustomerStatus;
+  price_list?: Pick<PriceList, "id" | "name" | "type"> | null;
+  rejected_at?: string | null;
+  rejection_reason?: string | null;
+};
+
+export type WholesaleAccess = {
+  access_method: "phone_token";
+  token: string;
+  customer: WholesaleCustomer;
+  expires_hint?: string | null;
+};
+
+export type WholesalePricing = {
+  product_id: number;
+  product_slug: string;
+  name_ar: string;
+  name_en?: string | null;
+  sku?: string | null;
+  currency: string;
+  base_price?: string | null;
+  wholesale_price: string;
+  unit_price: number;
+  price_list_id: number;
+  price_list_type: PriceAudience;
+  price_audience: PriceAudience;
+  min_quantity_applied: number;
+  price_source: string;
 };
 
 export type OrderStatusHistory = {

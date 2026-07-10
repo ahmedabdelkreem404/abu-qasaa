@@ -104,5 +104,8 @@ class CatalogSeeder extends Seeder
         if (isset($priceLists['wholesale'], $prices[1])) {
             ProductPrice::query()->create(['business_unit_id' => $unit->id, 'product_id' => $product->id, 'price_list_id' => $priceLists['wholesale']->id, 'price' => $prices[1], 'min_quantity' => 12, 'is_active' => true]);
         }
+        if (isset($priceLists['distributor'], $prices[1])) {
+            ProductPrice::query()->create(['business_unit_id' => $unit->id, 'product_id' => $product->id, 'price_list_id' => $priceLists['distributor']->id, 'price' => max(1, $prices[1] - 25), 'min_quantity' => 48, 'is_active' => true]);
+        }
     }
 }

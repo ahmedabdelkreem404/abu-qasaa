@@ -1,5 +1,9 @@
 # Setup
 
+## Phase 9 Seed Notes
+
+`php artisan migrate:fresh --seed` creates Oils wholesale seed data, including a demo approved wholesale customer with phone `01011111111` and a pending wholesale application. Dates remains wholesale-disabled by default.
+
 ## Backend
 
 ```bash

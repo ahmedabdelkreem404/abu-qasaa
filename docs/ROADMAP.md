@@ -1,5 +1,9 @@
 # Roadmap
 
+## Phase 9 Complete: Wholesale Foundation
+
+Implemented public applications, admin approval/rejection, wholesale customer price-list assignment, approved customer access tokens, wholesale catalog/cart pricing, minimum quantity enforcement, seed data, docs, and tests. Phase 10 can add real OTP/customer portal auth, price-list history, and advanced B2B account workflows.
+
 ## Phase 1: Foundation And Business Units
 
 Implemented now: business unit CRUD foundation, activity templates, activity modules, module enablement, settings, feature flags, seeders, dashboard management placeholders, public business unit lookups, and tests.

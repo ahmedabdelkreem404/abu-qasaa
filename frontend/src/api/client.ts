@@ -48,6 +48,10 @@ import type {
   StockTransfer,
   InventorySummary,
   PublicAvailability,
+  WholesaleAccess,
+  WholesaleApplication,
+  WholesaleCustomer,
+  WholesalePricing,
 } from "@/types/platform";
 
 const API_URL =
@@ -494,7 +498,7 @@ export async function getCart(businessSlug: string, sessionToken: string) {
   return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}`);
 }
 
-export async function addCartItem(businessSlug: string, sessionToken: string, payload: { product_id: number; product_variant_id?: number | null; quantity: number }) {
+export async function addCartItem(businessSlug: string, sessionToken: string, payload: { product_id: number; product_variant_id?: number | null; quantity: number; wholesale_phone?: string | null; wholesale_token?: string | null }) {
   return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}/items`, {
     method: "POST",
     body: JSON.stringify(payload),
@@ -532,6 +536,8 @@ export type CheckoutPayload = {
     landmark?: string | null;
   };
   notes?: string | null;
+  wholesale_phone?: string | null;
+  wholesale_token?: string | null;
 };
 
 export async function submitCheckout(businessSlug: string, payload: CheckoutPayload) {
@@ -588,6 +594,96 @@ export async function initiatePaymobPayment(businessSlug: string, orderNumber: s
 
 export async function getPublicPaymentStatus(businessSlug: string, orderNumber: string, phone: string) {
   return apiRequest<ApiResponse<PublicPaymentStatus>>(`/public/${businessSlug}/orders/${orderNumber}/payment-status?phone=${encodeURIComponent(phone)}`);
+}
+
+export type WholesaleApplicationPayload = {
+  applicant_name: string;
+  phone: string;
+  email?: string | null;
+  company_name?: string | null;
+  shop_name?: string | null;
+  tax_number?: string | null;
+  commercial_record?: string | null;
+  governorate?: string | null;
+  city?: string | null;
+  address?: string | null;
+  message?: string | null;
+};
+
+export async function submitWholesaleApplication(businessSlug: string, payload: WholesaleApplicationPayload) {
+  return apiRequest<ApiResponse<WholesaleApplication>>(`/public/${businessSlug}/wholesale/apply`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getWholesaleStatus(businessSlug: string, phone: string) {
+  return apiRequest<ApiResponse<{ type: "customer" | "application" | "none"; status?: string | null }>>(
+    `/public/${businessSlug}/wholesale/status?phone=${encodeURIComponent(phone)}`,
+  );
+}
+
+export async function requestWholesaleAccess(businessSlug: string, phone: string) {
+  return apiRequest<ApiResponse<WholesaleAccess>>(`/public/${businessSlug}/wholesale/access`, {
+    method: "POST",
+    body: JSON.stringify({ phone }),
+  });
+}
+
+export async function listPublicWholesaleProducts(businessSlug: string, access: { phone: string; token: string }, params?: URLSearchParams) {
+  const query = new URLSearchParams(params);
+  query.set("phone", access.phone);
+  query.set("token", access.token);
+  return apiRequest<PaginatedResponse<WholesalePricing>>(`/public/${businessSlug}/wholesale/products?${query.toString()}`);
+}
+
+export async function getPublicWholesaleProduct(businessSlug: string, productSlug: string, access: { phone: string; token: string }) {
+  const query = new URLSearchParams({ phone: access.phone, token: access.token });
+  return apiRequest<ApiResponse<WholesalePricing>>(`/public/${businessSlug}/wholesale/products/${productSlug}?${query.toString()}`);
+}
+
+export async function listWholesaleApplications(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<WholesaleApplication>>(withQuery("/wholesale/applications", params));
+}
+
+export async function getWholesaleApplication(id: string | number) {
+  return apiRequest<ApiResponse<WholesaleApplication>>(`/wholesale/applications/${id}`);
+}
+
+export async function approveWholesaleApplication(id: string | number, payload: { price_list_id?: number | null; notes?: string | null }) {
+  return apiRequest<ApiResponse<WholesaleApplication>>(`/wholesale/applications/${id}/approve`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function rejectWholesaleApplication(id: string | number, payload: { rejection_reason: string; notes?: string | null }) {
+  return apiRequest<ApiResponse<WholesaleApplication>>(`/wholesale/applications/${id}/reject`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function listWholesaleCustomers(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<WholesaleCustomer>>(withQuery("/wholesale/customers", params));
+}
+
+export async function getWholesaleCustomer(id: string | number) {
+  return apiRequest<ApiResponse<WholesaleCustomer>>(`/wholesale/customers/${id}`);
+}
+
+export async function updateWholesaleCustomer(id: string | number, payload: Partial<WholesaleCustomer>) {
+  return apiRequest<ApiResponse<WholesaleCustomer>>(`/wholesale/customers/${id}`, { method: "PATCH", body: JSON.stringify(payload) });
+}
+
+export async function assignWholesaleCustomerPriceList(id: string | number, price_list_id: number, notes?: string | null) {
+  return apiRequest<ApiResponse<WholesaleCustomer>>(`/wholesale/customers/${id}/assign-price-list`, { method: "POST", body: JSON.stringify({ price_list_id, notes }) });
+}
+
+export async function approveWholesaleCustomer(id: string | number) {
+  return apiRequest<ApiResponse<WholesaleCustomer>>(`/wholesale/customers/${id}/approve`, { method: "POST" });
+}
+
+export async function rejectWholesaleCustomer(id: string | number, rejection_reason: string) {
+  return apiRequest<ApiResponse<WholesaleCustomer>>(`/wholesale/customers/${id}/reject`, { method: "POST", body: JSON.stringify({ rejection_reason }) });
+}
+
+export async function getWholesalePricingPreview(id: string | number) {
+  return apiRequest<ApiResponse<WholesalePricing[]>>(`/wholesale/customers/${id}/pricing-preview`);
 }
 
 export async function getPaymobReturnStatus(params: URLSearchParams) {

@@ -14,11 +14,22 @@ class Customer extends Model
 {
     use SoftDeletes;
 
-    protected $fillable = ['business_unit_id', 'user_id', 'type', 'name', 'email', 'phone', 'company_name', 'tax_number', 'commercial_record', 'approval_status', 'price_list_id', 'notes', 'metadata_json'];
+    protected $fillable = [
+        'business_unit_id', 'user_id', 'type', 'name', 'email', 'phone', 'company_name',
+        'tax_number', 'commercial_record', 'approval_status', 'wholesale_status',
+        'price_list_id', 'approved_at', 'approved_by', 'rejected_at', 'rejected_by',
+        'rejection_reason', 'credit_limit', 'payment_terms', 'assigned_sales_user_id',
+        'wholesale_access_token_hash', 'notes', 'metadata_json',
+    ];
 
     protected function casts(): array
     {
-        return ['metadata_json' => 'array'];
+        return [
+            'metadata_json' => 'array',
+            'approved_at' => 'datetime',
+            'rejected_at' => 'datetime',
+            'credit_limit' => 'decimal:2',
+        ];
     }
 
     public function businessUnit(): BelongsTo

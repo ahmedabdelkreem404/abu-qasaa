@@ -1,5 +1,9 @@
 # Business Units
 
+## Wholesale Business-Unit Rules
+
+Wholesale is available only when the `wholesale` module is enabled and the `wholesale_enabled` setting is true for that business unit. Oils is enabled in seeds; Dates is intentionally disabled unless changed by an admin.
+
 Abnaa Abu Qasaa Trading is the umbrella brand. It owns and manages several business units through one shared platform.
 
 ## Current Business Units

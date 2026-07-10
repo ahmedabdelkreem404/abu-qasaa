@@ -1,5 +1,9 @@
 # Catalog
 
+## Wholesale Price Lists
+
+Catalog price lists support `retail`, `wholesale`, `distributor`, and `special`. Wholesale price resolution uses assigned customer price lists first, then the business unit wholesale list. Missing wholesale prices reject wholesale requests instead of falling back to retail.
+
 ## Scope
 
 Phase 4 implements the Product Catalog foundation for product-based business units. It supports catalog management and public product browsing only.

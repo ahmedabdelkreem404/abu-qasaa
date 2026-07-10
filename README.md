@@ -2,6 +2,8 @@
 
 Abnaa Abu Qasaa Trading is an umbrella business platform for managing multiple current and future business units from one modular monolith.
 
+Phase 9 adds the wholesale foundation for product business units. Oils now supports public wholesale applications, admin review, approved customer access, wholesale price-list resolution, cart minimum quantities, and wholesale pricing snapshots while retail checkout remains unchanged. See `docs/WHOLESALE.md`.
+
 ## Tech Stack
 
 - Backend: Laravel 12

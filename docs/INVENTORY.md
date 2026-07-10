@@ -1,5 +1,9 @@
 # Inventory And Warehouse Foundation
 
+## Wholesale Inventory Boundary
+
+Phase 9 does not change inventory reservation mechanics. Wholesale orders continue through the existing order and stock reservation foundation, with wholesale metadata preserved on order items for downstream fulfillment.
+
 Phase 8 adds inventory as a business-unit scoped module inside the modular monolith.
 
 ## Scope

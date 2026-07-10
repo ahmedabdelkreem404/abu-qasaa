@@ -1,5 +1,9 @@
 # API Conventions
 
+## Wholesale APIs
+
+Phase 9 public wholesale endpoints live under `/api/v1/public/{businessSlug}/wholesale/*`. Dashboard endpoints live under `/api/v1/wholesale/*` and use Sanctum plus permission middleware. Public wholesale product endpoints return `403` without approved customer phone/token context.
+
 ## Versioning
 
 All public API routes are versioned under `/api/v1`.

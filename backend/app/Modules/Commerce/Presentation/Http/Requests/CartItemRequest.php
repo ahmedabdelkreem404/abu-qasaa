@@ -17,6 +17,8 @@ class CartItemRequest extends FormRequest
             'product_id' => ['required', 'exists:products,id'],
             'product_variant_id' => ['nullable', 'exists:product_variants,id'],
             'quantity' => ['required', 'integer', 'min:1'],
+            'wholesale_phone' => ['nullable', 'string', 'max:255'],
+            'wholesale_token' => ['nullable', 'string', 'max:255'],
         ];
     }
 }

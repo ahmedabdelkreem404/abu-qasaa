@@ -26,7 +26,11 @@ class CustomerResource extends JsonResource
             'tax_number' => $this->tax_number,
             'commercial_record' => $this->commercial_record,
             'approval_status' => $this->approval_status,
+            'wholesale_status' => $this->wholesale_status,
             'price_list_id' => $this->price_list_id,
+            'approved_at' => $this->approved_at,
+            'credit_limit' => $this->credit_limit,
+            'payment_terms' => $this->payment_terms,
             'notes' => $this->notes,
             'addresses' => CustomerAddressResource::collection($this->whenLoaded('addresses')),
         ];

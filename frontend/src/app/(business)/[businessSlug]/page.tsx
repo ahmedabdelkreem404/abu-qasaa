@@ -37,6 +37,8 @@ export default async function BusinessHomePage({
     .then((response) => response.data)
     .catch(() => null);
   const hasProducts = unit.modules?.some((module) => module.key === "products" && module.is_enabled) ?? false;
+  const hasWholesale = (unit.modules?.some((module) => module.key === "wholesale" && module.is_enabled) ?? false)
+    && (unit.settings?.some((setting) => setting.key === "wholesale_enabled" && Boolean(setting.value)) ?? unit.type === "wholesale_store");
   const featuredProducts = hasProducts
     ? await listPublicProducts(businessSlug, new URLSearchParams({ is_featured: "true", per_page: "3" })).then((response) => response.data).catch(() => [])
     : [];
@@ -76,6 +78,7 @@ export default async function BusinessHomePage({
         <p className="max-w-2xl text-slate-600">
           {unit.description ?? typeMessages[unit.type] ?? "Business unit coming soon"}
         </p>
+        {hasWholesale ? <a href={`/${businessSlug}/wholesale`} className="mt-4 inline-flex rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Wholesale / Become a partner</a> : null}
       </div>
       <div className="rounded-md border border-slate-200 bg-white p-6">
         {typeMessages[unit.type] ?? "Business unit coming soon"}

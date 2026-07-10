@@ -2,6 +2,10 @@
 
 Abnaa Abu Qasaa Trading is structured as a modular monolith: one Laravel backend, one Next.js frontend, and one MySQL database. The codebase is intentionally prepared for expansion without introducing microservices, Kubernetes, or heavy DevOps concerns.
 
+## Phase 9 Wholesale
+
+Wholesale is implemented inside the Commerce module as a modular monolith extension. Controllers route to actions/services, wholesale rules remain business-unit scoped, and pricing reuses Catalog price lists/product prices instead of introducing a separate pricing service.
+
 ## Why Modular Monolith
 
 The platform needs shared identity, reporting, payments, inventory, catalog, CMS, and business unit configuration. A modular monolith keeps these capabilities in one deployable system while still separating ownership through module folders, contracts, DTOs, actions, routes, and migrations.
