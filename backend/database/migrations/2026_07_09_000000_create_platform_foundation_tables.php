@@ -145,10 +145,40 @@ return new class extends Migration
         Schema::create('customers', function (Blueprint $table): void {
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('user_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('type')->default('individual');
             $table->string('name');
             $table->string('email')->nullable();
-            $table->string('phone')->nullable();
-            $table->json('metadata')->nullable();
+            $table->string('phone');
+            $table->string('company_name')->nullable();
+            $table->string('tax_number')->nullable();
+            $table->string('commercial_record')->nullable();
+            $table->string('approval_status')->nullable();
+            $table->foreignId('price_list_id')->nullable()->constrained()->nullOnDelete();
+            $table->text('notes')->nullable();
+            $table->json('metadata_json')->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+        });
+
+        Schema::create('customer_addresses', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('customer_id')->constrained()->cascadeOnDelete();
+            $table->string('type');
+            $table->string('label')->nullable();
+            $table->string('recipient_name');
+            $table->string('phone');
+            $table->string('country')->default('Egypt');
+            $table->string('governorate')->nullable();
+            $table->string('city')->nullable();
+            $table->string('area')->nullable();
+            $table->string('street_address');
+            $table->string('building')->nullable();
+            $table->string('floor')->nullable();
+            $table->string('apartment')->nullable();
+            $table->string('landmark')->nullable();
+            $table->string('postal_code')->nullable();
+            $table->boolean('is_default')->default(false);
             $table->timestamps();
         });
 
@@ -285,23 +315,92 @@ return new class extends Migration
             $table->id();
             $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('number')->unique();
-            $table->string('status')->default('draft');
-            $table->decimal('total', 12, 2)->default(0);
+            $table->string('order_number')->unique();
+            $table->string('status')->default('pending_review');
+            $table->string('payment_status')->default('unpaid');
+            $table->string('fulfillment_status')->default('unfulfilled');
             $table->string('currency', 3)->default('EGP');
+            $table->decimal('subtotal', 12, 2)->default(0);
+            $table->decimal('discount_total', 12, 2)->default(0);
+            $table->decimal('tax_total', 12, 2)->default(0);
+            $table->decimal('shipping_total', 12, 2)->default(0);
+            $table->decimal('grand_total', 12, 2)->default(0);
+            $table->string('customer_name');
+            $table->string('customer_email')->nullable();
+            $table->string('customer_phone');
+            $table->json('shipping_address_json')->nullable();
+            $table->json('billing_address_json')->nullable();
+            $table->text('notes')->nullable();
+            $table->text('internal_notes')->nullable();
+            $table->string('source')->nullable();
+            $table->timestamp('placed_at')->nullable();
+            $table->timestamp('confirmed_at')->nullable();
+            $table->timestamp('cancelled_at')->nullable();
+            $table->json('metadata_json')->nullable();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignId('updated_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
 
         Schema::create('order_items', function (Blueprint $table): void {
             $table->id();
-            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
             $table->foreignId('order_id')->constrained()->cascadeOnDelete();
             $table->foreignId('product_id')->nullable()->constrained()->nullOnDelete();
             $table->foreignId('product_variant_id')->nullable()->constrained()->nullOnDelete();
-            $table->string('description')->nullable();
+            $table->string('sku')->nullable();
+            $table->string('product_name_ar');
+            $table->string('product_name_en')->nullable();
+            $table->string('variant_name_ar')->nullable();
+            $table->string('variant_name_en')->nullable();
             $table->unsignedInteger('quantity')->default(1);
             $table->decimal('unit_price', 12, 2)->default(0);
-            $table->decimal('total', 12, 2)->default(0);
+            $table->decimal('subtotal', 12, 2)->default(0);
+            $table->json('metadata_json')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('order_status_histories', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
+            $table->string('from_status')->nullable();
+            $table->string('to_status');
+            $table->text('note')->nullable();
+            $table->foreignId('changed_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamps();
+        });
+
+        Schema::create('carts', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('business_unit_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('customer_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('session_token')->unique()->nullable();
+            $table->string('status')->default('active');
+            $table->string('currency', 3)->default('EGP');
+            $table->decimal('subtotal', 12, 2)->default(0);
+            $table->decimal('discount_total', 12, 2)->default(0);
+            $table->decimal('tax_total', 12, 2)->default(0);
+            $table->decimal('shipping_total', 12, 2)->default(0);
+            $table->decimal('grand_total', 12, 2)->default(0);
+            $table->timestamp('expires_at')->nullable();
+            $table->json('metadata_json')->nullable();
+            $table->timestamps();
+        });
+
+        Schema::create('cart_items', function (Blueprint $table): void {
+            $table->id();
+            $table->foreignId('cart_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('product_variant_id')->nullable()->constrained()->nullOnDelete();
+            $table->string('sku')->nullable();
+            $table->string('product_name_ar');
+            $table->string('product_name_en')->nullable();
+            $table->string('variant_name_ar')->nullable();
+            $table->string('variant_name_en')->nullable();
+            $table->unsignedInteger('quantity');
+            $table->decimal('unit_price', 12, 2);
+            $table->decimal('subtotal', 12, 2);
+            $table->json('metadata_json')->nullable();
             $table->timestamps();
         });
 
@@ -569,6 +668,9 @@ return new class extends Migration
             'manual_payment_proofs',
             'payment_transactions',
             'payments',
+            'cart_items',
+            'carts',
+            'order_status_histories',
             'order_items',
             'orders',
             'product_prices',
@@ -578,6 +680,7 @@ return new class extends Migration
             'products',
             'brands',
             'categories',
+            'customer_addresses',
             'customers',
             'user_business_units',
             'warehouses',

@@ -133,3 +133,29 @@ Public catalog endpoints:
 - `GET /api/v1/public/{businessSlug}/brands`
 
 Public product responses do not expose `cost_price`.
+
+## Commerce Routes
+
+Public commerce endpoints:
+
+- `POST /api/v1/public/{businessSlug}/cart`
+- `GET /api/v1/public/{businessSlug}/cart/{sessionToken}`
+- `POST /api/v1/public/{businessSlug}/cart/{sessionToken}/items`
+- `PUT /api/v1/public/{businessSlug}/cart/{sessionToken}/items/{cartItem}`
+- `DELETE /api/v1/public/{businessSlug}/cart/{sessionToken}/items/{cartItem}`
+- `DELETE /api/v1/public/{businessSlug}/cart/{sessionToken}/clear`
+- `POST /api/v1/public/{businessSlug}/checkout`
+- `GET /api/v1/public/{businessSlug}/orders/{orderNumber}?phone=...`
+
+Protected commerce endpoints:
+
+- `GET /api/v1/commerce/customers`
+- `POST /api/v1/commerce/customers`
+- `GET /api/v1/commerce/customers/{customer}`
+- `PATCH /api/v1/commerce/customers/{customer}`
+- `GET /api/v1/commerce/orders`
+- `GET /api/v1/commerce/orders/{order}`
+- `PUT /api/v1/commerce/orders/{order}/status`
+- `POST /api/v1/commerce/orders/{order}/cancel`
+
+Public order responses do not expose internal notes.

@@ -64,3 +64,5 @@ Dashboard pages:
 ## Phase 5
 
 Next work should build ecommerce flows on top of the catalog: cart, checkout, order creation, customer-facing order states, and payment integration.
+
+Phase 5 now builds the first commerce layer on top of catalog data. Product prices are resolved into cart/order snapshots; catalog `cost_price` remains admin-only and is never exposed in public commerce responses.

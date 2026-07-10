@@ -1,4 +1,5 @@
 import { listPublicBrands, listPublicCategories, listPublicProducts } from "@/api/client";
+import { AddToCartButton } from "@/commerce/cart-tools";
 import { ApiErrorState, EmptyState } from "@/components/shared/api-state";
 import Link from "next/link";
 
@@ -35,12 +36,15 @@ export default async function BusinessProductsPage({
       {products.length === 0 ? <EmptyState message="No published products yet." /> : (
         <div className="grid gap-4 md:grid-cols-3">
           {products.map((product) => (
-            <Link key={product.id} href={`/${businessSlug}/products/${product.slug}`} className="rounded-md border border-slate-200 bg-white p-5">
-              <div className="flex aspect-[4/3] items-center justify-center rounded-md bg-slate-100 text-sm text-slate-500">Product image</div>
-              <h2 className="mt-4 font-semibold">{product.name_en ?? product.name_ar}</h2>
-              <p className="mt-2 line-clamp-2 text-sm text-slate-600">{product.short_description_en ?? product.short_description_ar ?? product.category?.name_en ?? product.category?.name_ar}</p>
-              {product.base_price ? <p className="mt-3 text-sm font-medium text-teal-700">{product.base_price} {product.currency}</p> : null}
-            </Link>
+            <div key={product.id} className="rounded-md border border-slate-200 bg-white p-5">
+              <Link href={`/${businessSlug}/products/${product.slug}`}>
+                <div className="flex aspect-[4/3] items-center justify-center rounded-md bg-slate-100 text-sm text-slate-500">Product image</div>
+                <h2 className="mt-4 font-semibold">{product.name_en ?? product.name_ar}</h2>
+                <p className="mt-2 line-clamp-2 text-sm text-slate-600">{product.short_description_en ?? product.short_description_ar ?? product.category?.name_en ?? product.category?.name_ar}</p>
+                {product.base_price ? <p className="mt-3 text-sm font-medium text-teal-700">{product.base_price} {product.currency}</p> : null}
+              </Link>
+              <AddToCartButton businessSlug={businessSlug} product={product} />
+            </div>
           ))}
         </div>
       )}

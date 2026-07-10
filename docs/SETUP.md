@@ -70,3 +70,9 @@ The default seed also creates product catalog data for:
 - `dates`: categories, the Ghosoun brand, retail price list, sample dates products, variants, and prices.
 
 Use `oils.admin@abuqasaa.test` or `dates.admin@abuqasaa.test` for scoped dashboard catalog testing.
+
+## Commerce Local Testing
+
+Dates supports guest checkout in seeded data. Oils supports carts and product browsing, but seeded `allow_guest_checkout` is disabled for Oils to reflect wholesale-style ordering rules.
+
+Public cart session tokens are stored by the frontend per business unit using `abu_qasaa_cart_{businessSlug}`.

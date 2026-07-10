@@ -1,4 +1,5 @@
 import { getPublicProductBySlug } from "@/api/client";
+import { AddToCartButton } from "@/commerce/cart-tools";
 import { ApiErrorState } from "@/components/shared/api-state";
 
 export default async function ProductDetailPage({
@@ -23,7 +24,11 @@ export default async function ProductDetailPage({
           <p className="mt-3 text-slate-600">{product.short_description_en ?? product.short_description_ar}</p>
           {product.base_price ? <p className="mt-4 text-xl font-semibold text-teal-700">{product.base_price} {product.currency}</p> : null}
         </div>
-        <button disabled className="rounded-md border border-slate-300 px-4 py-2 text-sm text-slate-500">Ordering coming soon</button>
+        <div className="rounded-md border border-slate-200 bg-white p-4">
+          <label className="grid max-w-32 gap-1 text-sm">Quantity<input type="number" min={1} defaultValue={1} className="rounded-md border border-slate-300 px-3 py-2" /></label>
+          <AddToCartButton businessSlug={businessSlug} product={product} />
+          <p className="mt-2 text-sm text-slate-500">No online payment yet. Orders are submitted for confirmation.</p>
+        </div>
         <Info title="Description" value={product.description_en ?? product.description_ar ?? "No description yet."} />
         <Info title="Brand" value={product.brand?.name_en ?? product.brand?.name_ar ?? "-"} />
         <div className="rounded-md border border-slate-200 bg-white p-5">

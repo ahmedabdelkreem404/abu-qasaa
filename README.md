@@ -113,6 +113,15 @@ Implemented catalog scope:
 
 This phase does not include cart, checkout, orders, payments, or inventory stock movements.
 
+## Phase 5 Cart And Orders Foundation
+
+Commerce foundation now supports public carts, checkout request submission, customer snapshots, and dashboard order management.
+
+- Public users can create a business-unit cart, add/update/remove items, and submit checkout details.
+- Orders preserve item names, SKUs, variant labels, unit prices, quantities, and totals at order time.
+- Dashboard users can view scoped orders/customers and update order status.
+- No online payment, Paymob, manual proof review, shipping provider, or inventory deduction is implemented yet.
+
 ## Git Workflow
 
 Use focused branches and small commits. Keep generated secrets out of Git. Commit foundation changes with clear messages and open pull requests for review once a remote is configured.

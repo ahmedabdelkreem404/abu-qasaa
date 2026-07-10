@@ -1,0 +1,58 @@
+# Commerce
+
+## Scope
+
+Phase 5 implements cart, customers, checkout request, and orders foundation. It does not implement Paymob, manual payment proof review, Vodafone Cash, Instapay, inventory deduction, stock movements, or shipping provider integrations.
+
+## Cart Model
+
+Carts belong to one business unit and are identified publicly by a `session_token`. Cart items snapshot product name, SKU, variant label, unit price, quantity, and subtotal. A cart can be `active`, `converted`, `abandoned`, or `expired`.
+
+## Customer Model
+
+Customers are business-unit scoped. Phone is required for checkout, email is optional, and customer types include `individual`, `shop`, `company`, and `distributor`. Wholesale approval remains a placeholder through customer fields.
+
+## Order Model
+
+Orders preserve totals and item snapshots at checkout time. Initial public checkout creates orders as:
+
+- `status`: `pending_review`
+- `payment_status`: `unpaid`
+- `fulfillment_status`: `unfulfilled`
+
+Order status changes create `order_status_histories` records.
+
+## Public APIs
+
+- `POST /api/v1/public/{businessSlug}/cart`
+- `GET /api/v1/public/{businessSlug}/cart/{sessionToken}`
+- `POST /api/v1/public/{businessSlug}/cart/{sessionToken}/items`
+- `PUT /api/v1/public/{businessSlug}/cart/{sessionToken}/items/{cartItem}`
+- `DELETE /api/v1/public/{businessSlug}/cart/{sessionToken}/items/{cartItem}`
+- `DELETE /api/v1/public/{businessSlug}/cart/{sessionToken}/clear`
+- `POST /api/v1/public/{businessSlug}/checkout`
+- `GET /api/v1/public/{businessSlug}/orders/{orderNumber}?phone=...`
+
+## Dashboard APIs
+
+- `GET /api/v1/commerce/customers`
+- `POST /api/v1/commerce/customers`
+- `GET /api/v1/commerce/customers/{customer}`
+- `PATCH /api/v1/commerce/customers/{customer}`
+- `GET /api/v1/commerce/orders`
+- `GET /api/v1/commerce/orders/{order}`
+- `PUT /api/v1/commerce/orders/{order}/status`
+- `POST /api/v1/commerce/orders/{order}/cancel`
+
+## Business Rules
+
+- Business unit must be active.
+- `products` and `orders` modules must be enabled.
+- Checkout requires `checkout_enabled`, `allow_guest_checkout`, and `show_prices`.
+- Public carts cannot mix products across business units.
+- Public checkout only accepts published/public products with resolvable prices.
+- Public order lookup requires order number and matching phone.
+
+## Phase 6
+
+Next work should add real payment flows, manual proof review, inventory reservation/deduction, shipping calculation, and richer customer account flows.

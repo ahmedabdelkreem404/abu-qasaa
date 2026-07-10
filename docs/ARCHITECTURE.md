@@ -51,3 +51,9 @@ Phase 4 adds a real `Catalog` module around the existing modular monolith bounda
 The Catalog module owns categories, brands, products, variants, images, price lists, and product prices. Flexible product specs remain JSON-based through `specs_json` and variant `option_values_json`; there is no attribute-builder subsystem yet.
 
 Public product APIs resolve the business-unit slug, require an active business unit with the `products` module enabled, expose only published/public products, and omit admin-only cost fields.
+
+## Commerce Foundation
+
+Phase 5 adds public cart and order request flows inside the `Commerce` module. Carts and orders are scoped to one business unit, and checkout requires active product and order modules plus enabled checkout settings.
+
+Orders store pricing snapshots from cart items so later catalog price changes do not alter historical totals. Payment and fulfillment fields exist for future phases, but no payment processing, inventory deduction, or shipping integration is performed.

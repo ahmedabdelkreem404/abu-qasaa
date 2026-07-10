@@ -45,3 +45,7 @@ Dashboard CMS permissions are business-unit scoped. A business-unit admin can ma
 Product catalog management is available only when the `products` module is enabled for the business unit. Oils and Dates are seeded as product-based units; Import/Export and Real Estate do not expose product catalog management.
 
 Future product-based business units can use the same generic catalog tables and APIs after Super Admin enables the `products`, `categories`, `brands`, and optional `price_lists` modules.
+
+## Commerce Rules
+
+Commerce checkout requires the business unit to be active, have `products` and `orders` enabled, and have `checkout_enabled`, `allow_guest_checkout`, and `show_prices` enabled. Carts cannot mix products across business units.

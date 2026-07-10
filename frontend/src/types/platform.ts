@@ -310,13 +310,130 @@ export type Product = {
   prices?: ProductPrice[];
 };
 
+export type CartStatus = "active" | "converted" | "abandoned" | "expired";
+export type OrderStatus = "pending_review" | "pending_payment" | "confirmed" | "processing" | "ready_to_ship" | "shipped" | "delivered" | "cancelled" | "archived";
+export type PaymentStatus = "unpaid" | "pending" | "paid" | "failed" | "refunded";
+export type FulfillmentStatus = "unfulfilled" | "preparing" | "ready" | "shipped" | "delivered" | "cancelled";
+export type CustomerType = "individual" | "shop" | "company" | "distributor";
+export type AddressType = "shipping" | "billing";
+
+export type CustomerAddress = {
+  id?: number;
+  customer_id?: number;
+  type: AddressType;
+  label?: string | null;
+  recipient_name: string;
+  phone: string;
+  country?: string;
+  governorate?: string | null;
+  city?: string | null;
+  area?: string | null;
+  street_address: string;
+  building?: string | null;
+  floor?: string | null;
+  apartment?: string | null;
+  landmark?: string | null;
+  postal_code?: string | null;
+  is_default?: boolean;
+};
+
+export type Customer = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  type: CustomerType;
+  name: string;
+  email?: string | null;
+  phone: string;
+  company_name?: string | null;
+  tax_number?: string | null;
+  commercial_record?: string | null;
+  approval_status?: string | null;
+  price_list_id?: number | null;
+  notes?: string | null;
+  addresses?: CustomerAddress[];
+};
+
+export type CartItem = {
+  id: number;
+  cart_id: number;
+  product_id: number;
+  product_variant_id?: number | null;
+  sku?: string | null;
+  product_name_ar: string;
+  product_name_en?: string | null;
+  variant_name_ar?: string | null;
+  variant_name_en?: string | null;
+  quantity: number;
+  unit_price: string;
+  subtotal: string;
+};
+
+export type Cart = {
+  id: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  session_token: string;
+  status: CartStatus;
+  currency: string;
+  subtotal: string;
+  discount_total: string;
+  tax_total: string;
+  shipping_total: string;
+  grand_total: string;
+  items?: CartItem[];
+};
+
 export type Order = {
   id: number;
-  businessUnitId: number;
-  number: string;
-  status: string;
-  total: number;
+  business_unit_id: number;
+  business_unit?: Pick<BusinessUnit, "id" | "slug" | "name_ar" | "name_en"> | null;
+  customer?: Customer;
+  order_number: string;
+  status: OrderStatus;
+  payment_status: PaymentStatus;
+  fulfillment_status: FulfillmentStatus;
   currency: string;
+  subtotal: string;
+  discount_total: string;
+  tax_total: string;
+  shipping_total: string;
+  grand_total: string;
+  customer_name: string;
+  customer_email?: string | null;
+  customer_phone: string;
+  shipping_address_json?: Record<string, unknown> | null;
+  billing_address_json?: Record<string, unknown> | null;
+  notes?: string | null;
+  internal_notes?: string | null;
+  placed_at?: string | null;
+  items?: OrderItem[];
+  status_histories?: OrderStatusHistory[];
+};
+
+export type OrderItem = {
+  id: number;
+  order_id: number;
+  product_id?: number | null;
+  product_variant_id?: number | null;
+  sku?: string | null;
+  product_name_ar: string;
+  product_name_en?: string | null;
+  variant_name_ar?: string | null;
+  variant_name_en?: string | null;
+  quantity: number;
+  unit_price: string;
+  subtotal: string;
+};
+
+export type OrderStatusHistory = {
+  id: number;
+  order_id: number;
+  from_status?: string | null;
+  to_status: string;
+  note?: string | null;
+  changed_by?: number | null;
+  created_at?: string;
 };
 
 export type Payment = {

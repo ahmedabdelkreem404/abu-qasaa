@@ -7,6 +7,7 @@ import type {
   BusinessUnit,
   BusinessUnitModule,
   BusinessUnitSetting,
+  Cart,
   Category,
   CategoryStatus,
   CmsMenu,
@@ -15,6 +16,8 @@ import type {
   CmsPageType,
   CmsSection,
   ContactInquiry,
+  Customer,
+  CustomerType,
   InquiryStatus,
   FeatureFlag,
   LoginResponse,
@@ -28,6 +31,8 @@ import type {
   ProductType,
   ProductVariant,
   ProductVisibility,
+  Order,
+  OrderStatus,
 } from "@/types/platform";
 
 const API_URL =
@@ -453,4 +458,117 @@ export async function listPublicCategories(businessSlug: string) {
 
 export async function listPublicBrands(businessSlug: string) {
   return apiRequest<ApiResponse<Brand[]>>(`/public/${businessSlug}/brands`);
+}
+
+export async function getOrCreateCart(businessSlug: string, session_token?: string | null) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart`, {
+    method: "POST",
+    body: JSON.stringify({ session_token }),
+  });
+}
+
+export async function getCart(businessSlug: string, sessionToken: string) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}`);
+}
+
+export async function addCartItem(businessSlug: string, sessionToken: string, payload: { product_id: number; product_variant_id?: number | null; quantity: number }) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}/items`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateCartItem(businessSlug: string, sessionToken: string, itemId: string | number, quantity: number) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}/items/${itemId}`, {
+    method: "PUT",
+    body: JSON.stringify({ quantity }),
+  });
+}
+
+export async function removeCartItem(businessSlug: string, sessionToken: string, itemId: string | number) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}/items/${itemId}`, { method: "DELETE" });
+}
+
+export async function clearCart(businessSlug: string, sessionToken: string) {
+  return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart/${sessionToken}/clear`, { method: "DELETE" });
+}
+
+export type CheckoutPayload = {
+  session_token: string;
+  customer: { name: string; phone: string; email?: string | null };
+  shipping_address: {
+    recipient_name: string;
+    phone: string;
+    governorate?: string | null;
+    city?: string | null;
+    area?: string | null;
+    street_address: string;
+    building?: string | null;
+    floor?: string | null;
+    apartment?: string | null;
+    landmark?: string | null;
+  };
+  notes?: string | null;
+};
+
+export async function submitCheckout(businessSlug: string, payload: CheckoutPayload) {
+  return apiRequest<ApiResponse<Order>>(`/public/${businessSlug}/checkout`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function getPublicOrder(businessSlug: string, orderNumber: string, phone: string) {
+  return apiRequest<ApiResponse<Order>>(`/public/${businessSlug}/orders/${orderNumber}?phone=${encodeURIComponent(phone)}`);
+}
+
+export async function listOrders(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Order>>(withQuery("/commerce/orders", params));
+}
+
+export async function getOrder(id: string | number) {
+  return apiRequest<ApiResponse<Order>>(`/commerce/orders/${id}`);
+}
+
+export async function updateOrderStatus(id: string | number, status: OrderStatus, note?: string | null) {
+  return apiRequest<ApiResponse<Order>>(`/commerce/orders/${id}/status`, {
+    method: "PUT",
+    body: JSON.stringify({ status, note }),
+  });
+}
+
+export async function cancelOrder(id: string | number, note?: string | null) {
+  return apiRequest<ApiResponse<Order>>(`/commerce/orders/${id}/cancel`, {
+    method: "POST",
+    body: JSON.stringify({ note }),
+  });
+}
+
+export type CustomerPayload = Partial<Customer> & {
+  business_unit_id: number;
+  type: CustomerType;
+  name: string;
+  phone: string;
+};
+
+export async function listCustomers(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<Customer>>(withQuery("/commerce/customers", params));
+}
+
+export async function getCustomer(id: string | number) {
+  return apiRequest<ApiResponse<Customer>>(`/commerce/customers/${id}`);
+}
+
+export async function createCustomer(payload: CustomerPayload) {
+  return apiRequest<ApiResponse<Customer>>("/commerce/customers", {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function updateCustomer(id: string | number, payload: Partial<CustomerPayload>) {
+  return apiRequest<ApiResponse<Customer>>(`/commerce/customers/${id}`, {
+    method: "PATCH",
+    body: JSON.stringify(payload),
+  });
 }

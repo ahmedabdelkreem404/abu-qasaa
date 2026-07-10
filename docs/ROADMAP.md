@@ -24,26 +24,32 @@ Implemented now: category, brand, product, variant, product image, price list, a
 
 Remaining: visual image uploads, richer section-level merchandising, product import/export, attribute builder, and final product browsing polish.
 
-## Phase 5: Ecommerce For Oils And Dates
+## Phase 5: Cart, Checkout Request, Customers, Orders
+
+Implemented now: public carts, cart items, checkout request order creation, customer/address records, order status history, dashboard orders/customers, and pricing snapshots.
+
+Remaining: online payments, manual payment proof review, inventory deduction, shipping integrations, customer accounts, coupons, and richer order fulfillment workflows.
+
+## Phase 6: Ecommerce Payments And Fulfillment
 
 Implement catalog browsing, pricing, carts, checkout, orders, and customer flows for product-based business units.
 
-## Phase 6: Wholesale, Inventory, Warehouses
+## Phase 7: Wholesale, Inventory, Warehouses
 
 Add price lists, wholesale workflows, branches, warehouses, stock items, and stock movements.
 
-## Phase 7: Payments, Paymob, Manual Payments
+## Phase 8: Payments, Paymob, Manual Payments
 
 Implement generic payments, manual proof review, and Paymob integration.
 
-## Phase 8: Real Estate Leads And Appointments
+## Phase 9: Real Estate Leads And Appointments
 
 Implement projects, properties, units, lead capture, and appointment scheduling.
 
-## Phase 9: Import/Export RFQ Workflow
+## Phase 10: Import/Export RFQ Workflow
 
 Implement services, RFQ requests, RFQ items, quotation handling, and follow-up workflows.
 
-## Phase 10: Reports And Audit Logs
+## Phase 11: Reports And Audit Logs
 
 Implement operational reports, exports, audit trails, and admin visibility.
