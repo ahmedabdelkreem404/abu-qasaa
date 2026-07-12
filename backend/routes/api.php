@@ -3,6 +3,17 @@
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')->group(function (): void {
+    Route::get('/health', fn () => response()->json([
+        'success' => true,
+        'message' => 'Health check passed.',
+        'data' => [
+            'status' => 'ok',
+            'application' => config('app.name'),
+            'environment' => app()->environment(),
+            'timestamp' => now()->toIso8601String(),
+        ],
+    ]));
+
     require base_path('app/Modules/Identity/Presentation/Routes/api.php');
     require base_path('app/Modules/BusinessUnits/Presentation/Routes/api.php');
     require base_path('app/Modules/Catalog/Presentation/Routes/api.php');

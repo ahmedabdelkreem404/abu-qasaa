@@ -2,7 +2,7 @@
 
 Abnaa Abu Qasaa Trading is an umbrella business platform for managing multiple current and future business units from one modular monolith.
 
-Phase 9 adds the wholesale foundation for product business units. Oils now supports public wholesale applications, admin review, approved customer access, wholesale price-list resolution, cart minimum quantities, and wholesale pricing snapshots while retail checkout remains unchanged. See `docs/WHOLESALE.md`.
+V1 is complete across the approved foundation scope: product commerce, payments, inventory, wholesale, Ghosoun Dates merchandising, real estate, import/export RFQ, reports, audit logs, and production readiness polish. See `docs/V1_COMPLETION_AUDIT.md` and `docs/V1_ACCEPTANCE_CHECKLIST.md`.
 
 ## Tech Stack
 
@@ -46,6 +46,24 @@ npm run dev
 
 Build backend features inside `backend/app/Modules/{ModuleName}` using Domain, Application, Infrastructure, and Presentation layers where useful. Build frontend features inside matching `frontend/src/{feature}` folders and expose screens through `frontend/src/app`.
 
+## V1 Verification
+
+Backend:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+php artisan test
+```
+
+Frontend:
+
+```bash
+cd frontend
+npm run lint
+npm run build
+```
+
 ## Architecture Summary
 
 The platform uses one backend, one frontend, and one MySQL database. Business units are represented as data through `business_units`, `activity_templates`, and enabled modules. The system is prepared for oils and lubricants, import/export RFQs, dates ecommerce, real estate, CMS, payments, inventory, reports, and audit logs without splitting into microservices.
@@ -68,7 +86,7 @@ cd backend
 php artisan migrate:fresh --seed
 ```
 
-Auth, permissions, and richer CMS work remain follow-up work from the broader foundation track.
+Auth, permissions, and CMS are now implemented as part of the V1 foundation.
 
 ## Phase 2 Auth Foundation
 
