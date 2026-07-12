@@ -12,6 +12,7 @@ Route::prefix('v1')->group(function (): void {
     require base_path('app/Modules/ServicesRfq/Presentation/Routes/api.php');
     require base_path('app/Modules/RealEstate/Presentation/Routes/api.php');
     require base_path('app/Modules/CMS/Presentation/Routes/api.php');
+    require base_path('app/Modules/Reports/Presentation/Routes/api.php');
 
     Route::middleware('auth:sanctum')->group(function (): void {
         Route::get('/modules', fn () => response()->json(['success' => true, 'message' => 'Modules retrieved successfully', 'data' => ['Core', 'Identity', 'BusinessUnits', 'Catalog', 'Commerce', 'Inventory', 'Payments', 'CMS', 'ServicesRfq', 'RealEstate', 'Notifications', 'Reports', 'Audit']]))

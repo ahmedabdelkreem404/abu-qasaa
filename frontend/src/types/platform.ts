@@ -887,3 +887,23 @@ export type RfqRequest = {
   status: string;
   submitted_at?: string | null;
 };
+
+export type ExecutiveReport = {
+  orders_count: number;
+  orders_value: number;
+  customers_count: number;
+  low_stock_count: number;
+  real_estate_leads_count: number;
+  rfq_count: number;
+};
+
+export type AuditLog = {
+  id: number;
+  business_unit_id?: number | null;
+  user_id?: number | null;
+  action?: string | null;
+  event: string;
+  auditable_type?: string | null;
+  auditable_id?: number | null;
+  created_at?: string | null;
+};

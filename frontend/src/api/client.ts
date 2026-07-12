@@ -61,6 +61,8 @@ import type {
   RealEstateLead,
   ImportExportService,
   RfqRequest,
+  ExecutiveReport,
+  AuditLog,
 } from "@/types/platform";
 
 const API_URL =
@@ -990,4 +992,12 @@ export async function getPublicRfqStatus(businessSlug: string, rfqNumber: string
 
 export async function listRfqRequests(params?: URLSearchParams) {
   return apiRequest<PaginatedResponse<RfqRequest>>(withQuery("/services-rfq/rfq-requests", params));
+}
+
+export async function getExecutiveReport() {
+  return apiRequest<ApiResponse<ExecutiveReport>>("/reports/executive-summary");
+}
+
+export async function listAuditLogs(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<AuditLog>>(withQuery("/audit-logs", params));
 }
