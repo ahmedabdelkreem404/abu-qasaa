@@ -7,6 +7,8 @@
   --surface: #ffffff;
   --line: #e2e8f0;
   --brand: #0f766e;
+  --font-geist-sans: Arial, Helvetica, sans-serif;
+  --font-geist-mono: "Courier New", Consolas, monospace;
 }
 
 @theme inline {
