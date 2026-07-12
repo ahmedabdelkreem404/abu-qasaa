@@ -29,7 +29,7 @@
 - [x] Final frontend lint run on release candidate.
 - [x] Final frontend production build run on release candidate.
 - [x] Final migration refresh and seed run on release candidate.
-- [ ] `master` merged, pushed, and verified equal to `origin/master`.
+- [x] `master` merged, pushed, and verified equal to `origin/master`.
 
 ## Release Gate
 
