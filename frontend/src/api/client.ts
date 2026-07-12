@@ -25,6 +25,10 @@ import type {
   PriceList,
   PriceListType,
   Product,
+  ProductBadge,
+  ProductBundle,
+  ProductCollection,
+  CorporateGiftInquiry,
   ProductImage,
   ProductPrice,
   ProductStatus,
@@ -52,6 +56,13 @@ import type {
   WholesaleApplication,
   WholesaleCustomer,
   WholesalePricing,
+  RealEstateProject,
+  PropertyUnit,
+  RealEstateLead,
+  ImportExportService,
+  RfqRequest,
+  ExecutiveReport,
+  AuditLog,
 } from "@/types/platform";
 
 const API_URL =
@@ -487,6 +498,53 @@ export async function listPublicBrands(businessSlug: string) {
   return apiRequest<ApiResponse<Brand[]>>(`/public/${businessSlug}/brands`);
 }
 
+export async function listPublicCollections(businessSlug: string) {
+  return apiRequest<ApiResponse<ProductCollection[]>>(`/public/${businessSlug}/collections`);
+}
+
+export async function getPublicCollection(businessSlug: string, collectionSlug: string) {
+  return apiRequest<ApiResponse<ProductCollection>>(`/public/${businessSlug}/collections/${collectionSlug}`);
+}
+
+export async function listPublicFeaturedProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/featured-products`);
+}
+
+export async function listPublicGiftProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/gift-products`);
+}
+
+export async function listPublicSeasonalProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/seasonal-products`);
+}
+
+export async function listPublicCorporateGiftProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/corporate-gift-products`);
+}
+
+export async function submitCorporateGiftInquiry(businessSlug: string, payload: Partial<CorporateGiftInquiry>) {
+  return apiRequest<ApiResponse<CorporateGiftInquiry>>(`/public/${businessSlug}/corporate-gift-inquiries`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function listProductCollections(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductCollection>>(withQuery("/catalog/collections", params));
+}
+
+export async function listProductBadges(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductBadge>>(withQuery("/catalog/badges", params));
+}
+
+export async function listProductBundles(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductBundle>>(withQuery("/catalog/bundles", params));
+}
+
+export async function listCorporateGiftInquiries(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<CorporateGiftInquiry>>(withQuery("/catalog/corporate-gift-inquiries", params));
+}
+
 export async function getOrCreateCart(businessSlug: string, session_token?: string | null) {
   return apiRequest<ApiResponse<Cart>>(`/public/${businessSlug}/cart`, {
     method: "POST",
@@ -890,4 +948,56 @@ export async function updateCustomer(id: string | number, payload: Partial<Custo
     method: "PATCH",
     body: JSON.stringify(payload),
   });
+}
+
+export async function listPublicRealEstateProjects(businessSlug: string) {
+  return apiRequest<ApiResponse<RealEstateProject[]>>(`/public/${businessSlug}/real-estate/projects`);
+}
+
+export async function getPublicRealEstateProject(businessSlug: string, projectSlug: string) {
+  return apiRequest<ApiResponse<RealEstateProject>>(`/public/${businessSlug}/real-estate/projects/${projectSlug}`);
+}
+
+export async function listPublicPropertyUnits(businessSlug: string, params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<PropertyUnit>>(withQuery(`/public/${businessSlug}/real-estate/units`, params));
+}
+
+export async function submitRealEstateLead(businessSlug: string, payload: Partial<RealEstateLead>) {
+  return apiRequest<ApiResponse<RealEstateLead>>(`/public/${businessSlug}/real-estate/leads`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function listRealEstateProjects(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RealEstateProject>>(withQuery("/real-estate/projects", params));
+}
+
+export async function listRealEstateLeads(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RealEstateLead>>(withQuery("/real-estate/leads", params));
+}
+
+export async function listPublicServices(businessSlug: string) {
+  return apiRequest<ApiResponse<ImportExportService[]>>(`/public/${businessSlug}/services`);
+}
+
+export async function getPublicService(businessSlug: string, serviceSlug: string) {
+  return apiRequest<ApiResponse<ImportExportService>>(`/public/${businessSlug}/services/${serviceSlug}`);
+}
+
+export async function submitRfqRequest(businessSlug: string, payload: Record<string, unknown>) {
+  return apiRequest<ApiResponse<RfqRequest>>(`/public/${businessSlug}/rfq-requests`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function getPublicRfqStatus(businessSlug: string, rfqNumber: string, contact: string) {
+  return apiRequest<ApiResponse<RfqRequest>>(`/public/${businessSlug}/rfq-requests/${rfqNumber}/status?contact=${encodeURIComponent(contact)}`);
+}
+
+export async function listRfqRequests(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RfqRequest>>(withQuery("/services-rfq/rfq-requests", params));
+}
+
+export async function getExecutiveReport() {
+  return apiRequest<ApiResponse<ExecutiveReport>>("/reports/executive-summary");
+}
+
+export async function listAuditLogs(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<AuditLog>>(withQuery("/audit-logs", params));
 }

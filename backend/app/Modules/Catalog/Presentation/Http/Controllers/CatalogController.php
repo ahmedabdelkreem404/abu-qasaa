@@ -28,8 +28,12 @@ use App\Modules\Catalog\Application\Actions\UpsertProductPricesAction;
 use App\Modules\Catalog\Application\Actions\UpsertProductVariantsAction;
 use App\Modules\Catalog\Infrastructure\Models\Brand;
 use App\Modules\Catalog\Infrastructure\Models\Category;
+use App\Modules\Catalog\Infrastructure\Models\CorporateGiftInquiry;
 use App\Modules\Catalog\Infrastructure\Models\PriceList;
 use App\Modules\Catalog\Infrastructure\Models\Product;
+use App\Modules\Catalog\Infrastructure\Models\ProductBadge;
+use App\Modules\Catalog\Infrastructure\Models\ProductBundle;
+use App\Modules\Catalog\Infrastructure\Models\ProductCollection;
 use App\Modules\Catalog\Infrastructure\Models\ProductVariant;
 use App\Modules\Catalog\Presentation\Http\Requests\StoreBrandRequest;
 use App\Modules\Catalog\Presentation\Http\Requests\StoreCategoryRequest;
@@ -44,7 +48,11 @@ use App\Modules\Catalog\Presentation\Http\Requests\UpsertProductPricesRequest;
 use App\Modules\Catalog\Presentation\Http\Requests\UpsertProductVariantsRequest;
 use App\Modules\Catalog\Presentation\Http\Resources\BrandResource;
 use App\Modules\Catalog\Presentation\Http\Resources\CategoryResource;
+use App\Modules\Catalog\Presentation\Http\Resources\CorporateGiftInquiryResource;
 use App\Modules\Catalog\Presentation\Http\Resources\PriceListResource;
+use App\Modules\Catalog\Presentation\Http\Resources\ProductBadgeResource;
+use App\Modules\Catalog\Presentation\Http\Resources\ProductBundleResource;
+use App\Modules\Catalog\Presentation\Http\Resources\ProductCollectionResource;
 use App\Modules\Catalog\Presentation\Http\Resources\ProductResource;
 use App\Modules\Core\Presentation\Http\Responses\ApiResponse;
 use App\Modules\Identity\Application\Services\AccessControlService;
@@ -312,6 +320,188 @@ class CatalogController extends Controller
         return ApiResponse::success(BrandResource::collection(Brand::query()->where('business_unit_id', $businessUnit->id)->where('status', 'active')->orderBy('sort_order')->get()), 'Public brands retrieved successfully');
     }
 
+    public function publicCollections(string $businessSlug): JsonResponse
+    {
+        $businessUnit = $this->publicBusinessUnit($businessSlug);
+
+        $collections = ProductCollection::query()
+            ->where('business_unit_id', $businessUnit->id)
+            ->where('status', 'active')
+            ->where(fn ($query) => $query->whereNull('starts_at')->orWhere('starts_at', '<=', now()))
+            ->where(fn ($query) => $query->whereNull('ends_at')->orWhere('ends_at', '>=', now()))
+            ->orderByDesc('is_featured')
+            ->orderBy('sort_order')
+            ->get();
+
+        return ApiResponse::success(ProductCollectionResource::collection($collections), 'Public collections retrieved successfully');
+    }
+
+    public function publicCollection(string $businessSlug, string $collectionSlug): JsonResponse
+    {
+        $businessUnit = $this->publicBusinessUnit($businessSlug);
+        $collection = ProductCollection::query()
+            ->where('business_unit_id', $businessUnit->id)
+            ->where('slug', $collectionSlug)
+            ->where('status', 'active')
+            ->where(fn ($query) => $query->whereNull('starts_at')->orWhere('starts_at', '<=', now()))
+            ->where(fn ($query) => $query->whereNull('ends_at')->orWhere('ends_at', '>=', now()))
+            ->with(['items.product' => fn ($query) => $query
+                ->where('business_unit_id', $businessUnit->id)
+                ->where('status', 'published')
+                ->where('visibility', 'public')
+                ->with(['category', 'brand', 'images', 'badges', 'bundle.items.childProduct'])])
+            ->firstOrFail();
+
+        return ApiResponse::success(new ProductCollectionResource($collection, true, $this->showPrices($businessUnit)), 'Public collection retrieved successfully');
+    }
+
+    public function publicFeaturedProducts(Request $request, string $businessSlug): JsonResponse
+    {
+        return $this->publicMerchandisedProducts($request, $businessSlug, fn ($query) => $query->where('is_featured', true), 'Featured products retrieved successfully');
+    }
+
+    public function publicGiftProducts(Request $request, string $businessSlug): JsonResponse
+    {
+        return $this->publicMerchandisedProducts($request, $businessSlug, fn ($query) => $query->where('gift_options_json->is_gift_product', true), 'Gift products retrieved successfully');
+    }
+
+    public function publicSeasonalProducts(Request $request, string $businessSlug): JsonResponse
+    {
+        return $this->publicMerchandisedProducts($request, $businessSlug, fn ($query) => $query->where('merchandising_json->seasonal', true), 'Seasonal products retrieved successfully');
+    }
+
+    public function publicCorporateGiftProducts(Request $request, string $businessSlug): JsonResponse
+    {
+        return $this->publicMerchandisedProducts($request, $businessSlug, fn ($query) => $query->where('gift_options_json->corporate_gift_available', true), 'Corporate gift products retrieved successfully');
+    }
+
+    public function submitCorporateGiftInquiry(Request $request, string $businessSlug): JsonResponse
+    {
+        $businessUnit = $this->publicBusinessUnit($businessSlug);
+        $data = $request->validate([
+            'product_id' => ['nullable', 'integer', 'exists:products,id'],
+            'product_collection_id' => ['nullable', 'integer', 'exists:product_collections,id'],
+            'company_name' => ['nullable', 'string', 'max:255'],
+            'contact_name' => ['required', 'string', 'max:255'],
+            'phone' => ['required', 'string', 'max:255'],
+            'email' => ['nullable', 'email', 'max:255'],
+            'quantity' => ['nullable', 'integer', 'min:1'],
+            'budget_range' => ['nullable', 'string', 'max:255'],
+            'occasion' => ['nullable', 'string', 'max:255'],
+            'message' => ['nullable', 'string'],
+        ]);
+        if (($error = $this->validateOptionalProductScope($businessUnit, $data['product_id'] ?? null)) || ($error = $this->validateOptionalCollectionScope($businessUnit, $data['product_collection_id'] ?? null))) {
+            return $error;
+        }
+
+        $inquiry = CorporateGiftInquiry::query()->create($data + ['business_unit_id' => $businessUnit->id, 'status' => 'new']);
+
+        return ApiResponse::success(CorporateGiftInquiryResource::make($inquiry), 'Corporate gift inquiry submitted successfully', 201);
+    }
+
+    public function collections(Request $request): JsonResponse
+    {
+        $query = ProductCollection::query()->with('businessUnit')->orderBy('sort_order');
+        $query = $this->scopeQueryToUserBusinessUnits($request, $query);
+
+        return ApiResponse::paginated($query->paginate((int) $request->query('per_page', 15))->through(fn (ProductCollection $collection) => ProductCollectionResource::make($collection)->resolve()), 'Collections retrieved successfully');
+    }
+
+    public function storeCollection(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'business_unit_id' => ['required', 'integer', 'exists:business_units,id'],
+            'name_ar' => ['required', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
+            'slug' => ['required', 'string', 'max:255'],
+            'description_ar' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
+            'image' => ['nullable', 'string', 'max:255'],
+            'status' => ['required', 'in:active,draft,archived'],
+            'starts_at' => ['nullable', 'date'],
+            'ends_at' => ['nullable', 'date'],
+            'is_featured' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+            'seo_title_ar' => ['nullable', 'string', 'max:255'],
+            'seo_title_en' => ['nullable', 'string', 'max:255'],
+            'seo_description_ar' => ['nullable', 'string'],
+            'seo_description_en' => ['nullable', 'string'],
+        ]);
+        if ($error = $this->validateCatalogScope($request, $data['business_unit_id'])) {
+            return $error;
+        }
+
+        $collection = ProductCollection::query()->create($data);
+
+        return ApiResponse::success(ProductCollectionResource::make($collection), 'Collection created successfully', 201);
+    }
+
+    public function badges(Request $request): JsonResponse
+    {
+        $query = ProductBadge::query()->orderBy('sort_order');
+        $query = $this->scopeQueryToUserBusinessUnits($request, $query);
+
+        return ApiResponse::paginated($query->paginate((int) $request->query('per_page', 15))->through(fn (ProductBadge $badge) => ProductBadgeResource::make($badge)->resolve()), 'Badges retrieved successfully');
+    }
+
+    public function storeBadge(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'business_unit_id' => ['required', 'integer', 'exists:business_units,id'],
+            'key' => ['required', 'string', 'max:255'],
+            'name_ar' => ['required', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
+            'description_ar' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
+            'color' => ['nullable', 'string', 'max:255'],
+            'is_active' => ['nullable', 'boolean'],
+            'sort_order' => ['nullable', 'integer'],
+        ]);
+        if ($error = $this->validateCatalogScope($request, $data['business_unit_id'])) {
+            return $error;
+        }
+
+        return ApiResponse::success(ProductBadgeResource::make(ProductBadge::query()->create($data)), 'Badge created successfully', 201);
+    }
+
+    public function bundles(Request $request): JsonResponse
+    {
+        $query = ProductBundle::query()->with(['product', 'items.childProduct'])->orderByDesc('id');
+        $query = $this->scopeQueryToUserBusinessUnits($request, $query);
+
+        return ApiResponse::paginated($query->paginate((int) $request->query('per_page', 15))->through(fn (ProductBundle $bundle) => ProductBundleResource::make($bundle)->resolve()), 'Bundles retrieved successfully');
+    }
+
+    public function storeBundle(Request $request): JsonResponse
+    {
+        $data = $request->validate([
+            'business_unit_id' => ['required', 'integer', 'exists:business_units,id'],
+            'product_id' => ['required', 'integer', 'exists:products,id'],
+            'name_ar' => ['required', 'string', 'max:255'],
+            'name_en' => ['nullable', 'string', 'max:255'],
+            'description_ar' => ['nullable', 'string'],
+            'description_en' => ['nullable', 'string'],
+            'bundle_type' => ['required', 'in:fixed_box,corporate_box,seasonal_box,simple_bundle'],
+            'pricing_mode' => ['required', 'in:use_parent_product_price,fixed_bundle_price'],
+            'fixed_price' => ['nullable', 'numeric', 'min:0'],
+            'is_active' => ['nullable', 'boolean'],
+            'metadata_json' => ['nullable', 'array'],
+        ]);
+        if (($error = $this->validateCatalogScope($request, $data['business_unit_id'])) || ($error = $this->validateOptionalProductScope(BusinessUnit::query()->findOrFail($data['business_unit_id']), $data['product_id']))) {
+            return $error;
+        }
+
+        return ApiResponse::success(ProductBundleResource::make(ProductBundle::query()->create($data)), 'Bundle created successfully', 201);
+    }
+
+    public function corporateGiftInquiries(Request $request): JsonResponse
+    {
+        $query = CorporateGiftInquiry::query()->orderByDesc('id');
+        $query = $this->scopeQueryToUserBusinessUnits($request, $query);
+
+        return ApiResponse::paginated($query->paginate((int) $request->query('per_page', 15))->through(fn (CorporateGiftInquiry $inquiry) => CorporateGiftInquiryResource::make($inquiry)->resolve()), 'Corporate gift inquiries retrieved successfully');
+    }
+
     private function validateCatalogScope(Request $request, int|string $businessUnitId): ?JsonResponse
     {
         $businessUnit = BusinessUnit::query()->findOrFail($businessUnitId);
@@ -357,6 +547,57 @@ class CatalogController extends Controller
         }
 
         return null;
+    }
+
+    private function validateOptionalProductScope(BusinessUnit $businessUnit, ?int $productId): ?JsonResponse
+    {
+        if ($productId === null) {
+            return null;
+        }
+
+        return Product::query()->whereKey($productId)->where('business_unit_id', $businessUnit->id)->exists()
+            ? null
+            : ApiResponse::error('Product must belong to the same business unit.', 422);
+    }
+
+    private function validateOptionalCollectionScope(BusinessUnit $businessUnit, ?int $collectionId): ?JsonResponse
+    {
+        if ($collectionId === null) {
+            return null;
+        }
+
+        return ProductCollection::query()->whereKey($collectionId)->where('business_unit_id', $businessUnit->id)->exists()
+            ? null
+            : ApiResponse::error('Collection must belong to the same business unit.', 422);
+    }
+
+    private function publicMerchandisedProducts(Request $request, string $businessSlug, callable $constraint, string $message): JsonResponse
+    {
+        $businessUnit = $this->publicBusinessUnit($businessSlug);
+        $query = Product::query()
+            ->where('business_unit_id', $businessUnit->id)
+            ->where('status', 'published')
+            ->where('visibility', 'public')
+            ->with(['category', 'brand', 'images', 'badges', 'bundle.items.childProduct'])
+            ->orderByDesc('is_featured')
+            ->orderBy('name_ar');
+        $constraint($query);
+
+        return ApiResponse::paginated(
+            $query->paginate((int) $request->query('per_page', 15))->through(fn (Product $product) => (new ProductResource($product, true, $this->showPrices($businessUnit)))->resolve()),
+            $message,
+        );
+    }
+
+    private function scopeQueryToUserBusinessUnits(Request $request, $query)
+    {
+        if ($request->user()->isSuperAdmin()) {
+            return $query;
+        }
+
+        $ids = $request->user()->businessUnitAssignments()->where('is_active', true)->pluck('business_unit_id');
+
+        return $query->whereIn('business_unit_id', $ids);
     }
 
     private function publicBusinessUnit(string $slug): BusinessUnit

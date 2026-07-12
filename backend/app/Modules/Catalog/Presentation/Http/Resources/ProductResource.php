@@ -49,6 +49,8 @@ class ProductResource extends JsonResource
             'min_order_quantity' => $this->min_order_quantity,
             'max_order_quantity' => $this->max_order_quantity,
             'specs_json' => $this->specs_json,
+            'merchandising_json' => $this->merchandising_json,
+            'gift_options_json' => $this->gift_options_json,
             'seo_title_ar' => $this->seo_title_ar,
             'seo_title_en' => $this->seo_title_en,
             'seo_description_ar' => $this->seo_description_ar,
@@ -57,6 +59,8 @@ class ProductResource extends JsonResource
             'variants' => ProductVariantResource::collection($this->whenLoaded('variants')),
             'images' => ProductImageResource::collection($this->whenLoaded('images')),
             'prices' => $this->when($this->showPrices, ProductPriceResource::collection($this->whenLoaded('prices'))),
+            'badges' => ProductBadgeResource::collection($this->whenLoaded('badges')),
+            'bundle' => $this->whenLoaded('bundle', fn () => $this->bundle ? ProductBundleResource::make($this->bundle) : null),
         ];
     }
 }

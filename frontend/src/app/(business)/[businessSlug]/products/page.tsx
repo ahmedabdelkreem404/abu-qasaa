@@ -39,6 +39,10 @@ export default async function BusinessProductsPage({
             <div key={product.id} className="rounded-md border border-slate-200 bg-white p-5">
               <Link href={`/${businessSlug}/products/${product.slug}`}>
                 <div className="flex aspect-[4/3] items-center justify-center rounded-md bg-slate-100 text-sm text-slate-500">Product image</div>
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {product.badges?.slice(0, 2).map((badge) => <span key={badge.id} className="rounded-sm bg-teal-50 px-2 py-1 text-xs font-medium text-teal-800">{badge.name_en ?? badge.name_ar}</span>)}
+                  {product.bundle ? <span className="rounded-sm bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800">{product.bundle.name_en ?? product.bundle.name_ar}</span> : null}
+                </div>
                 <h2 className="mt-4 font-semibold">{product.name_en ?? product.name_ar}</h2>
                 <p className="mt-2 line-clamp-2 text-sm text-slate-600">{product.short_description_en ?? product.short_description_ar ?? product.category?.name_en ?? product.category?.name_ar}</p>
                 {product.base_price ? <p className="mt-3 text-sm font-medium text-teal-700">{product.base_price} {product.currency}</p> : null}

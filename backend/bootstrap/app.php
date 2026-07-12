@@ -6,6 +6,7 @@ use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -26,5 +27,13 @@ return Application::configure(basePath: dirname(__DIR__))
                 'success' => false,
                 'message' => 'Unauthenticated.',
             ], 401);
+        });
+
+        $exceptions->render(function (NotFoundHttpException $exception) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Resource not found.',
+                'errors' => [],
+            ], 404);
         });
     })->create();

@@ -5,6 +5,7 @@ const links = [
   ["/dashboard/catalog/categories", "Categories", "Manage business-unit scoped category trees."],
   ["/dashboard/catalog/brands", "Brands", "Manage catalog brands per business unit."],
   ["/dashboard/catalog/price-lists", "Price Lists", "Manage retail, wholesale, distributor, and special prices."],
+  ["/dashboard/catalog/merchandising", "Merchandising", "Manage badges, collections, bundles, and corporate gift inquiries."],
 ];
 
 export default function DashboardCatalogPage() {

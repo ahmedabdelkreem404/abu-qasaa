@@ -301,6 +301,8 @@ export type Product = {
   min_order_quantity: number;
   max_order_quantity?: number | null;
   specs_json?: Record<string, unknown>;
+  merchandising_json?: Record<string, unknown>;
+  gift_options_json?: Record<string, unknown>;
   seo_title_ar?: string | null;
   seo_title_en?: string | null;
   seo_description_ar?: string | null;
@@ -309,6 +311,62 @@ export type Product = {
   variants?: ProductVariant[];
   images?: ProductImage[];
   prices?: ProductPrice[];
+  badges?: ProductBadge[];
+  bundle?: ProductBundle | null;
+};
+
+export type ProductBadge = {
+  id: number;
+  business_unit_id: number;
+  key: string;
+  name_ar: string;
+  name_en?: string | null;
+  color?: string | null;
+  is_active: boolean;
+  sort_order: number;
+};
+
+export type ProductBundle = {
+  id: number;
+  business_unit_id: number;
+  product_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  bundle_type: "fixed_box" | "corporate_box" | "seasonal_box" | "simple_bundle";
+  pricing_mode: "use_parent_product_price" | "fixed_bundle_price";
+  fixed_price?: string | null;
+  is_active: boolean;
+  metadata_json?: Record<string, unknown> | null;
+};
+
+export type ProductCollection = {
+  id: number;
+  business_unit_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  description_ar?: string | null;
+  description_en?: string | null;
+  image?: string | null;
+  status?: "active" | "draft" | "archived";
+  is_featured: boolean;
+  sort_order: number;
+  products?: Product[];
+};
+
+export type CorporateGiftInquiry = {
+  id: number;
+  business_unit_id: number;
+  company_name?: string | null;
+  contact_name: string;
+  phone: string;
+  email?: string | null;
+  quantity?: number | null;
+  budget_range?: string | null;
+  occasion?: string | null;
+  message?: string | null;
+  status: "new" | "contacted" | "quoted" | "won" | "lost" | "archived";
+  created_at?: string | null;
 };
 
 export type CartStatus = "active" | "converted" | "abandoned" | "expired";
@@ -744,4 +802,108 @@ export type Lead = {
   email?: string;
   phone?: string;
   status: string;
+};
+
+export type RealEstateProject = {
+  id: number;
+  business_unit_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  project_code: string;
+  status: string;
+  project_type: string;
+  developer_name?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  city?: string | null;
+  governorate?: string | null;
+  starting_price?: string | null;
+  currency: string;
+  is_featured: boolean;
+  amenities_json?: string[] | null;
+  units?: PropertyUnit[];
+};
+
+export type PropertyUnit = {
+  id: number;
+  business_unit_id: number;
+  project_id: number;
+  property_id?: number | null;
+  unit_code: string;
+  unit_type: string;
+  status: string;
+  floor?: number | null;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  area: string;
+  price: string;
+  currency: string;
+  down_payment?: string | null;
+  installment_months?: number | null;
+  is_featured: boolean;
+};
+
+export type RealEstateLead = {
+  id: number;
+  business_unit_id: number;
+  project_id?: number | null;
+  unit_id?: number | null;
+  source: string;
+  name: string;
+  phone: string;
+  email?: string | null;
+  status: string;
+  message?: string | null;
+};
+
+export type ImportExportService = {
+  id: number;
+  business_unit_id: number;
+  category?: string | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  summary_ar?: string | null;
+  summary_en?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  status: string;
+  is_featured: boolean;
+  sort_order: number;
+};
+
+export type RfqRequest = {
+  id: number;
+  business_unit_id: number;
+  service_id?: number | null;
+  rfq_number: string;
+  company_name?: string | null;
+  contact_name: string;
+  phone: string;
+  email: string;
+  origin_country?: string | null;
+  destination_country?: string | null;
+  status: string;
+  submitted_at?: string | null;
+};
+
+export type ExecutiveReport = {
+  orders_count: number;
+  orders_value: number;
+  customers_count: number;
+  low_stock_count: number;
+  real_estate_leads_count: number;
+  rfq_count: number;
+};
+
+export type AuditLog = {
+  id: number;
+  business_unit_id?: number | null;
+  user_id?: number | null;
+  action?: string | null;
+  event: string;
+  auditable_type?: string | null;
+  auditable_id?: number | null;
+  created_at?: string | null;
 };

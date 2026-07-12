@@ -23,6 +23,10 @@ export default async function ProductDetailPage({
       <div className="space-y-6">
         <div>
           <p className="text-sm font-medium uppercase tracking-wide text-teal-700">{product.category?.name_en ?? product.category?.name_ar ?? "Product"}</p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {product.badges?.map((badge) => <span key={badge.id} className="rounded-sm bg-teal-50 px-2 py-1 text-xs font-medium text-teal-800">{badge.name_en ?? badge.name_ar}</span>)}
+            {product.bundle ? <span className="rounded-sm bg-amber-50 px-2 py-1 text-xs font-medium text-amber-800">{product.bundle.name_en ?? product.bundle.name_ar}</span> : null}
+          </div>
           <h1 className="mt-2 text-3xl font-semibold">{product.name_en ?? product.name_ar}</h1>
           <p className="mt-3 text-slate-600">{product.short_description_en ?? product.short_description_ar}</p>
           {product.base_price ? <p className="mt-4 text-xl font-semibold text-teal-700">{product.base_price} {product.currency}</p> : null}
@@ -35,6 +39,7 @@ export default async function ProductDetailPage({
         </div>
         <Info title="Description" value={product.description_en ?? product.description_ar ?? "No description yet."} />
         <Info title="Brand" value={product.brand?.name_en ?? product.brand?.name_ar ?? "-"} />
+        {product.bundle ? <Info title="Bundle" value={`${product.bundle.name_en ?? product.bundle.name_ar} · ${product.bundle.bundle_type.replaceAll("_", " ")}`} /> : null}
         <div className="rounded-md border border-slate-200 bg-white p-5">
           <h2 className="font-semibold">Specs</h2>
           <dl className="mt-3 grid gap-2 text-sm">

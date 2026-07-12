@@ -41,6 +41,7 @@ class AddCartItemAction extends BaseAction
         if (($price['price_audience'] ?? 'retail') !== 'retail' && $newQuantity < $minimum) {
             throw ValidationException::withMessages(['quantity' => ["Wholesale minimum quantity is {$minimum}."]]);
         }
+        $bundleSnapshot = $this->bundleSnapshot($product);
         CartItem::query()->updateOrCreate(
             ['cart_id' => $cart->id, 'product_id' => $product->id, 'product_variant_id' => $variant?->id],
             [
@@ -60,7 +61,7 @@ class AddCartItemAction extends BaseAction
                     'min_quantity_applied' => $price['min_quantity_applied'] ?? 1,
                     'price_source' => $price['price_source'] ?? 'retail_price_list',
                     'wholesale_customer_id' => $price['wholesale_customer_id'] ?? null,
-                ],
+                ] + ($bundleSnapshot ? ['bundle' => $bundleSnapshot] : []),
             ],
         );
 
@@ -69,6 +70,18 @@ class AddCartItemAction extends BaseAction
 
     private function resolvePrice(Cart $cart, Product $product, int $quantity, ?int $variantId, array $data): ?array
     {
+        $bundle = $product->bundle()->where('is_active', true)->first();
+        if ($bundle && $bundle->pricing_mode === 'fixed_bundle_price' && $bundle->fixed_price !== null) {
+            return [
+                'unit_price' => (float) $bundle->fixed_price,
+                'price_list_id' => null,
+                'price_list_type' => 'retail',
+                'price_audience' => 'retail',
+                'min_quantity_applied' => 1,
+                'price_source' => 'fixed_bundle_price',
+            ];
+        }
+
         $customer = app(WholesaleAccessService::class)->approvedCustomer($product->businessUnit, $data['wholesale_phone'] ?? null, $data['wholesale_token'] ?? null);
         if ($customer) {
             $cart->update(['customer_id' => $customer->id]);
@@ -95,6 +108,34 @@ class AddCartItemAction extends BaseAction
             'price_audience' => 'retail',
             'min_quantity_applied' => $price?->min_quantity ?? 1,
             'price_source' => $price ? 'retail_price_list' : 'product_base_price',
+        ];
+    }
+
+    private function bundleSnapshot(Product $product): ?array
+    {
+        $bundle = $product->bundle()
+            ->where('is_active', true)
+            ->with('items.childProduct')
+            ->first();
+
+        if (! $bundle) {
+            return null;
+        }
+
+        return [
+            'id' => $bundle->id,
+            'name_ar' => $bundle->name_ar,
+            'name_en' => $bundle->name_en,
+            'bundle_type' => $bundle->bundle_type,
+            'pricing_mode' => $bundle->pricing_mode,
+            'fixed_price' => $bundle->fixed_price,
+            'items' => $bundle->items->map(fn ($item) => [
+                'child_product_id' => $item->child_product_id,
+                'child_product_variant_id' => $item->child_product_variant_id,
+                'quantity' => $item->quantity,
+                'name_ar' => $item->childProduct?->name_ar,
+                'name_en' => $item->childProduct?->name_en,
+            ])->values()->all(),
         ];
     }
 }
