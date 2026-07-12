@@ -301,6 +301,8 @@ export type Product = {
   min_order_quantity: number;
   max_order_quantity?: number | null;
   specs_json?: Record<string, unknown>;
+  merchandising_json?: Record<string, unknown>;
+  gift_options_json?: Record<string, unknown>;
   seo_title_ar?: string | null;
   seo_title_en?: string | null;
   seo_description_ar?: string | null;
@@ -309,6 +311,62 @@ export type Product = {
   variants?: ProductVariant[];
   images?: ProductImage[];
   prices?: ProductPrice[];
+  badges?: ProductBadge[];
+  bundle?: ProductBundle | null;
+};
+
+export type ProductBadge = {
+  id: number;
+  business_unit_id: number;
+  key: string;
+  name_ar: string;
+  name_en?: string | null;
+  color?: string | null;
+  is_active: boolean;
+  sort_order: number;
+};
+
+export type ProductBundle = {
+  id: number;
+  business_unit_id: number;
+  product_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  bundle_type: "fixed_box" | "corporate_box" | "seasonal_box" | "simple_bundle";
+  pricing_mode: "use_parent_product_price" | "fixed_bundle_price";
+  fixed_price?: string | null;
+  is_active: boolean;
+  metadata_json?: Record<string, unknown> | null;
+};
+
+export type ProductCollection = {
+  id: number;
+  business_unit_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  description_ar?: string | null;
+  description_en?: string | null;
+  image?: string | null;
+  status?: "active" | "draft" | "archived";
+  is_featured: boolean;
+  sort_order: number;
+  products?: Product[];
+};
+
+export type CorporateGiftInquiry = {
+  id: number;
+  business_unit_id: number;
+  company_name?: string | null;
+  contact_name: string;
+  phone: string;
+  email?: string | null;
+  quantity?: number | null;
+  budget_range?: string | null;
+  occasion?: string | null;
+  message?: string | null;
+  status: "new" | "contacted" | "quoted" | "won" | "lost" | "archived";
+  created_at?: string | null;
 };
 
 export type CartStatus = "active" | "converted" | "abandoned" | "expired";

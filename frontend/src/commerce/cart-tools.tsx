@@ -83,6 +83,7 @@ export function CartManager({ businessSlug }: { businessSlug: string }) {
               <h2 className="font-semibold">{item.product_name_en ?? item.product_name_ar}</h2>
               <p className="text-sm text-slate-600">{item.sku ?? ""} · {item.unit_price} {cart.currency}</p>
               {item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail" ? <p className="mt-1 text-xs font-medium text-teal-700">Wholesale · minimum {String(item.metadata_json.min_quantity_applied ?? 1)}</p> : null}
+              {typeof item.metadata_json?.bundle === "object" && item.metadata_json.bundle !== null ? <p className="mt-1 text-xs font-medium text-amber-700">Bundle · {String((item.metadata_json.bundle as { name_en?: string; name_ar?: string }).name_en ?? (item.metadata_json.bundle as { name_ar?: string }).name_ar ?? "Gift box")}</p> : null}
             </div>
             <div className="flex items-center gap-2">
               <input type="number" min={1} defaultValue={item.quantity} onBlur={(event) => refresh(updateCartItem(businessSlug, cart.session_token, item.id, Number(event.currentTarget.value)))} className="w-20 rounded-md border border-slate-300 px-2 py-1 text-sm" />

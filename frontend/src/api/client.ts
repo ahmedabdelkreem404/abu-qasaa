@@ -25,6 +25,10 @@ import type {
   PriceList,
   PriceListType,
   Product,
+  ProductBadge,
+  ProductBundle,
+  ProductCollection,
+  CorporateGiftInquiry,
   ProductImage,
   ProductPrice,
   ProductStatus,
@@ -485,6 +489,53 @@ export async function listPublicCategories(businessSlug: string) {
 
 export async function listPublicBrands(businessSlug: string) {
   return apiRequest<ApiResponse<Brand[]>>(`/public/${businessSlug}/brands`);
+}
+
+export async function listPublicCollections(businessSlug: string) {
+  return apiRequest<ApiResponse<ProductCollection[]>>(`/public/${businessSlug}/collections`);
+}
+
+export async function getPublicCollection(businessSlug: string, collectionSlug: string) {
+  return apiRequest<ApiResponse<ProductCollection>>(`/public/${businessSlug}/collections/${collectionSlug}`);
+}
+
+export async function listPublicFeaturedProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/featured-products`);
+}
+
+export async function listPublicGiftProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/gift-products`);
+}
+
+export async function listPublicSeasonalProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/seasonal-products`);
+}
+
+export async function listPublicCorporateGiftProducts(businessSlug: string) {
+  return apiRequest<PaginatedResponse<Product>>(`/public/${businessSlug}/corporate-gift-products`);
+}
+
+export async function submitCorporateGiftInquiry(businessSlug: string, payload: Partial<CorporateGiftInquiry>) {
+  return apiRequest<ApiResponse<CorporateGiftInquiry>>(`/public/${businessSlug}/corporate-gift-inquiries`, {
+    method: "POST",
+    body: JSON.stringify(payload),
+  });
+}
+
+export async function listProductCollections(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductCollection>>(withQuery("/catalog/collections", params));
+}
+
+export async function listProductBadges(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductBadge>>(withQuery("/catalog/badges", params));
+}
+
+export async function listProductBundles(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<ProductBundle>>(withQuery("/catalog/bundles", params));
+}
+
+export async function listCorporateGiftInquiries(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<CorporateGiftInquiry>>(withQuery("/catalog/corporate-gift-inquiries", params));
 }
 
 export async function getOrCreateCart(businessSlug: string, session_token?: string | null) {

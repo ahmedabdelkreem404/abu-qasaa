@@ -7,6 +7,13 @@ Route::get('/public/{businessSlug}/products', [CatalogController::class, 'public
 Route::get('/public/{businessSlug}/products/{productSlug}', [CatalogController::class, 'publicProduct']);
 Route::get('/public/{businessSlug}/categories', [CatalogController::class, 'publicCategories']);
 Route::get('/public/{businessSlug}/brands', [CatalogController::class, 'publicBrands']);
+Route::get('/public/{businessSlug}/collections', [CatalogController::class, 'publicCollections']);
+Route::get('/public/{businessSlug}/collections/{collectionSlug}', [CatalogController::class, 'publicCollection']);
+Route::get('/public/{businessSlug}/featured-products', [CatalogController::class, 'publicFeaturedProducts']);
+Route::get('/public/{businessSlug}/gift-products', [CatalogController::class, 'publicGiftProducts']);
+Route::get('/public/{businessSlug}/seasonal-products', [CatalogController::class, 'publicSeasonalProducts']);
+Route::get('/public/{businessSlug}/corporate-gift-products', [CatalogController::class, 'publicCorporateGiftProducts']);
+Route::post('/public/{businessSlug}/corporate-gift-inquiries', [CatalogController::class, 'submitCorporateGiftInquiry']);
 
 Route::middleware('auth:sanctum')->prefix('catalog')->group(function (): void {
     Route::get('/categories', [CatalogController::class, 'categories'])->middleware('permission:products.view');
@@ -36,4 +43,12 @@ Route::middleware('auth:sanctum')->prefix('catalog')->group(function (): void {
     Route::get('/price-lists/{priceList}', [CatalogController::class, 'showPriceList'])->middleware('permission:products.view');
     Route::match(['put', 'patch'], '/price-lists/{priceList}', [CatalogController::class, 'updatePriceList'])->middleware('permission:products.update');
     Route::delete('/price-lists/{priceList}', [CatalogController::class, 'destroyPriceList'])->middleware('permission:products.delete');
+
+    Route::get('/badges', [CatalogController::class, 'badges'])->middleware('permission:products.view');
+    Route::post('/badges', [CatalogController::class, 'storeBadge'])->middleware('permission:products.create');
+    Route::get('/collections', [CatalogController::class, 'collections'])->middleware('permission:products.view');
+    Route::post('/collections', [CatalogController::class, 'storeCollection'])->middleware('permission:products.create');
+    Route::get('/bundles', [CatalogController::class, 'bundles'])->middleware('permission:products.view');
+    Route::post('/bundles', [CatalogController::class, 'storeBundle'])->middleware('permission:products.create');
+    Route::get('/corporate-gift-inquiries', [CatalogController::class, 'corporateGiftInquiries'])->middleware('permission:leads.view');
 });
