@@ -3,6 +3,7 @@
 namespace App\Modules\Reports\Presentation\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
 use App\Modules\Commerce\Infrastructure\Models\Customer;
 use App\Modules\Commerce\Infrastructure\Models\Order;
 use App\Modules\Core\Presentation\Http\Responses\ApiResponse;
@@ -50,7 +51,7 @@ class ReportsController extends Controller
     private function businessUnitIds(Request $request)
     {
         if ($request->user()->isSuperAdmin()) {
-            return \App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit::query()->pluck('id');
+            return BusinessUnit::query()->pluck('id');
         }
 
         return $request->user()->businessUnitAssignments()->where('is_active', true)->pluck('business_unit_id');

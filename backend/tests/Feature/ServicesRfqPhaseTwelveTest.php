@@ -4,7 +4,6 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Modules\BusinessUnits\Infrastructure\Models\BusinessUnit;
-use App\Modules\ServicesRfq\Infrastructure\Models\RfqQuotation;
 use App\Modules\ServicesRfq\Infrastructure\Models\RfqRequest;
 use App\Modules\ServicesRfq\Infrastructure\Models\Service;
 use Illuminate\Foundation\Testing\RefreshDatabase;
