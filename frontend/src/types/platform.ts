@@ -856,3 +856,34 @@ export type RealEstateLead = {
   status: string;
   message?: string | null;
 };
+
+export type ImportExportService = {
+  id: number;
+  business_unit_id: number;
+  category?: string | null;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  summary_ar?: string | null;
+  summary_en?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  status: string;
+  is_featured: boolean;
+  sort_order: number;
+};
+
+export type RfqRequest = {
+  id: number;
+  business_unit_id: number;
+  service_id?: number | null;
+  rfq_number: string;
+  company_name?: string | null;
+  contact_name: string;
+  phone: string;
+  email: string;
+  origin_country?: string | null;
+  destination_country?: string | null;
+  status: string;
+  submitted_at?: string | null;
+};

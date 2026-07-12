@@ -59,6 +59,8 @@ import type {
   RealEstateProject,
   PropertyUnit,
   RealEstateLead,
+  ImportExportService,
+  RfqRequest,
 } from "@/types/platform";
 
 const API_URL =
@@ -968,4 +970,24 @@ export async function listRealEstateProjects(params?: URLSearchParams) {
 
 export async function listRealEstateLeads(params?: URLSearchParams) {
   return apiRequest<PaginatedResponse<RealEstateLead>>(withQuery("/real-estate/leads", params));
+}
+
+export async function listPublicServices(businessSlug: string) {
+  return apiRequest<ApiResponse<ImportExportService[]>>(`/public/${businessSlug}/services`);
+}
+
+export async function getPublicService(businessSlug: string, serviceSlug: string) {
+  return apiRequest<ApiResponse<ImportExportService>>(`/public/${businessSlug}/services/${serviceSlug}`);
+}
+
+export async function submitRfqRequest(businessSlug: string, payload: Record<string, unknown>) {
+  return apiRequest<ApiResponse<RfqRequest>>(`/public/${businessSlug}/rfq-requests`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function getPublicRfqStatus(businessSlug: string, rfqNumber: string, contact: string) {
+  return apiRequest<ApiResponse<RfqRequest>>(`/public/${businessSlug}/rfq-requests/${rfqNumber}/status?contact=${encodeURIComponent(contact)}`);
+}
+
+export async function listRfqRequests(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RfqRequest>>(withQuery("/services-rfq/rfq-requests", params));
 }
