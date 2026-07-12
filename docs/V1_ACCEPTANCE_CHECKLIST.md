@@ -25,10 +25,10 @@
 - [x] Phase 12 regression tests passed before commit.
 - [x] Phase 13 regression tests passed before commit.
 - [x] Phase 14 readiness test added and passed.
-- [ ] Final full backend suite run on release candidate.
-- [ ] Final frontend lint run on release candidate.
-- [ ] Final frontend production build run on release candidate.
-- [ ] Final migration refresh and seed run on release candidate.
+- [x] Final full backend suite run on release candidate.
+- [x] Final frontend lint run on release candidate.
+- [x] Final frontend production build run on release candidate.
+- [x] Final migration refresh and seed run on release candidate.
 - [ ] `master` merged, pushed, and verified equal to `origin/master`.
 
 ## Release Gate
