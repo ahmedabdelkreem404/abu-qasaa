@@ -56,6 +56,9 @@ import type {
   WholesaleApplication,
   WholesaleCustomer,
   WholesalePricing,
+  RealEstateProject,
+  PropertyUnit,
+  RealEstateLead,
 } from "@/types/platform";
 
 const API_URL =
@@ -941,4 +944,28 @@ export async function updateCustomer(id: string | number, payload: Partial<Custo
     method: "PATCH",
     body: JSON.stringify(payload),
   });
+}
+
+export async function listPublicRealEstateProjects(businessSlug: string) {
+  return apiRequest<ApiResponse<RealEstateProject[]>>(`/public/${businessSlug}/real-estate/projects`);
+}
+
+export async function getPublicRealEstateProject(businessSlug: string, projectSlug: string) {
+  return apiRequest<ApiResponse<RealEstateProject>>(`/public/${businessSlug}/real-estate/projects/${projectSlug}`);
+}
+
+export async function listPublicPropertyUnits(businessSlug: string, params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<PropertyUnit>>(withQuery(`/public/${businessSlug}/real-estate/units`, params));
+}
+
+export async function submitRealEstateLead(businessSlug: string, payload: Partial<RealEstateLead>) {
+  return apiRequest<ApiResponse<RealEstateLead>>(`/public/${businessSlug}/real-estate/leads`, { method: "POST", body: JSON.stringify(payload) });
+}
+
+export async function listRealEstateProjects(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RealEstateProject>>(withQuery("/real-estate/projects", params));
+}
+
+export async function listRealEstateLeads(params?: URLSearchParams) {
+  return apiRequest<PaginatedResponse<RealEstateLead>>(withQuery("/real-estate/leads", params));
 }

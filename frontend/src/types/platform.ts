@@ -803,3 +803,56 @@ export type Lead = {
   phone?: string;
   status: string;
 };
+
+export type RealEstateProject = {
+  id: number;
+  business_unit_id: number;
+  name_ar: string;
+  name_en?: string | null;
+  slug: string;
+  project_code: string;
+  status: string;
+  project_type: string;
+  developer_name?: string | null;
+  description_ar?: string | null;
+  description_en?: string | null;
+  city?: string | null;
+  governorate?: string | null;
+  starting_price?: string | null;
+  currency: string;
+  is_featured: boolean;
+  amenities_json?: string[] | null;
+  units?: PropertyUnit[];
+};
+
+export type PropertyUnit = {
+  id: number;
+  business_unit_id: number;
+  project_id: number;
+  property_id?: number | null;
+  unit_code: string;
+  unit_type: string;
+  status: string;
+  floor?: number | null;
+  bedrooms?: number | null;
+  bathrooms?: number | null;
+  area: string;
+  price: string;
+  currency: string;
+  down_payment?: string | null;
+  installment_months?: number | null;
+  is_featured: boolean;
+};
+
+export type RealEstateLead = {
+  id: number;
+  business_unit_id: number;
+  project_id?: number | null;
+  unit_id?: number | null;
+  source: string;
+  name: string;
+  phone: string;
+  email?: string | null;
+  status: string;
+  message?: string | null;
+};
