@@ -1,0 +1,255 @@
+[
+  {
+    "name": "home-ar-desktop",
+    "path": "/",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\home-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": "rgb(255, 255, 255)",
+      "textSample": "أبناء أبو قصعة للتجارة\nمنصة علامة تجارية جامعة\nالرئيسية\nعن الشركة\nوحدات الأعمال\nتواصل معنا\nEnglish\nلوحة التحكم\n\nمنصة علامة تجارية جامعة\n\nواجهة تشغيل راقية تجمع الزيوت والتمور والعقارات وخدمات التجارة.\n\nتجمع أبناء أبو قصعة التجارة والبيع بالجملة والعقارات وخدمات الاستيراد والتصدير في منصة رقمية موثوق"
+    }
+  },
+  {
+    "name": "home-en-desktop",
+    "path": "/",
+    "locale": "en",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\home-en-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/",
+      "lang": "en",
+      "dir": "ltr",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": "rgb(255, 255, 255)",
+      "textSample": "Abnaa Abu Qasaa Trading\nUmbrella brand platform\nHome\nAbout\nBusiness Units\nContact\nالعربية\nDashboard\n\nUmbrella brand platform\n\nA premium operating home for oils, dates, real estate, and trade services.\n\nAbnaa Abu Qasaa brings commerce, wholesale, property, and import/export workflows into one trusted"
+    }
+  },
+  {
+    "name": "home-ar-mobile",
+    "path": "/",
+    "locale": "ar",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\home-ar-mobile.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": "rgb(255, 255, 255)",
+      "textSample": "أبناء أبو قصعة للتجارة\nEnglish\nالقائمة\n\nمنصة علامة تجارية جامعة\n\nواجهة تشغيل راقية تجمع الزيوت والتمور والعقارات وخدمات التجارة.\n\nتجمع أبناء أبو قصعة التجارة والبيع بالجملة والعقارات وخدمات الاستيراد والتصدير في منصة رقمية موثوقة.\n\nاستكشف قطاعات الأعمال\nفتح لوحة التحكم\n\nأبو قصعة للزيوت\n\n4\n\nقطاعات ال"
+    }
+  },
+  {
+    "name": "business-units-ar-desktop",
+    "path": "/business-units",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\business-units-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/business-units",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": "rgb(255, 255, 255)",
+      "textSample": "أبناء أبو قصعة للتجارة\nمنصة علامة تجارية جامعة\nالرئيسية\nعن الشركة\nوحدات الأعمال\nتواصل معنا\nEnglish\nلوحة التحكم\n\nمنصة علامة تجارية جامعة\n\nقطاعات الأعمال\n\nاستكشف الأنشطة النشطة التي تديرها أبناء أبو قصعة للتجارة.\n\n4\n\nقطاعات الأعمال\n\nاستيراد وتصدير\nأبناء أبو قاعود للاستيراد والتصدير\n\nمدخل منظم لطلبات ا"
+    }
+  },
+  {
+    "name": "business-units-en-desktop",
+    "path": "/business-units",
+    "locale": "en",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\business-units-en-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/business-units",
+      "lang": "en",
+      "dir": "ltr",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": "rgb(255, 255, 255)",
+      "textSample": "Abnaa Abu Qasaa Trading\nUmbrella brand platform\nHome\nAbout\nBusiness Units\nContact\nالعربية\nDashboard\n\nUmbrella brand platform\n\nBusiness Units\n\nExplore the active businesses managed by Abnaa Abu Qasaa Trading.\n\n4\n\nBusiness Units\n\nShared platform, focused units\n\nEach business unit keeps its operational"
+    }
+  },
+  {
+    "name": "oils-ar-desktop",
+    "path": "/oils",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\oils-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/oils",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": null,
+      "textSample": "زيوت وشحوم\n\nأبناء أبو قاعود للزيوت ومواد التشحيم\n\nكتالوج زيوت وشحوم صناعية مع مسارات بيع وتوريد واضحة.\n\nالمجموعات\nعلب الهدايا\nهدايا الشركات\nالموسمية"
+    }
+  },
+  {
+    "name": "dates-ar-desktop",
+    "path": "/dates",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\dates-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": null,
+      "textSample": "تمور وهدايا\n\nغصون للتمور\n\nتجربة عرض للتمور الفاخرة والهدايا المؤسسية بشكل أنيق وسهل التصفح.\n\nالمجموعات\nعلب الهدايا\nهدايا الشركات\nالموسمية"
+    }
+  },
+  {
+    "name": "real-estate-ar-desktop",
+    "path": "/real-estate",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\real-estate-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/real-estate",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": null,
+      "textSample": "عقارات\n\nأبناء أبو قاعود للعقارات\n\nعرض للمشروعات والوحدات وطلبات المعاينة بدون ازدحام بصري."
+    }
+  },
+  {
+    "name": "import-export-ar-desktop",
+    "path": "/import-export",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\import-export-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/import-export",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "heroTextColor": null,
+      "textSample": "استيراد وتصدير\n\nأبناء أبو قاعود للاستيراد والتصدير\n\nمدخل منظم لطلبات الأسعار وخدمات الشحن والجمارك والتجارة."
+    }
+  },
+  {
+    "name": "dashboard-ar-desktop",
+    "path": "/dashboard",
+    "locale": "ar",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "dashboard": true,
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\dashboard-ar-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dashboard",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 1440,
+      "height": 900,
+      "scrollWidth": 1440,
+      "clientWidth": 1440,
+      "overflow": false,
+      "translationOk": true,
+      "textSample": "أبو قصعة\nSuper Admin\nنظرة عامة\nقطاعات الأعمال\nالمستخدمون\nالكتالوج\nالتجارة\nالطلبات\nالجملة\nالمدفوعات\nالمخزون\nطلبات الأسعار\nالعقارات\nإدارة المحتوى\nالتقارير\nالإعدادات\nالخصائص\nEnglish\nتسجيل الخروج\n\nمركز التحكم\n\nتم تسجيل الدخول باسم Super Admin\n\nالرئيسية\n\nلوحة التحكم\n\nمركز التحكم\n\nتم تسجيل الدخول باسم Super Admin. الأدوار: المدير العام.\n\n4+\n\nقطاعات الأعم"
+    }
+  },
+  {
+    "name": "dashboard-ar-mobile",
+    "path": "/dashboard",
+    "locale": "ar",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "dashboard": true,
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\ui-remediation\\dashboard-ar-mobile.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dashboard",
+      "lang": "ar",
+      "dir": "rtl",
+      "width": 390,
+      "height": 844,
+      "scrollWidth": 390,
+      "clientWidth": 390,
+      "overflow": false,
+      "translationOk": true,
+      "textSample": "أبو قصعة\nSuper Admin\nالتنقل\nEnglish\nتسجيل الخروج\n\nمركز التحكم\n\nتم تسجيل الدخول باسم Super Admin\n\nالرئيسية\n\nلوحة التحكم\n\nمركز التحكم\n\nتم تسجيل الدخول باسم Super Admin. الأدوار: المدير العام.\n\n4+\n\nقطاعات الأعمال\n\n52\n\nالصلاحيات\n\nنشط\n\nالتقارير\n\nقطاعات الأعمال المتاحة\n\nالمدير العام يمكنه الوصول إلى كل قطاعات الأعمال."
+    }
+  }
+]

@@ -3,6 +3,10 @@ import { SectionRenderer } from "@/cms/section-renderer";
 import { ApiErrorState } from "@/components/shared/api-state";
 import { getDictionary, getLocale } from "@/i18n/server";
 import type { BusinessUnit, CmsPage } from "@/types/platform";
+import { StorefrontGallery, StorefrontProductGrid } from "@/storefront/components";
+import { getStorefrontProfile, storefrontName } from "@/storefront/profiles";
+import Image from "next/image";
+import Link from "next/link";
 
 async function loadBusinessUnit(slug: string): Promise<BusinessUnit | null> {
   try {
@@ -33,8 +37,10 @@ export default async function BusinessHomePage({
   const hasProducts = unit.modules?.some((module) => module.key === "products" && module.is_enabled) ?? false;
   const hasWholesale = (unit.modules?.some((module) => module.key === "wholesale" && module.is_enabled) ?? false)
     && (unit.settings?.some((setting) => setting.key === "wholesale_enabled" && Boolean(setting.value)) ?? unit.type === "wholesale_store");
+  const profile = getStorefrontProfile(unit.slug);
+  const name = storefrontName(unit, locale);
   const featuredProducts = hasProducts
-    ? await listPublicProducts(businessSlug, new URLSearchParams({ is_featured: "true", per_page: "3" })).then((response) => response.data).catch(() => [])
+    ? await listPublicProducts(businessSlug, new URLSearchParams({ is_featured: "true", per_page: "6" })).then((response) => response.data).catch(() => [])
     : [];
   const visibleFeaturedProducts = locale === "ar"
     ? featuredProducts.filter((product) => hasArabicText(product.name_ar))
@@ -43,34 +49,44 @@ export default async function BusinessHomePage({
 
   if (page) {
     return (
-      <section className="space-y-6">
-        <div className="aq-card p-6">
-          <p className="aq-eyebrow">{dictionary.businessUnits.types[unit.slug as keyof typeof dictionary.businessUnits.types] ?? unit.type}</p>
-          <h1 className="aq-title">{locale === "ar" ? page.title_ar : (page.title_en ?? page.title_ar)}</h1>
-          <p className="aq-subtitle mt-2">
-            {dictionary.businessUnits.descriptions[unit.slug as keyof typeof dictionary.businessUnits.descriptions] ?? unit.description ?? dictionary.common.learnMore}
-          </p>
+      <section className="space-y-12">
+        <div className="aq-store-hero">
+          <div className="aq-store-hero-media">
+            <Image src={profile.heroImage} alt={name} fill priority sizes="100vw" />
+          </div>
+          <div className="aq-store-hero-content">
+            <p className="aq-store-kicker">{dictionary.businessUnits.types[unit.slug as keyof typeof dictionary.businessUnits.types] ?? unit.type}</p>
+            <h1 className="aq-store-display">{name}</h1>
+            <p className="aq-store-copy">{profile.promise[locale]}</p>
+            <div className="flex flex-wrap gap-3">
+              {hasProducts ? <Link href={`/${businessSlug}/products`} className="aq-btn aq-btn-light">{dictionary.common.browseProducts}</Link> : null}
+              <Link href={`/${businessSlug}/gallery`} className="aq-btn-secondary aq-btn-dark">{locale === "ar" ? "شاهد المعرض" : "View gallery"}</Link>
+              {hasWholesale ? <Link href={`/${businessSlug}/wholesale`} className="aq-btn-secondary aq-btn-dark">{dictionary.businessUnits.wholesalePartner}</Link> : null}
+            </div>
+          </div>
         </div>
         <SectionRenderer sections={page.sections} locale={locale} />
         {hasProducts ? <MerchLinks businessSlug={businessSlug} labels={dictionary.businessUnits.merchLinks} /> : null}
+        <div className="aq-store-section">
+          <div className="aq-store-section-head">
+            <div>
+              <p className="aq-store-kicker">{locale === "ar" ? "هوية بصرية" : "Visual identity"}</p>
+              <h2 className="aq-store-title">{locale === "ar" ? "من عالم النشاط" : "From this brand world"}</h2>
+            </div>
+            <Link href={`/${businessSlug}/gallery`} className="aq-store-pill">{locale === "ar" ? "كل الصور" : "All images"}</Link>
+          </div>
+          <StorefrontGallery images={profile.gallery.slice(0, 4)} title={name} />
+        </div>
         {visibleFeaturedProducts.length > 0 ? (
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-black">{dictionary.businessUnits.featuredProducts}</h2>
-              <a href={`/${businessSlug}/products`} className="text-sm font-black text-[var(--aq-primary)]">{dictionary.common.viewDetails}</a>
+          <div className="aq-store-section">
+            <div className="aq-store-section-head">
+              <div>
+                <p className="aq-store-kicker">{dictionary.businessUnits.featuredProducts}</p>
+                <h2 className="aq-store-title">{locale === "ar" ? "مختارات النشاط" : "Featured selections"}</h2>
+              </div>
+              <Link href={`/${businessSlug}/products`} className="aq-store-pill">{dictionary.common.viewDetails}</Link>
             </div>
-            <div className="aq-grid-auto">
-              {visibleFeaturedProducts.map((product) => (
-                <a key={product.id} href={`/${businessSlug}/products/${product.slug}`} className="aq-card p-5">
-                  <h3 className="font-black">{locale === "ar" ? product.name_ar : (product.name_en ?? product.name_ar)}</h3>
-                  <p className="mt-2 text-sm leading-7 text-[var(--aq-muted)]">
-                    {locale === "ar"
-                      ? (product.short_description_ar ?? product.short_description_en ?? product.category?.name_ar)
-                      : (product.short_description_en ?? product.short_description_ar ?? product.category?.name_en)}
-                  </p>
-                </a>
-              ))}
-            </div>
+            <StorefrontProductGrid businessSlug={businessSlug} products={visibleFeaturedProducts} empty={dictionary.common.noData} locale={locale} profile={profile} />
           </div>
         ) : null}
       </section>

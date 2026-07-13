@@ -93,7 +93,7 @@ class BusinessUnitFoundationSeeder extends Seeder
 
     private const BUSINESS_UNITS = [
         [
-            'name_ar' => 'أبناء أبو قاعود للزيوت ومواد التشحيم',
+            'name_ar' => 'أبناء أبو قصعة للزيوت ومواد التشحيم',
             'name_en' => 'Abnaa Abu Qasaa Oils & Lubricants',
             'slug' => 'oils',
             'type' => 'wholesale_store',
@@ -109,7 +109,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'settings' => ['registration_enabled' => true, 'checkout_enabled' => true, 'show_prices' => true, 'allow_guest_checkout' => true, 'manual_payment_enabled' => true, 'paymob_enabled' => true, 'inventory_enabled' => true, 'wholesale_enabled' => false],
         ],
         [
-            'name_ar' => 'أبناء أبو قاعود للاستيراد والتصدير',
+            'name_ar' => 'أبناء أبو قصعة للاستيراد والتصدير',
             'name_en' => 'Abnaa Abu Qasaa Import & Export',
             'slug' => 'import-export',
             'type' => 'services_rfq',
@@ -117,7 +117,7 @@ class BusinessUnitFoundationSeeder extends Seeder
             'settings' => ['registration_enabled' => false, 'checkout_enabled' => false, 'show_prices' => false, 'rfq_enabled' => true, 'manual_payment_enabled' => true, 'paymob_enabled' => false],
         ],
         [
-            'name_ar' => 'أبناء أبو قاعود للعقارات',
+            'name_ar' => 'أبناء أبو قصعة للعقارات',
             'name_en' => 'Abnaa Abu Qasaa Real Estate',
             'slug' => 'real-estate',
             'type' => 'real_estate',

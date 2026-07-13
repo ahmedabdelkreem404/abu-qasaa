@@ -512,6 +512,268 @@ html[dir="rtl"] .aq-eyebrow {
   min-width: 720px;
 }
 
+.aq-storefront {
+  min-height: 100vh;
+  background: linear-gradient(180deg, color-mix(in srgb, var(--store-surface) 78%, white 22%) 0%, #fffaf4 100%);
+  color: var(--store-text);
+}
+
+.aq-store-container {
+  width: min(100% - clamp(1rem, 5vw, 6rem), 1320px);
+  margin-inline: auto;
+}
+
+.aq-store-header {
+  position: sticky;
+  top: 0;
+  z-index: 45;
+  border-bottom: 1px solid color-mix(in srgb, var(--store-accent) 20%, transparent);
+  background: color-mix(in srgb, var(--store-surface) 84%, white 16% / 0.94);
+  backdrop-filter: blur(18px);
+}
+
+.aq-store-nav {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.75rem;
+}
+
+.aq-store-brand {
+  display: inline-flex;
+  min-width: 0;
+  align-items: center;
+  gap: 0.75rem;
+  color: var(--store-text);
+  text-align: start;
+}
+
+.aq-store-logo {
+  width: 52px;
+  height: 52px;
+  border: 1px solid color-mix(in srgb, var(--store-accent) 24%, white 76%);
+  border-radius: 50%;
+  background: white;
+  object-fit: contain;
+  padding: 0.22rem;
+  box-shadow: 0 10px 28px rgb(47 27 18 / 0.10);
+}
+
+.aq-store-links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  border: 1px solid color-mix(in srgb, var(--store-accent) 18%, white 82%);
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.78);
+  padding: 0.25rem;
+  box-shadow: 0 10px 24px rgb(47 27 18 / 0.06);
+}
+
+.aq-store-link,
+.aq-store-pill {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  padding: 0.65rem 0.9rem;
+  color: var(--store-text);
+  font-size: 0.88rem;
+  font-weight: 900;
+  white-space: nowrap;
+}
+
+.aq-store-link:hover,
+.aq-store-pill:hover {
+  background: color-mix(in srgb, var(--store-accent) 12%, white 88%);
+}
+
+.aq-store-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+}
+
+.aq-store-pill {
+  border: 1px solid color-mix(in srgb, var(--store-accent) 28%, white 72%);
+  background: white;
+}
+
+.aq-store-mobile-menu {
+  display: none;
+}
+
+.aq-store-main {
+  padding-block: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+.aq-store-footer {
+  border-top: 1px solid color-mix(in srgb, var(--store-accent) 18%, white 82%);
+  background: var(--store-accent-dark);
+  color: white;
+}
+
+.aq-store-footer-grid {
+  display: grid;
+  gap: 1.5rem;
+  padding-block: 2rem;
+}
+
+.aq-store-footer-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.aq-store-hero {
+  display: grid;
+  min-height: min(78vh, 46rem);
+  overflow: hidden;
+  border-radius: var(--aq-radius);
+  background: var(--store-accent-dark);
+  box-shadow: 0 24px 70px rgb(47 27 18 / 0.16);
+}
+
+.aq-store-hero-media,
+.aq-store-product-image,
+.aq-store-gallery-item {
+  position: relative;
+  overflow: hidden;
+}
+
+.aq-store-hero-media {
+  min-height: 22rem;
+}
+
+.aq-store-hero-media img,
+.aq-store-product-image img,
+.aq-store-gallery-item img {
+  object-fit: cover;
+}
+
+.aq-store-hero-content {
+  display: grid;
+  align-content: center;
+  gap: 1rem;
+  padding: clamp(1.25rem, 4vw, 4rem);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--store-accent-dark) 92%, transparent) 0%, color-mix(in srgb, var(--store-accent) 74%, transparent) 100%);
+  color: white;
+}
+
+.aq-store-kicker {
+  color: color-mix(in srgb, var(--store-accent) 46%, white 54%);
+  font-size: 0.82rem;
+  font-weight: 950;
+}
+
+.aq-store-display {
+  max-width: 11ch;
+  color: white;
+  font-size: clamp(2.8rem, 8vw, 7rem);
+  font-weight: 950;
+  line-height: 0.96;
+  letter-spacing: 0;
+}
+
+.aq-store-copy {
+  max-width: 64ch;
+  color: rgb(255 255 255 / 0.82);
+  font-size: clamp(1rem, 1.4vw, 1.18rem);
+  line-height: 1.9;
+}
+
+.aq-store-section {
+  display: grid;
+  gap: 1.25rem;
+}
+
+.aq-store-section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.aq-store-title {
+  color: var(--store-text);
+  font-size: clamp(1.8rem, 4vw, 3.6rem);
+  font-weight: 950;
+  line-height: 1.05;
+}
+
+.aq-store-gallery {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.aq-store-gallery-item {
+  min-height: 15rem;
+  border-radius: var(--aq-radius);
+  background: var(--store-surface);
+  box-shadow: 0 12px 30px rgb(47 27 18 / 0.10);
+}
+
+.aq-store-gallery-item:nth-child(1),
+.aq-store-gallery-item:nth-child(4) {
+  grid-column: span 3;
+}
+
+.aq-store-gallery-item:nth-child(2),
+.aq-store-gallery-item:nth-child(3),
+.aq-store-gallery-item:nth-child(5),
+.aq-store-gallery-item:nth-child(6) {
+  grid-column: span 3;
+}
+
+.aq-store-product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+}
+
+.aq-store-product-card {
+  display: grid;
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--store-accent) 14%, white 86%);
+  border-radius: var(--aq-radius);
+  background: white;
+  box-shadow: 0 12px 34px rgb(47 27 18 / 0.08);
+}
+
+.aq-store-product-image {
+  min-height: 16rem;
+  background: var(--store-surface);
+}
+
+.aq-store-product-body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.aq-store-policy-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+}
+
+.aq-store-policy {
+  border: 1px solid color-mix(in srgb, var(--store-accent) 18%, white 82%);
+  border-radius: var(--aq-radius);
+  background: white;
+  padding: 1.2rem;
+  box-shadow: 0 12px 30px rgb(47 27 18 / 0.07);
+}
+
 .aq-dashboard-sidebar {
   position: sticky;
   top: 0;
@@ -583,6 +845,69 @@ html[dir="rtl"] .aq-eyebrow {
 }
 
 @media (max-width: 1023px) {
+  .aq-store-nav {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .aq-store-links {
+    display: none;
+  }
+
+  .aq-store-actions .aq-store-pill {
+    display: none;
+  }
+
+  .aq-store-mobile-menu {
+    display: block;
+    padding-bottom: 0.85rem;
+  }
+
+  .aq-store-mobile-menu summary {
+    display: inline-flex;
+    min-height: 42px;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid color-mix(in srgb, var(--store-accent) 24%, white 76%);
+    border-radius: var(--aq-radius-sm);
+    background: white;
+    padding: 0.65rem 0.9rem;
+    color: var(--store-text);
+    font-weight: 950;
+    list-style: none;
+  }
+
+  .aq-store-mobile-menu summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .aq-store-mobile-menu div {
+    display: grid;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+  }
+
+  .aq-store-mobile-menu a {
+    border: 1px solid color-mix(in srgb, var(--store-accent) 16%, white 84%);
+    border-radius: var(--aq-radius-sm);
+    background: white;
+    padding: 0.75rem;
+    text-align: center;
+    font-weight: 900;
+  }
+
+  .aq-store-hero {
+    min-height: auto;
+  }
+
+  .aq-store-gallery {
+    grid-template-columns: 1fr;
+  }
+
+  .aq-store-gallery-item,
+  .aq-store-gallery-item:nth-child(n) {
+    grid-column: auto;
+  }
+
   .aq-header-row {
     grid-template-columns: minmax(0, 1fr) auto;
   }

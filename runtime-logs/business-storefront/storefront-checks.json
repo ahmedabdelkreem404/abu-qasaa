@@ -1,0 +1,162 @@
+[
+  {
+    "name": "dates-home-desktop",
+    "path": "/dates",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\dates-home-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 7,
+      "textSample": "غصون للتمور\nغصون للتمور\nالرئيسية\nالمنتجات\nعلب الهدايا\nهدايا الشركات\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nتمور وهدايا\n\nغصون للتمور\n\nتمور وهدايا فاخرة بتجربة دافئة، راقية، ومناسبة للبيت والضيافة والشركات.\n\nتصفح المنتجات\nشاهد المعرض\nالمجموعات\nعلب الهدايا\nهدايا الشركات\nالموسمية\n\nهوية بصرية\n\nمن عالم النشا",
+      "hasGhosoun": true
+    }
+  },
+  {
+    "name": "dates-products-desktop",
+    "path": "/dates/products",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\dates-products-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates/products",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 8,
+      "textSample": "غصون للتمور\nغصون للتمور\nالرئيسية\nالمنتجات\nعلب الهدايا\nهدايا الشركات\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\ndates\n\nالمنتجات\n\nتصفح المنتجات المنشورة مع مؤشرات السعر والمخزون.\n\nالتصنيف\nPremium Dates\nGift Boxes\nBulk Dates\nالعلامة\nGhosoun\nPremium Medjool Dates 1kg\n\nPremium Dates\n\n280.00 EGP\n\nAdd to cart\nCla",
+      "hasGhosoun": true
+    }
+  },
+  {
+    "name": "dates-gallery-desktop",
+    "path": "/dates/gallery",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\dates-gallery-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates/gallery",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 8,
+      "textSample": "غصون للتمور\nغصون للتمور\nالرئيسية\nالمنتجات\nعلب الهدايا\nهدايا الشركات\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nغصون للتمور\n\nالمعرض\n\nتمور وهدايا فاخرة بتجربة دافئة، راقية، ومناسبة للبيت والضيافة والشركات.\n\nغصون للتمور\nتمور وهدايا فاخرة بتجربة دافئة، راقية، ومناسبة للبيت والضيافة والشركات.\nمنصة أبو قصعة\nالسي",
+      "hasGhosoun": true
+    }
+  },
+  {
+    "name": "dates-policies-desktop",
+    "path": "/dates/policies",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\dates-policies-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates/policies",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 2,
+      "textSample": "غصون للتمور\nغصون للتمور\nالرئيسية\nالمنتجات\nعلب الهدايا\nهدايا الشركات\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nغصون للتمور\n\nالسياسات والتفاصيل\n\nتمور وهدايا فاخرة بتجربة دافئة، راقية، ومناسبة للبيت والضيافة والشركات.\n\nسياسة الجودة\n\nنختار المنتجات بعناية ونراجع التغليف قبل التسليم لضمان تجربة تليق بالضيافة.\n",
+      "hasGhosoun": true
+    }
+  },
+  {
+    "name": "dates-home-mobile",
+    "path": "/dates",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\dates-home-mobile.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/dates",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 7,
+      "textSample": "غصون للتمور\nغصون للتمور\nEnglish\nالقائمة\n\nتمور وهدايا\n\nغصون للتمور\n\nتمور وهدايا فاخرة بتجربة دافئة، راقية، ومناسبة للبيت والضيافة والشركات.\n\nتصفح المنتجات\nشاهد المعرض\nالمجموعات\nعلب الهدايا\nهدايا الشركات\nالموسمية\n\nهوية بصرية\n\nمن عالم النشاط\nكل الصور\nغصون للتمور\nتمور وهدايا فاخرة بتجربة دافئة، راقية، و",
+      "hasGhosoun": true
+    }
+  },
+  {
+    "name": "oils-home-desktop",
+    "path": "/oils",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\oils-home-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/oils",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 4,
+      "textSample": "أبناء أبو قصعة للزيوت ومواد التشحيم\nأبو قصعة للزيوت\nالرئيسية\nالمنتجات\nالجملة\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nزيوت وشحوم\n\nأبناء أبو قصعة للزيوت ومواد التشحيم\n\nواجهة توريد واضحة للزيوت والشحوم الصناعية والبيع بالجملة.\n\nتصفح المنتجات\nشاهد المعرض\nالجملة / طلب شراكة\nالمجموعات\nعلب الهدايا\nهدايا الشركا",
+      "hasGhosoun": false
+    }
+  },
+  {
+    "name": "real-estate-home-desktop",
+    "path": "/real-estate",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\real-estate-home-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/real-estate",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 4,
+      "textSample": "أبناء أبو قصعة للعقارات\nأبو قصعة للعقارات\nالرئيسية\nالمشروعات\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nعقارات\n\nأبناء أبو قصعة للعقارات\n\nمشروعات ووحدات وطلبات معاينة داخل تجربة عقارية منفصلة.\n\nشاهد المعرض\n\nهوية بصرية\n\nمن عالم النشاط\nكل الصور\nأبناء أبو قصعة للعقارات\nمشروعات ووحدات وطلبات معاينة داخل تجربة ع",
+      "hasGhosoun": false
+    }
+  },
+  {
+    "name": "import-export-home-desktop",
+    "path": "/import-export",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "screenshot": "E:\\SaaS\\abu qasaa\\runtime-logs\\business-storefront\\import-export-home-desktop.png",
+    "metrics": {
+      "url": "http://127.0.0.1:3000/import-export",
+      "lang": "ar",
+      "dir": "rtl",
+      "overflow": false,
+      "hasStoreNav": true,
+      "hasStoreFooter": true,
+      "renderedImages": 4,
+      "textSample": "أبناء أبو قصعة للاستيراد والتصدير\nأبو قصعة للاستيراد والتصدير\nالرئيسية\nالخدمات\nطلب عرض سعر\nالمعرض\nالسياسات\nEnglish\nكل الأنشطة\n\nاستيراد وتصدير\n\nأبناء أبو قصعة للاستيراد والتصدير\n\nخدمات تجارة وشحن وجمارك وطلبات أسعار بواجهة مستقلة.\n\nشاهد المعرض\n\nهوية بصرية\n\nمن عالم النشاط\nكل الصور\nأبناء أبو قصعة للاست",
+      "hasGhosoun": false
+    }
+  }
+]
