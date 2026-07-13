@@ -6,6 +6,14 @@
 
 ## Backend
 
+Safe helper from the repository root:
+
+```bash
+scripts/setup-local.sh
+```
+
+This copies environment examples only when local env files do not exist, installs dependencies, generates a Laravel app key when needed, creates the public storage link, and clears caches.
+
 ```bash
 cd backend
 composer install
@@ -15,7 +23,7 @@ php artisan migrate
 php artisan serve
 ```
 
-Configure MySQL in `backend/.env` before running migrations.
+Configure MySQL in `backend/.env` before running migrations. Local defaults are documented in `backend/.env.example`.
 
 ## Frontend
 
@@ -26,7 +34,47 @@ cp .env.example .env.local
 npm run dev
 ```
 
-The frontend reads `NEXT_PUBLIC_API_URL`, which defaults to `http://localhost:8000/api/v1`.
+The frontend reads `NEXT_PUBLIC_API_BASE_URL` and `NEXT_PUBLIC_API_URL`, which default to `http://localhost:8000/api/v1`.
+
+## Local URLs
+
+```text
+Backend API: http://localhost:8000
+Frontend: http://localhost:3000
+Health: http://localhost:8000/api/v1/health
+```
+
+## Database Lifecycle
+
+Initial setup:
+
+```bash
+cd backend
+php artisan migrate --seed
+```
+
+Full local/test reset:
+
+```bash
+cd backend
+php artisan migrate:fresh --seed
+```
+
+`migrate:fresh` deletes local database data. Do not run it against staging or production.
+
+Inspection:
+
+```bash
+cd backend
+php artisan migrate:status
+php artisan db:show
+```
+
+The setup helper also supports a guarded local reset:
+
+```bash
+scripts/setup-local.sh --fresh-database
+```
 
 ## Checks
 

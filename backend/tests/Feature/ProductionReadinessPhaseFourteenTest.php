@@ -54,9 +54,10 @@ class ProductionReadinessPhaseFourteenTest extends TestCase
             ->assertJsonPath('success', false);
     }
 
-    public function test_safe_upload_service_stores_allowed_media_and_rejects_executables(): void
+    public function test_safe_upload_service_stores_allowed_media_with_safe_names_and_rejects_oversized_files(): void
     {
         Storage::fake('public');
+        Storage::fake('local');
         $service = app(SafeUploadService::class);
 
         $storedPath = $service->store(
@@ -66,6 +67,31 @@ class ProductionReadinessPhaseFourteenTest extends TestCase
 
         Storage::disk('public')->assertExists($storedPath);
         $this->assertStringStartsWith('catalog/', $storedPath);
+        $this->assertStringNotContainsString('fresh-dates', $storedPath);
+
+        $privatePath = $service->store(
+            UploadedFile::fake()->create('rfq-specification.pdf', 256, 'application/pdf'),
+            '../rfq-documents',
+            'local',
+        );
+
+        Storage::disk('local')->assertExists($privatePath);
+        Storage::disk('public')->assertMissing($privatePath);
+        $this->assertStringStartsWith('rfq-documents/', $privatePath);
+        $this->assertStringNotContainsString('..', $privatePath);
+
+        $this->expectException(\InvalidArgumentException::class);
+
+        $service->store(
+            UploadedFile::fake()->create('oversized-proof.jpg', 10 * 1024 + 1, 'image/jpeg'),
+            'manual-proofs',
+        );
+    }
+
+    public function test_safe_upload_service_rejects_executable_uploads(): void
+    {
+        Storage::fake('public');
+        $service = app(SafeUploadService::class);
 
         $this->expectException(\InvalidArgumentException::class);
 

@@ -4,7 +4,7 @@ Abnaa Abu Qasaa Trading is an umbrella business platform for managing multiple c
 
 V1 is complete across the approved foundation scope: product commerce, payments, inventory, wholesale, Ghosoun Dates merchandising, real estate, import/export RFQ, reports, audit logs, and production readiness polish. See `docs/V1_COMPLETION_AUDIT.md` and `docs/V1_ACCEPTANCE_CHECKLIST.md`.
 
-Phase 15 adds staging deployment and production launch readiness assets. It does not add business features. Start with `docs/STAGING.md`, `docs/DEPLOYMENT.md`, `docs/RELEASE_RUNBOOK.md`, and `docs/PRODUCTION_LAUNCH_CHECKLIST.md`.
+Phase 16 completes local final QA and the hosting handoff package. It does not perform external deployment. Start with `docs/LOCAL_RELEASE_READINESS.md`, `docs/LOCAL_ACCEPTANCE_CHECKLIST.md`, `docs/HOSTING_REQUIREMENTS.md`, `docs/HOSTING_HANDOFF_CHECKLIST.md`, and `docs/HOSTING_INFORMATION_TEMPLATE.md`.
 
 ## Tech Stack
 
@@ -23,6 +23,12 @@ scripts/   Local helper scripts
 ```
 
 ## Local Setup
+
+Safe helper:
+
+```bash
+scripts/setup-local.sh
+```
 
 Backend:
 
@@ -43,6 +49,23 @@ npm install
 cp .env.example .env.local
 npm run dev
 ```
+
+Local URLs:
+
+```text
+Backend API: http://localhost:8000
+Frontend: http://localhost:3000
+Health: http://localhost:8000/api/v1/health
+```
+
+## Local Release State
+
+```text
+Local release candidate approved.
+External deployment and production launch are deferred until hosting infrastructure is available.
+```
+
+No staging server, production server, domain, SSL certificate, remote database, or hosting access is required for local completion. Do not describe deferred hosting work as a code defect.
 
 ## Development Workflow
 

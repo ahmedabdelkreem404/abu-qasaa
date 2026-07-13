@@ -8,6 +8,8 @@ use InvalidArgumentException;
 
 class SafeUploadService
 {
+    private const MAX_UPLOAD_BYTES = 10 * 1024 * 1024;
+
     private const ALLOWED_MIME_TYPES = [
         'image/jpeg',
         'image/png',
@@ -27,6 +29,10 @@ class SafeUploadService
     {
         $extension = Str::lower($file->getClientOriginalExtension());
         $mimeType = (string) $file->getMimeType();
+
+        if ($file->getSize() > self::MAX_UPLOAD_BYTES) {
+            throw new InvalidArgumentException('Upload exceeds the maximum allowed size.');
+        }
 
         if (! in_array($extension, self::ALLOWED_EXTENSIONS, true) || ! in_array($mimeType, self::ALLOWED_MIME_TYPES, true)) {
             throw new InvalidArgumentException('Unsupported upload type.');
