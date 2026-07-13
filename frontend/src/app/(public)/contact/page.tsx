@@ -1,9 +1,11 @@
 import { getPublicCmsPageBySlug } from "@/api/client";
 import { ContactForm } from "@/cms/contact-form";
 import { SectionRenderer } from "@/cms/section-renderer";
+import { getDictionary } from "@/i18n/server";
 import type { CmsSection } from "@/types/platform";
 
 export default async function ContactPage() {
+  const dictionary = await getDictionary();
   let sections: CmsSection[] = [];
 
   try {
@@ -15,7 +17,13 @@ export default async function ContactPage() {
 
   return (
     <section className="space-y-8">
-      {sections.length > 0 ? <SectionRenderer sections={sections} /> : <h1 className="text-3xl font-semibold">Contact</h1>}
+      {sections.length > 0 ? <SectionRenderer sections={sections} /> : (
+        <div className="aq-card p-6">
+          <p className="aq-eyebrow">{dictionary.home.contactTitle}</p>
+          <h1 className="aq-title">{dictionary.public.contactTitle}</h1>
+          <p className="aq-subtitle mt-2">{dictionary.home.contactBody}</p>
+        </div>
+      )}
       <ContactForm />
     </section>
   );

@@ -12,22 +12,22 @@ export function PlaceholderPage({
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <p className="text-sm font-medium uppercase tracking-wide text-teal-700">
+        <p className="aq-eyebrow">
           Foundation
         </p>
-        <h1 className="text-3xl font-semibold tracking-normal text-slate-950">
+        <h1 className="aq-title">
           {title}
         </h1>
-        <p className="max-w-3xl text-base leading-7 text-slate-600">
+        <p className="aq-subtitle max-w-3xl">
           {description}
         </p>
       </div>
       {items.length > 0 ? (
-        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+        <div className="aq-grid-auto">
           {items.map((item) => (
             <div
               key={item}
-              className="rounded-md border border-slate-200 bg-white p-4 text-sm text-slate-700"
+              className="aq-card-muted p-4 text-sm font-semibold text-[var(--aq-ink-2)]"
             >
               {item}
             </div>

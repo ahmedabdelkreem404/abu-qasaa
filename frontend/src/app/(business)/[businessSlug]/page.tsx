@@ -1,6 +1,7 @@
 import { getBusinessUnitPublicCmsPage, getPublicBusinessUnitBySlug, listPublicCollections, listPublicProducts } from "@/api/client";
 import { SectionRenderer } from "@/cms/section-renderer";
 import { ApiErrorState } from "@/components/shared/api-state";
+import { getLocale } from "@/i18n/server";
 import type { BusinessUnit, CmsPage } from "@/types/platform";
 
 const typeMessages: Record<string, string> = {
@@ -27,6 +28,7 @@ export default async function BusinessHomePage({
   params: Promise<{ businessSlug: string }>;
 }) {
   const { businessSlug } = await params;
+  const locale = await getLocale();
   const unit = await loadBusinessUnit(businessSlug);
 
   if (unit === null) {
@@ -47,20 +49,24 @@ export default async function BusinessHomePage({
   if (page) {
     return (
       <section className="space-y-6">
-        <h1 className="text-3xl font-semibold">{page.title_en ?? page.title_ar}</h1>
+        <div className="aq-card p-6">
+          <p className="aq-eyebrow">{unit.type}</p>
+          <h1 className="aq-title">{locale === "ar" ? page.title_ar : (page.title_en ?? page.title_ar)}</h1>
+          {unit.description ? <p className="aq-subtitle mt-2">{unit.description}</p> : null}
+        </div>
         <SectionRenderer sections={page.sections} />
         {hasProducts ? <MerchLinks businessSlug={businessSlug} /> : null}
         {featuredProducts.length > 0 ? (
           <div className="space-y-4">
             <div className="flex items-center justify-between">
-              <h2 className="text-2xl font-semibold">Featured products</h2>
-              <a href={`/${businessSlug}/products`} className="text-sm font-medium text-teal-700">View products</a>
+              <h2 className="text-2xl font-black">Featured products</h2>
+              <a href={`/${businessSlug}/products`} className="text-sm font-black text-[var(--aq-primary)]">View products</a>
             </div>
-            <div className="grid gap-4 md:grid-cols-3">
+            <div className="aq-grid-auto">
               {featuredProducts.map((product) => (
-                <a key={product.id} href={`/${businessSlug}/products/${product.slug}`} className="rounded-md border border-slate-200 bg-white p-5">
-                  <h3 className="font-semibold">{product.name_en ?? product.name_ar}</h3>
-                  <p className="mt-2 text-sm text-slate-600">{product.short_description_en ?? product.short_description_ar ?? product.category?.name_en}</p>
+                <a key={product.id} href={`/${businessSlug}/products/${product.slug}`} className="aq-card p-5">
+                  <h3 className="font-black">{product.name_en ?? product.name_ar}</h3>
+                  <p className="mt-2 text-sm leading-7 text-[var(--aq-muted)]">{product.short_description_en ?? product.short_description_ar ?? product.category?.name_en}</p>
                 </a>
               ))}
             </div>
@@ -73,17 +79,17 @@ export default async function BusinessHomePage({
   return (
     <section className="space-y-6">
       <div className="space-y-2">
-        <p className="text-sm font-medium uppercase tracking-wide text-teal-700">
+        <p className="aq-eyebrow">
           {unit.type}
         </p>
-        <h1 className="text-3xl font-semibold">{unit.name_en ?? unit.name_ar}</h1>
-        <p className="max-w-2xl text-slate-600">
+        <h1 className="aq-title">{locale === "ar" ? unit.name_ar : (unit.name_en ?? unit.name_ar)}</h1>
+        <p className="aq-subtitle max-w-2xl">
           {unit.description ?? typeMessages[unit.type] ?? "Business unit coming soon"}
         </p>
-        {hasWholesale ? <a href={`/${businessSlug}/wholesale`} className="mt-4 inline-flex rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Wholesale / Become a partner</a> : null}
+        {hasWholesale ? <a href={`/${businessSlug}/wholesale`} className="aq-btn mt-4">Wholesale / Become a partner</a> : null}
       </div>
-      {hasProducts ? <MerchLinks businessSlug={businessSlug} /> : <div className="rounded-md border border-slate-200 bg-white p-6">{typeMessages[unit.type] ?? "Business unit coming soon"}</div>}
-      {collections.length > 0 ? <div className="grid gap-4 md:grid-cols-3">{collections.map((collection) => <a key={collection.id} href={`/${businessSlug}/collections/${collection.slug}`} className="rounded-md border border-slate-200 bg-white p-5"><h2 className="font-semibold">{collection.name_en ?? collection.name_ar}</h2><p className="mt-2 text-sm text-slate-600">{collection.description_en ?? collection.description_ar ?? "Curated selection."}</p></a>)}</div> : null}
+      {hasProducts ? <MerchLinks businessSlug={businessSlug} /> : <div className="aq-card p-6">{typeMessages[unit.type] ?? "Business unit coming soon"}</div>}
+      {collections.length > 0 ? <div className="aq-grid-auto">{collections.map((collection) => <a key={collection.id} href={`/${businessSlug}/collections/${collection.slug}`} className="aq-card p-5"><h2 className="font-black">{collection.name_en ?? collection.name_ar}</h2><p className="mt-2 text-sm leading-7 text-[var(--aq-muted)]">{collection.description_en ?? collection.description_ar ?? "Curated selection."}</p></a>)}</div> : null}
     </section>
   );
 }
@@ -96,7 +102,7 @@ function MerchLinks({ businessSlug }: { businessSlug: string }) {
         ["Gift boxes", `/${businessSlug}/gift-boxes`],
         ["Corporate gifts", `/${businessSlug}/corporate-gifts`],
         ["Seasonal", `/${businessSlug}/seasonal`],
-      ].map(([label, href]) => <a key={href} href={href} className="rounded-md border border-slate-300 bg-white px-3 py-2 text-sm font-medium text-slate-700">{label}</a>)}
+      ].map(([label, href]) => <a key={href} href={href} className="aq-btn-secondary">{label}</a>)}
     </div>
   );
 }

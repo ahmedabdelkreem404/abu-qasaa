@@ -46,10 +46,10 @@ export function AddToCartButton({ businessSlug, product, disabled = false }: { b
 
   return (
     <div className="mt-4 space-y-2">
-      <button onClick={onAdd} disabled={loading || disabled} className="rounded-md bg-teal-700 px-3 py-2 text-sm font-medium text-white disabled:opacity-60">
+      <button onClick={onAdd} disabled={loading || disabled} className="aq-btn min-h-10 px-3 py-2 disabled:opacity-60">
         {loading ? "Adding..." : "Add to cart"}
       </button>
-      {message ? <p className="text-sm text-slate-600">{message} <Link href={`/${businessSlug}/cart`} className="text-teal-700">View cart</Link></p> : null}
+      {message ? <p className="text-sm text-[var(--aq-muted)]">{message} <Link href={`/${businessSlug}/cart`} className="font-bold text-[var(--aq-primary)]">View cart</Link></p> : null}
     </div>
   );
 }
@@ -71,34 +71,34 @@ export function CartManager({ businessSlug }: { businessSlug: string }) {
     setCart(response.data);
   }
 
-  if (error) return <p className="text-sm text-red-600">{error}</p>;
-  if (!cart || (cart.items ?? []).length === 0) return <p className="rounded-md border border-slate-200 bg-white p-6 text-sm text-slate-600">Your cart is empty.</p>;
+  if (error) return <p className="text-sm font-bold text-red-600">{error}</p>;
+  if (!cart || (cart.items ?? []).length === 0) return <p className="aq-card-muted p-6 text-sm font-bold text-[var(--aq-muted)]">Your cart is empty.</p>;
 
   return (
     <section className="space-y-6">
       <div className="grid gap-4">
         {cart.items?.map((item) => (
-          <div key={item.id} className="flex flex-wrap items-center justify-between gap-3 rounded-md border border-slate-200 bg-white p-4">
+          <div key={item.id} className="aq-card flex flex-wrap items-center justify-between gap-3 p-4">
             <div>
               <h2 className="font-semibold">{item.product_name_en ?? item.product_name_ar}</h2>
-              <p className="text-sm text-slate-600">{item.sku ?? ""} · {item.unit_price} {cart.currency}</p>
-              {item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail" ? <p className="mt-1 text-xs font-medium text-teal-700">Wholesale · minimum {String(item.metadata_json.min_quantity_applied ?? 1)}</p> : null}
-              {typeof item.metadata_json?.bundle === "object" && item.metadata_json.bundle !== null ? <p className="mt-1 text-xs font-medium text-amber-700">Bundle · {String((item.metadata_json.bundle as { name_en?: string; name_ar?: string }).name_en ?? (item.metadata_json.bundle as { name_ar?: string }).name_ar ?? "Gift box")}</p> : null}
+              <p className="text-sm text-[var(--aq-muted)]">{item.sku ?? ""} · {item.unit_price} {cart.currency}</p>
+              {item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail" ? <p className="mt-1 text-xs font-bold text-[var(--aq-primary)]">Wholesale · minimum {String(item.metadata_json.min_quantity_applied ?? 1)}</p> : null}
+              {typeof item.metadata_json?.bundle === "object" && item.metadata_json.bundle !== null ? <p className="mt-1 text-xs font-bold text-[var(--aq-gold-2)]">Bundle · {String((item.metadata_json.bundle as { name_en?: string; name_ar?: string }).name_en ?? (item.metadata_json.bundle as { name_ar?: string }).name_ar ?? "Gift box")}</p> : null}
             </div>
             <div className="flex items-center gap-2">
-              <input type="number" min={1} defaultValue={item.quantity} onBlur={(event) => refresh(updateCartItem(businessSlug, cart.session_token, item.id, Number(event.currentTarget.value)))} className="w-20 rounded-md border border-slate-300 px-2 py-1 text-sm" />
-              <button onClick={() => refresh(removeCartItem(businessSlug, cart.session_token, item.id))} className="rounded-md border border-slate-300 px-3 py-2 text-sm">Remove</button>
+              <input type="number" min={1} defaultValue={item.quantity} onBlur={(event) => refresh(updateCartItem(businessSlug, cart.session_token, item.id, Number(event.currentTarget.value)))} className="w-20 px-2 py-2 text-sm" />
+              <button onClick={() => refresh(removeCartItem(businessSlug, cart.session_token, item.id))} className="aq-btn-secondary min-h-10 px-3 py-2">Remove</button>
             </div>
           </div>
         ))}
       </div>
-      <div className="rounded-md border border-slate-200 bg-white p-5">
-        <p className="text-sm text-slate-600">Subtotal: {cart.subtotal} {cart.currency}</p>
-        {cart.items?.some((item) => item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail") ? <p className="mt-1 text-sm font-medium text-teal-700">Wholesale cart</p> : null}
-        <p className="mt-2 text-xl font-semibold">Total: {cart.grand_total} {cart.currency}</p>
+      <div className="aq-card p-5">
+        <p className="text-sm text-[var(--aq-muted)]">Subtotal: {cart.subtotal} {cart.currency}</p>
+        {cart.items?.some((item) => item.metadata_json?.price_audience && item.metadata_json.price_audience !== "retail") ? <p className="mt-1 text-sm font-bold text-[var(--aq-primary)]">Wholesale cart</p> : null}
+        <p className="mt-2 text-2xl font-black">Total: {cart.grand_total} {cart.currency}</p>
         <div className="mt-4 flex gap-2">
-          <Link href={`/${businessSlug}/checkout`} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Checkout</Link>
-          <button onClick={() => refresh(clearCart(businessSlug, cart.session_token))} className="rounded-md border border-slate-300 px-4 py-2 text-sm">Clear cart</button>
+          <Link href={`/${businessSlug}/checkout`} className="aq-btn">Checkout</Link>
+          <button onClick={() => refresh(clearCart(businessSlug, cart.session_token))} className="aq-btn-secondary">Clear cart</button>
         </div>
       </div>
     </section>

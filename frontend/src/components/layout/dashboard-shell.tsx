@@ -3,30 +3,44 @@
 import { logout } from "@/api/client";
 import { ProtectedDashboard, useAuth } from "@/auth/auth-provider";
 import Link from "next/link";
+import Image from "next/image";
 import type { ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import { LanguageSwitcher } from "@/components/shared/language-switcher";
+import { dictionaries, pickLocale, type Dictionary, type Locale } from "@/i18n";
+import { useMemo, useState } from "react";
 
-const navItems = [
-  { href: "/dashboard", label: "Overview", permission: null },
-  { href: "/dashboard/business-units", label: "Business Units", permission: "business_units.view" },
-  { href: "/dashboard/users", label: "Users", permission: "users.view" },
-  { href: "/dashboard/catalog", label: "Catalog", permission: "products.view" },
-  { href: "/dashboard/commerce", label: "Commerce", permission: "orders.view" },
-  { href: "/dashboard/commerce/orders", label: "Orders", permission: "orders.view" },
-  { href: "/dashboard/wholesale", label: "Wholesale", permission: "wholesale.view" },
-  { href: "/dashboard/payments", label: "Payments", permission: "payments.view" },
-  { href: "/dashboard/inventory", label: "Inventory", permission: "inventory.view" },
-  { href: "/dashboard/services-rfq", label: "Services RFQ", permission: "rfq.view" },
-  { href: "/dashboard/real-estate", label: "Real Estate", permission: "real_estate.view" },
-  { href: "/dashboard/cms", label: "CMS", permission: "cms.view" },
-  { href: "/dashboard/reports", label: "Reports", permission: "reports.view" },
-  { href: "/dashboard/settings", label: "Settings", permission: "settings.view" },
-  { href: "/dashboard/features", label: "Features", permission: "settings.view" },
-];
+function buildNavItems(dictionary: Dictionary) {
+  return [
+    { href: "/dashboard", label: dictionary.dashboard.overview, permission: null },
+    { href: "/dashboard/business-units", label: dictionary.nav.businessUnits, permission: "business_units.view" },
+    { href: "/dashboard/users", label: dictionary.dashboard.users, permission: "users.view" },
+    { href: "/dashboard/catalog", label: dictionary.dashboard.catalog, permission: "products.view" },
+    { href: "/dashboard/commerce", label: dictionary.dashboard.commerce, permission: "orders.view" },
+    { href: "/dashboard/commerce/orders", label: dictionary.dashboard.orders, permission: "orders.view" },
+    { href: "/dashboard/wholesale", label: dictionary.nav.wholesale, permission: "wholesale.view" },
+    { href: "/dashboard/payments", label: dictionary.dashboard.payments, permission: "payments.view" },
+    { href: "/dashboard/inventory", label: dictionary.dashboard.inventory, permission: "inventory.view" },
+    { href: "/dashboard/services-rfq", label: dictionary.nav.rfq, permission: "rfq.view" },
+    { href: "/dashboard/real-estate", label: dictionary.nav.realEstate, permission: "real_estate.view" },
+    { href: "/dashboard/cms", label: dictionary.dashboard.cms, permission: "cms.view" },
+    { href: "/dashboard/reports", label: dictionary.dashboard.reports, permission: "reports.view" },
+    { href: "/dashboard/settings", label: dictionary.dashboard.settings, permission: "settings.view" },
+    { href: "/dashboard/features", label: dictionary.dashboard.features, permission: "settings.view" },
+  ];
+}
 
 export function DashboardShell({ children }: { children: ReactNode }) {
   const { user, hasPermission } = useAuth();
   const router = useRouter();
+  const [locale] = useState<Locale>(() => {
+    if (typeof document === "undefined") {
+      return "ar";
+    }
+    return pickLocale(document.cookie.match(/(?:^|; )abu_qasaa_locale=([^;]+)/)?.[1]);
+  });
+  const dictionary = dictionaries[locale];
+  const navItems = useMemo(() => buildNavItems(dictionary), [dictionary]);
 
   async function onLogout() {
     await logout();
@@ -35,30 +49,49 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   return (
     <ProtectedDashboard>
-      <div className="min-h-screen bg-slate-100 text-slate-950 lg:grid lg:grid-cols-[260px_1fr]">
-        <aside className="border-r border-slate-200 bg-white px-4 py-5">
-          <Link href="/dashboard" className="block font-semibold">
-            Abnaa Admin
+      <div className="min-h-screen bg-[#eef3f0] text-[var(--aq-ink)] lg:grid lg:grid-cols-[292px_1fr]">
+        <aside className="sticky top-0 z-30 max-h-screen overflow-y-auto border-[color:var(--aq-line)] bg-[var(--aq-ink)] px-4 py-5 text-white lg:border-r">
+          <Link href="/dashboard" className="aq-brand-mark">
+            <Image src="/brand/abu-qasaa-oils-logo.jpg" alt="Abu Qasaa Oils logo" width={48} height={48} className="aq-logo" />
+            <span>
+              <span className="block text-sm font-black">Abu Qasaa Admin</span>
+              <span className="block text-xs text-white/60">{user?.name}</span>
+            </span>
           </Link>
-          <p className="mt-2 text-xs text-slate-500">{user?.name}</p>
-          <nav className="mt-6 grid gap-1 text-sm">
+          <nav className="mt-7 grid gap-1 text-sm font-bold">
             {navItems
               .filter((item) => item.permission === null || hasPermission(item.permission))
               .map((item) => (
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="rounded-md px-3 py-2 text-slate-700 hover:bg-slate-100"
+                  className="rounded-md px-3 py-2.5 text-white/78 transition hover:bg-white/10 hover:text-white"
                 >
                   {item.label}
                 </Link>
               ))}
           </nav>
-          <button onClick={onLogout} className="mt-6 rounded-md border border-slate-300 px-3 py-2 text-sm text-slate-700">
-            Logout
-          </button>
+          <div className="mt-7 grid gap-2">
+            <LanguageSwitcher locale={locale} />
+            <button onClick={onLogout} className="rounded-md border border-white/20 px-3 py-2 text-sm font-bold text-white/85 transition hover:bg-white/10">
+              {dictionary.dashboard.logout}
+            </button>
+          </div>
         </aside>
-        <main className="min-w-0 px-4 py-6 sm:px-8">{children}</main>
+        <section className="min-w-0">
+          <header className="sticky top-0 z-20 border-b border-[color:var(--aq-line)] bg-white/88 px-4 py-4 backdrop-blur-xl sm:px-8">
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <div>
+                <p className="aq-eyebrow">{dictionary.dashboard.title}</p>
+                <p className="text-sm text-[var(--aq-muted)]">{dictionary.dashboard.signedIn} {user?.name ?? "-"}</p>
+              </div>
+              <Link href="/" className="aq-btn-secondary">
+                {dictionary.nav.home}
+              </Link>
+            </div>
+          </header>
+          <main className="min-w-0 px-4 py-6 sm:px-8 lg:py-8">{children}</main>
+        </section>
       </div>
     </ProtectedDashboard>
   );

@@ -49,12 +49,12 @@ export function CheckoutForm({ businessSlug }: { businessSlug: string }) {
   }
 
   if (order) {
-    return <div className="rounded-md border border-teal-200 bg-teal-50 p-6"><h1 className="text-2xl font-semibold">Order submitted</h1><div className="mt-3 grid gap-1 text-sm text-slate-700"><p>Order: <span className="font-medium">{order.order_number}</span></p><p>Total: <span className="font-medium">{order.grand_total} {order.currency}</span></p><p>Payment status: <span className="font-medium">{order.payment_status}</span></p></div><div className="mt-4 flex flex-wrap gap-3"><Link href={`/${businessSlug}/orders/${order.order_number}/payment?phone=${encodeURIComponent(phone)}`} className="rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Choose payment method</Link><Link href={`/${businessSlug}/orders/${order.order_number}?phone=${encodeURIComponent(phone)}`} className="rounded-md border border-teal-700 px-4 py-2 text-sm font-medium text-teal-800">Track order</Link></div></div>;
+    return <div className="aq-card border-[color:rgb(11_122_69_/_0.22)] bg-emerald-50 p-6"><h1 className="text-2xl font-black">Order submitted</h1><div className="mt-3 grid gap-1 text-sm text-[var(--aq-ink-2)]"><p>Order: <span className="font-bold">{order.order_number}</span></p><p>Total: <span className="font-bold">{order.grand_total} {order.currency}</span></p><p>Payment status: <span className="font-bold">{order.payment_status}</span></p></div><div className="mt-4 flex flex-wrap gap-3"><Link href={`/${businessSlug}/orders/${order.order_number}/payment?phone=${encodeURIComponent(phone)}`} className="aq-btn">Choose payment method</Link><Link href={`/${businessSlug}/orders/${order.order_number}?phone=${encodeURIComponent(phone)}`} className="aq-btn-secondary">Track order</Link></div></div>;
   }
 
-  return <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
-    {error ? <p className="text-sm text-red-600">{error}</p> : null}
-    <p className="text-sm text-slate-600">Manual payments and cash on delivery are available after the order is submitted. Wholesale carts keep their approved price snapshots.</p>
+  return <form onSubmit={onSubmit} className="aq-card aq-form-grid p-5">
+    {error ? <p className="text-sm font-bold text-red-600 md:col-span-2">{error}</p> : null}
+    <p className="text-sm leading-7 text-[var(--aq-muted)] md:col-span-2">Manual payments and cash on delivery are available after the order is submitted. Wholesale carts keep their approved price snapshots.</p>
     <Input name="name" label="Name" required />
     <Input name="phone" label="Phone" required />
     <Input name="email" label="Email" type="email" />
@@ -63,12 +63,12 @@ export function CheckoutForm({ businessSlug }: { businessSlug: string }) {
     <Input name="governorate" label="Governorate" />
     <Input name="city" label="City" />
     <Input name="street_address" label="Street address" required />
-    <label className="grid gap-1 text-sm">Notes<textarea name="notes" className="min-h-24 rounded-md border border-slate-300 px-3 py-2" /></label>
-    <button className="w-fit rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Submit order</button>
+    <label className="grid gap-1 text-sm md:col-span-2">Notes<textarea name="notes" className="min-h-24 px-3 py-2" /></label>
+    <button className="aq-btn md:w-fit">Submit order</button>
   </form>;
 }
 
 function Input(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   const { label, ...inputProps } = props;
-  return <label className="grid gap-1 text-sm">{label}<input {...inputProps} className="rounded-md border border-slate-300 px-3 py-2" /></label>;
+  return <label className="grid gap-1 text-sm font-bold text-[var(--aq-ink-2)]">{label}<input {...inputProps} className="px-3 py-2.5 font-normal" /></label>;
 }

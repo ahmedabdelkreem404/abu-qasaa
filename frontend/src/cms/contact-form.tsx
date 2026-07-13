@@ -28,15 +28,15 @@ export function ContactForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
-      {status === "success" ? <p className="text-sm text-teal-700">Inquiry sent successfully.</p> : null}
-      {status === "error" ? <p className="text-sm text-red-600">Could not send inquiry. Please try again.</p> : null}
-      <input name="name" required placeholder="Name" className="rounded-md border border-slate-300 px-3 py-2" />
-      <input name="email" type="email" placeholder="Email" className="rounded-md border border-slate-300 px-3 py-2" />
-      <input name="phone" placeholder="Phone" className="rounded-md border border-slate-300 px-3 py-2" />
-      <input name="subject" placeholder="Subject" className="rounded-md border border-slate-300 px-3 py-2" />
-      <textarea name="message" required placeholder="Message" className="min-h-32 rounded-md border border-slate-300 px-3 py-2" />
-      <button disabled={status === "loading"} className="w-fit rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white disabled:opacity-60">
+    <form onSubmit={onSubmit} className="aq-card aq-form-grid p-5">
+      {status === "success" ? <p className="rounded-md bg-emerald-50 p-3 text-sm font-bold text-emerald-800 md:col-span-2">Inquiry sent successfully.</p> : null}
+      {status === "error" ? <p className="rounded-md bg-red-50 p-3 text-sm font-bold text-red-700 md:col-span-2">Could not send inquiry. Please try again.</p> : null}
+      <input name="name" required placeholder="Name" className="px-3 py-3" />
+      <input name="email" type="email" placeholder="Email" className="px-3 py-3" />
+      <input name="phone" placeholder="Phone" className="px-3 py-3" />
+      <input name="subject" placeholder="Subject" className="px-3 py-3" />
+      <textarea name="message" required placeholder="Message" className="min-h-36 px-3 py-3 md:col-span-2" />
+      <button disabled={status === "loading"} className="aq-btn disabled:opacity-60 md:w-fit">
         {status === "loading" ? "Sending..." : "Send inquiry"}
       </button>
     </form>

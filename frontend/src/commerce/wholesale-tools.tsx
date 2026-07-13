@@ -56,25 +56,25 @@ export function WholesaleApplicationForm({ businessSlug }: { businessSlug: strin
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid gap-4 rounded-md border border-slate-200 bg-white p-5">
-      {status ? <p className="rounded-md bg-emerald-50 p-3 text-sm text-emerald-800">{status}</p> : null}
-      {error ? <p className="rounded-md bg-red-50 p-3 text-sm text-red-700">{error}</p> : null}
+    <form onSubmit={onSubmit} className="aq-card aq-form-grid p-5">
+      {status ? <p className="rounded-md bg-emerald-50 p-3 text-sm font-bold text-emerald-800 md:col-span-2">{status}</p> : null}
+      {error ? <p className="rounded-md bg-red-50 p-3 text-sm font-bold text-red-700 md:col-span-2">{error}</p> : null}
       <Input name="applicant_name" label="Applicant name" required />
       <Input name="phone" label="Phone" required />
       <Input name="email" label="Email" type="email" />
       <Input name="company_name" label="Company name" />
       <Input name="shop_name" label="Shop name" />
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:col-span-2 md:grid-cols-2">
         <Input name="tax_number" label="Tax number" />
         <Input name="commercial_record" label="Commercial record" />
       </div>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid gap-4 md:col-span-2 md:grid-cols-2">
         <Input name="governorate" label="Governorate" />
         <Input name="city" label="City" />
       </div>
-      <label className="grid gap-1 text-sm">Address<textarea name="address" className="min-h-20 rounded-md border border-slate-300 px-3 py-2" /></label>
-      <label className="grid gap-1 text-sm">Message<textarea name="message" className="min-h-24 rounded-md border border-slate-300 px-3 py-2" /></label>
-      <button className="w-fit rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Submit application</button>
+      <label className="grid gap-1 text-sm font-bold text-[var(--aq-ink-2)] md:col-span-2">Address<textarea name="address" className="min-h-20 px-3 py-2 font-normal" /></label>
+      <label className="grid gap-1 text-sm font-bold text-[var(--aq-ink-2)] md:col-span-2">Message<textarea name="message" className="min-h-24 px-3 py-2 font-normal" /></label>
+      <button className="aq-btn md:w-fit">Submit application</button>
     </form>
   );
 }
@@ -96,11 +96,11 @@ export function WholesaleStatusLookup({ businessSlug }: { businessSlug: string }
   }
 
   return (
-    <form onSubmit={onSubmit} className="grid max-w-xl gap-4 rounded-md border border-slate-200 bg-white p-5">
-      {result ? <p className="rounded-md bg-slate-50 p-3 text-sm text-slate-700">{result}</p> : null}
-      {error ? <p className="text-sm text-red-600">{error}</p> : null}
+    <form onSubmit={onSubmit} className="aq-card grid max-w-xl gap-4 p-5">
+      {result ? <p className="rounded-md bg-[var(--aq-soft)] p-3 text-sm font-bold text-[var(--aq-ink-2)]">{result}</p> : null}
+      {error ? <p className="text-sm font-bold text-red-600">{error}</p> : null}
       <Input name="phone" label="Phone" required />
-      <button className="w-fit rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Check status</button>
+      <button className="aq-btn w-fit">Check status</button>
     </form>
   );
 }
@@ -131,13 +131,14 @@ export function WholesaleAccessPanel({ businessSlug }: { businessSlug: string })
   }
 
   return (
-    <div className="rounded-md border border-slate-200 bg-white p-5">
-      <h2 className="font-semibold">Wholesale access</h2>
-      {access ? <p className="mt-2 text-sm text-emerald-700">Approved access found for {access.customer.phone}.</p> : <p className="mt-2 text-sm text-slate-600">Enter the approved customer phone to unlock wholesale prices on this device.</p>}
-      {message ? <p className="mt-3 text-sm text-slate-700">{message}</p> : null}
+    <div className="aq-card p-5">
+      <p className="aq-eyebrow">Partner pricing</p>
+      <h2 className="text-xl font-black">Wholesale access</h2>
+      {access ? <p className="mt-2 text-sm font-bold text-emerald-700">Approved access found for {access.customer.phone}.</p> : <p className="mt-2 text-sm leading-7 text-[var(--aq-muted)]">Enter the approved customer phone to unlock wholesale prices on this device.</p>}
+      {message ? <p className="mt-3 text-sm text-[var(--aq-ink-2)]">{message}</p> : null}
       <form onSubmit={onSubmit} className="mt-4 flex flex-wrap gap-3">
-        <input name="phone" placeholder="Approved phone" className="rounded-md border border-slate-300 px-3 py-2 text-sm" />
-        <button className="rounded-md bg-teal-700 px-4 py-2 text-sm font-medium text-white">Request access</button>
+        <input name="phone" placeholder="Approved phone" className="px-3 py-2 text-sm" />
+        <button className="aq-btn">Request access</button>
       </form>
     </div>
   );
@@ -158,18 +159,19 @@ export function WholesaleProducts({ businessSlug }: { businessSlug: string }) {
       .catch(() => setError("Could not load wholesale products."));
   }, [businessSlug]);
 
-  if (error) return <div className="space-y-4"><WholesaleAccessPanel businessSlug={businessSlug} /><p className="text-sm text-slate-600">{error}</p></div>;
-  if (!products) return <p className="text-sm text-slate-600">Loading wholesale products...</p>;
-  if (products.length === 0) return <p className="rounded-md border border-slate-200 bg-white p-5 text-sm text-slate-600">No wholesale products are available yet.</p>;
+  if (error) return <div className="space-y-4"><WholesaleAccessPanel businessSlug={businessSlug} /><p className="text-sm text-[var(--aq-muted)]">{error}</p></div>;
+  if (!products) return <p className="text-sm text-[var(--aq-muted)]">Loading wholesale products...</p>;
+  if (products.length === 0) return <p className="aq-card-muted p-5 text-sm text-[var(--aq-muted)]">No wholesale products are available yet.</p>;
 
   return (
-    <div className="grid gap-4 md:grid-cols-3">
+    <div className="aq-grid-auto">
       {products.map((product) => (
-        <Link key={product.product_id} href={`/${businessSlug}/wholesale/products/${product.product_slug}`} className="rounded-md border border-slate-200 bg-white p-5">
-          <h2 className="font-semibold">{product.name_en ?? product.name_ar}</h2>
-          <p className="mt-2 text-sm text-slate-600">{product.sku ?? "Wholesale item"}</p>
-          <p className="mt-3 text-sm font-medium text-teal-700">{product.wholesale_price} {product.currency}</p>
-          <p className="mt-1 text-xs text-slate-500">Minimum quantity: {product.min_quantity_applied}</p>
+        <Link key={product.product_id} href={`/${businessSlug}/wholesale/products/${product.product_slug}`} className="aq-card p-5 transition hover:-translate-y-1 hover:border-[color:var(--aq-primary)]">
+          <span className="aq-chip">Wholesale</span>
+          <h2 className="mt-4 font-black">{product.name_en ?? product.name_ar}</h2>
+          <p className="mt-2 text-sm text-[var(--aq-muted)]">{product.sku ?? "Wholesale item"}</p>
+          <p className="mt-3 text-lg font-black text-[var(--aq-primary)]">{product.wholesale_price} {product.currency}</p>
+          <p className="mt-1 text-xs font-bold text-[var(--aq-muted)]">Minimum quantity: {product.min_quantity_applied}</p>
         </Link>
       ))}
     </div>
@@ -178,5 +180,5 @@ export function WholesaleProducts({ businessSlug }: { businessSlug: string }) {
 
 function Input(props: React.InputHTMLAttributes<HTMLInputElement> & { label: string }) {
   const { label, ...inputProps } = props;
-  return <label className="grid gap-1 text-sm">{label}<input {...inputProps} className="rounded-md border border-slate-300 px-3 py-2" /></label>;
+  return <label className="grid gap-1 text-sm font-bold text-[var(--aq-ink-2)]">{label}<input {...inputProps} className="px-3 py-2.5 font-normal" /></label>;
 }
