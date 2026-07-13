@@ -1,18 +1,39 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\DB;
 
 Route::prefix('v1')->group(function (): void {
-    Route::get('/health', fn () => response()->json([
-        'success' => true,
-        'message' => 'Health check passed.',
-        'data' => [
-            'status' => 'ok',
-            'application' => config('app.name'),
-            'environment' => app()->environment(),
-            'timestamp' => now()->toIso8601String(),
-        ],
-    ]));
+    Route::get('/health', function () {
+        $checks = [
+            'database' => 'ok',
+            'storage' => 'ok',
+        ];
+
+        try {
+            DB::select('select 1');
+        } catch (Throwable) {
+            $checks['database'] = 'failed';
+        }
+
+        if (! is_writable(storage_path('app')) || ! is_writable(storage_path('logs'))) {
+            $checks['storage'] = 'failed';
+        }
+
+        $isHealthy = ! in_array('failed', $checks, true);
+
+        return response()->json([
+            'success' => $isHealthy,
+            'message' => $isHealthy ? 'Health check passed.' : 'Health check failed.',
+            'data' => [
+                'status' => $isHealthy ? 'ok' : 'failed',
+                'application' => config('app.name'),
+                'environment' => app()->environment(),
+                'timestamp' => now()->toIso8601String(),
+                'checks' => $checks,
+            ],
+        ], $isHealthy ? 200 : 503);
+    });
 
     require base_path('app/Modules/Identity/Presentation/Routes/api.php');
     require base_path('app/Modules/BusinessUnits/Presentation/Routes/api.php');
