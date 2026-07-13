@@ -20,6 +20,14 @@ npm run lint
 npm run build
 ```
 
+Staging verification:
+
+```bash
+scripts/verify-staging.sh https://api.example.com https://www.example.com dates
+```
+
+Use the staging acceptance checklist in `docs/STAGING_ACCEPTANCE_CHECKLIST.md` before approving production launch.
+
 ## Business Unit Operations
 
 Business-unit modules control whether public and dashboard features are visible for each unit. Keep feature enablement aligned with seeded modules and permissions.
@@ -37,3 +45,11 @@ For authentication, authorization, payment, RFQ, real estate, or merchandising i
 3. Confirm permissions and assigned business units.
 4. Reproduce with the focused feature test where possible.
 5. Add a regression test before applying fixes.
+
+## Release Operations
+
+- Take a verified database backup before each staging or production deployment.
+- Deploy additive migrations with `php artisan migrate --force`.
+- Do not run `migrate:fresh` or development seeders outside local/test databases.
+- Prefer forward fixes for additive migrations; restore a verified backup only after assessing data impact.
+- Keep Paymob in fake/test mode on staging unless official test credentials are provided through environment variables.

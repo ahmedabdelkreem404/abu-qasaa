@@ -4,6 +4,8 @@ Date: 2026-07-12
 
 Branch: `codex/complete-v1`
 
+Phase 15 note: V1 functional scope and `v1.0.0` release verification were completed before staging deployment preparation. Staging and production launch readiness are tracked separately in `docs/STAGING.md`, `docs/STAGING_ACCEPTANCE_CHECKLIST.md`, and `docs/PRODUCTION_LAUNCH_CHECKLIST.md`.
+
 ## Scope Completed
 
 V1 keeps the approved architecture: Laravel 12 backend, Next.js frontend, MySQL, one backend, one frontend, one database, modular monolith boundaries, and business-unit scoped behavior.
@@ -25,6 +27,8 @@ Completed phase scope:
 ## Exclusions
 
 The V1 completion intentionally does not add microservices, separate databases, DevOps complexity, shipping-provider integrations, live Paymob credential flows, or advanced CRM/accounting/property-management workflows beyond the approved foundation.
+
+External staging deployment and production launch approval are not part of the V1 functional completion record. They require environment credentials, a separate staging database/storage area, verified backups, and the staging smoke checklist.
 
 ## Verification Record
 

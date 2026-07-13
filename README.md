@@ -4,6 +4,8 @@ Abnaa Abu Qasaa Trading is an umbrella business platform for managing multiple c
 
 V1 is complete across the approved foundation scope: product commerce, payments, inventory, wholesale, Ghosoun Dates merchandising, real estate, import/export RFQ, reports, audit logs, and production readiness polish. See `docs/V1_COMPLETION_AUDIT.md` and `docs/V1_ACCEPTANCE_CHECKLIST.md`.
 
+Phase 15 adds staging deployment and production launch readiness assets. It does not add business features. Start with `docs/STAGING.md`, `docs/DEPLOYMENT.md`, `docs/RELEASE_RUNBOOK.md`, and `docs/PRODUCTION_LAUNCH_CHECKLIST.md`.
+
 ## Tech Stack
 
 - Backend: Laravel 12
@@ -63,6 +65,10 @@ cd frontend
 npm run lint
 npm run build
 ```
+
+## Staging Readiness
+
+Repository-side staging preparation includes safe environment templates, deployment scripts, backup guidance, Nginx examples, and staging smoke-test checklists. External deployment still requires real server access and environment-specific credentials supplied outside Git.
 
 ## Architecture Summary
 
