@@ -23,10 +23,11 @@
   --aq-focus: #1aa96b;
   --aq-shadow: 0 20px 70px rgb(23 32 29 / 0.10);
   --aq-shadow-soft: 0 10px 32px rgb(23 32 29 / 0.08);
+  --aq-shadow-tight: 0 8px 18px rgb(23 32 29 / 0.08);
   --aq-radius: 8px;
   --aq-radius-sm: 6px;
-  --aq-container: min(100% - clamp(1rem, 4vw, 5rem), 1440px);
-  --aq-font-ar: "Segoe UI", Tahoma, Arial, sans-serif;
+  --aq-container: min(100% - clamp(1.25rem, 5vw, 7rem), 1360px);
+  --aq-font-ar: "Noto Kufi Arabic", "Noto Sans Arabic", "Segoe UI", Tahoma, Arial, sans-serif;
   --aq-font-en: Inter, "Segoe UI", Arial, sans-serif;
   --background: #f5f7f4;
   --foreground: var(--aq-ink);
@@ -59,6 +60,7 @@ body {
   color: var(--foreground);
   font-family: var(--aq-font-en);
   text-rendering: optimizeLegibility;
+  text-align: start;
 }
 
 html[dir="rtl"] body {
@@ -125,21 +127,71 @@ th {
     #f6f8f5;
 }
 
+.aq-public-header {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  border-bottom: 1px solid rgb(217 226 220 / 0.92);
+  background: rgb(255 255 255 / 0.94);
+  box-shadow: 0 8px 24px rgb(23 32 29 / 0.04);
+  backdrop-filter: blur(18px);
+}
+
+.aq-header-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  gap: 1rem;
+  padding-block: 0.9rem;
+}
+
 .aq-brand-mark {
   display: inline-flex;
   align-items: center;
   gap: 0.75rem;
   min-width: 0;
+  text-align: start;
 }
 
 .aq-logo {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--aq-radius);
-  border: 1px solid rgb(255 255 255 / 0.80);
-  background: white;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid rgb(31 111 74 / 0.18);
+  background: #f8faf8;
   object-fit: contain;
-  box-shadow: var(--aq-shadow-soft);
+  padding: 0.1rem;
+  box-shadow: var(--aq-shadow-tight);
+}
+
+.aq-logo-hero {
+  width: clamp(7.5rem, 22vw, 13rem);
+  height: clamp(7.5rem, 22vw, 13rem);
+  border-radius: 50%;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  background: #f8faf8;
+  object-fit: contain;
+  padding: 0.4rem;
+  box-shadow: 0 22px 54px rgb(0 0 0 / 0.18);
+}
+
+.aq-logo-panel {
+  display: grid;
+  min-height: 18rem;
+  place-items: center;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: var(--aq-radius);
+  background:
+    linear-gradient(145deg, rgb(255 255 255 / 0.12), rgb(255 255 255 / 0.04)),
+    rgb(23 32 29 / 0.22);
+}
+
+.aq-logo-caption {
+  margin-top: 1rem;
+  color: rgb(255 255 255 / 0.72);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-align: center;
 }
 
 .aq-eyebrow {
@@ -156,7 +208,7 @@ html[dir="rtl"] .aq-eyebrow {
 
 .aq-display {
   color: var(--aq-ink);
-  font-size: clamp(2.25rem, 7vw, 5.75rem);
+  font-size: clamp(2.2rem, 5.4vw, 4.9rem);
   font-weight: 850;
   line-height: 0.98;
   letter-spacing: 0;
@@ -174,6 +226,14 @@ html[dir="rtl"] .aq-eyebrow {
   color: var(--aq-muted);
   font-size: clamp(1rem, 1.5vw, 1.18rem);
   line-height: 1.85;
+}
+
+.aq-hero .aq-display {
+  color: white;
+}
+
+.aq-measure {
+  max-width: 68ch;
 }
 
 .aq-card {
@@ -202,6 +262,7 @@ html[dir="rtl"] .aq-eyebrow {
   font-size: 0.92rem;
   font-weight: 800;
   line-height: 1;
+  text-align: center;
   transition: transform 160ms ease, box-shadow 160ms ease, background-color 160ms ease, border-color 160ms ease;
 }
 
@@ -230,7 +291,7 @@ html[dir="rtl"] .aq-eyebrow {
 }
 
 .aq-locale-switch {
-  min-height: 38px;
+  min-height: 44px;
   border-radius: 999px;
   border: 1px solid var(--aq-line);
   background: white;
@@ -238,6 +299,70 @@ html[dir="rtl"] .aq-eyebrow {
   color: var(--aq-ink-2);
   font-size: 0.82rem;
   font-weight: 800;
+}
+
+.aq-nav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  border: 1px solid var(--aq-line);
+  border-radius: 999px;
+  background: white;
+  padding: 0.25rem;
+  color: var(--aq-ink-2);
+  font-size: 0.9rem;
+  font-weight: 800;
+  box-shadow: var(--aq-shadow-tight);
+}
+
+.aq-nav-link {
+  min-height: 40px;
+  border-radius: 999px;
+  padding: 0.7rem 0.9rem;
+  transition: background-color 160ms ease, color 160ms ease;
+  white-space: nowrap;
+}
+
+.aq-nav-link:hover {
+  background: var(--aq-soft);
+  color: var(--aq-primary-2);
+}
+
+.aq-header-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.aq-mobile-menu {
+  display: none;
+}
+
+.aq-menu-summary {
+  display: inline-flex;
+  min-height: 44px;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--aq-line);
+  border-radius: var(--aq-radius-sm);
+  background: white;
+  padding: 0.65rem 0.9rem;
+  color: var(--aq-ink-2);
+  font-size: 0.88rem;
+  font-weight: 900;
+  list-style: none;
+}
+
+.aq-mobile-menu summary::-webkit-details-marker {
+  display: none;
+}
+
+.aq-mobile-menu-panel {
+  display: grid;
+  gap: 0.5rem;
+  padding-block: 0 0.85rem;
 }
 
 .aq-chip {
@@ -262,9 +387,9 @@ html[dir="rtl"] .aq-eyebrow {
   position: relative;
   overflow: hidden;
   border-radius: var(--aq-radius);
-  background-color: var(--aq-primary-2);
+  background-color: #17201d;
   background-image:
-    linear-gradient(135deg, rgb(31 111 74 / 0.98), rgb(21 81 58 / 0.96)),
+    linear-gradient(135deg, rgb(23 32 29 / 0.98) 0%, rgb(21 81 58 / 0.98) 58%, rgb(31 111 74 / 0.98) 100%),
     linear-gradient(45deg, rgb(241 181 44 / 0.18), transparent 48%);
   color: white;
   box-shadow: var(--aq-shadow);
@@ -299,6 +424,71 @@ html[dir="rtl"] .aq-eyebrow {
   color: white;
 }
 
+.aq-hero-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(17rem, 0.58fr);
+  gap: clamp(1.5rem, 4vw, 4rem);
+  align-items: center;
+  padding: clamp(1.35rem, 4vw, 4.5rem);
+}
+
+.aq-stat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.aq-stat-card {
+  border: 1px solid var(--aq-line);
+  border-radius: var(--aq-radius);
+  background: white;
+  padding: 1.1rem;
+  box-shadow: var(--aq-shadow-tight);
+}
+
+.aq-business-card {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--aq-line);
+  border-radius: var(--aq-radius);
+  background: white;
+  padding: 1.35rem;
+  box-shadow: var(--aq-shadow-soft);
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.aq-business-card:hover {
+  transform: translateY(-2px);
+  border-color: rgb(31 111 74 / 0.38);
+  box-shadow: var(--aq-shadow);
+}
+
+.aq-business-card::before {
+  content: "";
+  display: block;
+  width: 3rem;
+  height: 0.32rem;
+  margin-block-end: 1rem;
+  border-radius: 999px;
+  background: var(--unit-accent, var(--aq-primary));
+}
+
+.aq-unit-oils {
+  --unit-accent: var(--aq-gold);
+}
+
+.aq-unit-dates {
+  --unit-accent: #9a5a2a;
+}
+
+.aq-unit-real-estate {
+  --unit-accent: #32455f;
+}
+
+.aq-unit-import-export {
+  --unit-accent: #176b87;
+}
+
 .aq-form-grid {
   display: grid;
   gap: 1rem;
@@ -322,6 +512,63 @@ html[dir="rtl"] .aq-eyebrow {
   min-width: 720px;
 }
 
+.aq-dashboard-sidebar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  max-height: 100vh;
+  overflow-y: auto;
+  border-color: var(--aq-line);
+  background: var(--aq-ink);
+  padding: 1.25rem 1rem;
+  color: white;
+}
+
+.aq-dashboard-sidebar-head {
+  display: grid;
+  gap: 1rem;
+}
+
+.aq-dashboard-nav {
+  display: grid;
+  gap: 0.25rem;
+  margin-top: 1.75rem;
+  font-size: 0.9rem;
+  font-weight: 800;
+}
+
+.aq-dashboard-nav-link {
+  border-radius: var(--aq-radius-sm);
+  padding: 0.7rem 0.85rem;
+  color: rgb(255 255 255 / 0.78);
+  transition: background-color 160ms ease, color 160ms ease;
+}
+
+.aq-dashboard-nav-link:hover {
+  background: rgb(255 255 255 / 0.10);
+  color: white;
+}
+
+.aq-dashboard-menu {
+  display: none;
+}
+
+.aq-dashboard-menu summary {
+  min-height: 42px;
+  cursor: pointer;
+  border: 1px solid rgb(255 255 255 / 0.20);
+  border-radius: var(--aq-radius-sm);
+  padding: 0.65rem 0.85rem;
+  color: white;
+  font-size: 0.88rem;
+  font-weight: 900;
+  list-style: none;
+}
+
+.aq-dashboard-menu summary::-webkit-details-marker {
+  display: none;
+}
+
 @media (max-width: 520px) {
   .aq-logo {
     width: 40px;
@@ -332,5 +579,107 @@ html[dir="rtl"] .aq-eyebrow {
   .aq-btn-secondary,
   .aq-btn-ghost {
     width: 100%;
+  }
+}
+
+@media (max-width: 1023px) {
+  .aq-header-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .aq-header-row > .aq-nav {
+    display: none;
+  }
+
+  .aq-header-actions .aq-btn-secondary {
+    display: none;
+  }
+
+  .aq-mobile-menu {
+    display: block;
+  }
+
+  .aq-mobile-menu[open] .aq-menu-summary {
+    border-color: rgb(31 111 74 / 0.36);
+    color: var(--aq-primary-2);
+  }
+
+  .aq-mobile-menu-panel .aq-nav-link {
+    border: 1px solid var(--aq-line);
+    background: white;
+    text-align: center;
+  }
+
+  .aq-hero-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .aq-logo-panel {
+    min-height: auto;
+    padding: 1.25rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .aq-container {
+    width: min(100% - 1.25rem, 1360px);
+  }
+
+  .aq-display {
+    font-size: clamp(2rem, 12vw, 3.25rem);
+    line-height: 1.05;
+  }
+
+  .aq-title {
+    font-size: clamp(1.55rem, 9vw, 2.35rem);
+    line-height: 1.15;
+  }
+
+  .aq-hero-layout {
+    padding: 1.25rem;
+  }
+
+  .aq-stat-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 1023px) {
+  .aq-dashboard-shell {
+    display: block;
+  }
+
+  .aq-dashboard-sidebar {
+    position: sticky;
+    max-height: none;
+    overflow: visible;
+    padding: 0.85rem;
+  }
+
+  .aq-dashboard-sidebar-head {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .aq-dashboard-nav-wrap {
+    display: none;
+  }
+
+  .aq-dashboard-menu {
+    display: block;
+  }
+
+  .aq-dashboard-menu .aq-dashboard-nav {
+    position: absolute;
+    inset-inline: 0.85rem;
+    inset-block-start: calc(100% - 0.4rem);
+    z-index: 35;
+    max-height: min(70vh, 30rem);
+    overflow-y: auto;
+    border: 1px solid rgb(255 255 255 / 0.16);
+    border-radius: var(--aq-radius);
+    background: var(--aq-ink);
+    padding: 0.5rem;
+    box-shadow: 0 18px 44px rgb(0 0 0 / 0.22);
   }
 }

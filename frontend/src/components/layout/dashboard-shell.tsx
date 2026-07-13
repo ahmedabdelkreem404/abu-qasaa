@@ -49,29 +49,25 @@ export function DashboardShell({ children }: { children: ReactNode }) {
 
   return (
     <ProtectedDashboard>
-      <div className="min-h-screen bg-[#eef3f0] text-[var(--aq-ink)] lg:grid lg:grid-cols-[292px_1fr]">
-        <aside className="sticky top-0 z-30 max-h-screen overflow-y-auto border-[color:var(--aq-line)] bg-[var(--aq-ink)] px-4 py-5 text-white lg:border-r">
-          <Link href="/dashboard" className="aq-brand-mark">
-            <Image src="/brand/abu-qasaa-oils-logo.jpg" alt="Abu Qasaa Oils logo" width={48} height={48} className="aq-logo" />
-            <span>
-              <span className="block text-sm font-black">Abu Qasaa Admin</span>
-              <span className="block text-xs text-white/60">{user?.name}</span>
-            </span>
-          </Link>
-          <nav className="mt-7 grid gap-1 text-sm font-bold">
-            {navItems
-              .filter((item) => item.permission === null || hasPermission(item.permission))
-              .map((item) => (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  className="rounded-md px-3 py-2.5 text-white/78 transition hover:bg-white/10 hover:text-white"
-                >
-                  {item.label}
-                </Link>
-              ))}
-          </nav>
-          <div className="mt-7 grid gap-2">
+      <div className="aq-dashboard-shell min-h-screen bg-[#eef3f0] text-[var(--aq-ink)] lg:grid lg:grid-cols-[292px_1fr]">
+        <aside className="aq-dashboard-sidebar">
+          <div className="aq-dashboard-sidebar-head">
+            <Link href="/dashboard" className="aq-brand-mark">
+              <Image src="/brand/abu-qasaa-oils-logo.jpg" alt="Abu Qasaa Oils logo" width={48} height={48} className="aq-logo" />
+              <span>
+                <span className="block text-sm font-black">{dictionary.common.brandShort}</span>
+                <span className="block text-xs text-white/60">{user?.name}</span>
+              </span>
+            </Link>
+            <details className="aq-dashboard-menu">
+              <summary>{locale === "ar" ? "التنقل" : "Navigation"}</summary>
+              <DashboardNav navItems={navItems} hasPermission={hasPermission} />
+            </details>
+          </div>
+          <div className="aq-dashboard-nav-wrap">
+            <DashboardNav navItems={navItems} hasPermission={hasPermission} />
+          </div>
+          <div className="mt-5 grid gap-2">
             <LanguageSwitcher locale={locale} />
             <button onClick={onLogout} className="rounded-md border border-white/20 px-3 py-2 text-sm font-bold text-white/85 transition hover:bg-white/10">
               {dictionary.dashboard.logout}
@@ -94,5 +90,25 @@ export function DashboardShell({ children }: { children: ReactNode }) {
         </section>
       </div>
     </ProtectedDashboard>
+  );
+}
+
+function DashboardNav({
+  navItems,
+  hasPermission,
+}: {
+  navItems: ReturnType<typeof buildNavItems>;
+  hasPermission: (permission: string) => boolean;
+}) {
+  return (
+    <nav className="aq-dashboard-nav">
+      {navItems
+        .filter((item) => item.permission === null || hasPermission(item.permission))
+        .map((item) => (
+          <Link key={item.href} href={item.href} className="aq-dashboard-nav-link">
+            {item.label}
+          </Link>
+        ))}
+    </nav>
   );
 }

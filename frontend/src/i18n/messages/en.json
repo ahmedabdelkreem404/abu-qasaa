@@ -40,6 +40,20 @@
     "secondaryCta": "Open dashboard",
     "valuesTitle": "Built for trust, scale, and daily operations",
     "sectorsTitle": "Business sectors",
+    "permissionsMetric": "Structured operating permissions",
+    "experienceMetric": "Interface experience standard",
+    "sectorTags": {
+      "oils": "Industrial sector",
+      "dates": "Dates and gifts",
+      "realEstate": "Projects and reservations",
+      "importExport": "Trade services"
+    },
+    "sectorMetrics": {
+      "oils": "B2B and retail sales",
+      "dates": "Products and corporate gifts",
+      "realEstate": "Viewing and reservation leads",
+      "importExport": "RFQs and service requests"
+    },
     "contactTitle": "Ready to work with Abu Qasaa?",
     "contactBody": "Send a business inquiry and the right team can follow up from the dashboard."
   },
@@ -67,7 +81,16 @@
     "reports": "Reports",
     "settings": "Settings",
     "features": "Features",
-    "auditLogs": "Audit Logs"
+    "auditLogs": "Audit Logs",
+    "permissions": "Permissions",
+    "live": "Live",
+    "roles": "Roles",
+    "noRoles": "No roles",
+    "roleLabels": {
+      "super_admin": "Super Admin",
+      "business_admin": "Business Admin",
+      "staff": "Staff"
+    }
   },
   "login": {
     "title": "Dashboard login",
@@ -92,5 +115,36 @@
     "contactTitle": "Contact",
     "wholesaleTitle": "Wholesale access",
     "wholesaleBody": "Apply for partner access, check approval, and browse assigned wholesale pricing."
+  },
+  "businessUnits": {
+    "types": {
+      "oils": "Oils and lubricants",
+      "dates": "Dates and gifts",
+      "real-estate": "Real estate",
+      "import-export": "Import and export"
+    },
+    "descriptions": {
+      "oils": "Industrial oils and lubricants catalog with clear sales and supply journeys.",
+      "dates": "A polished presentation for premium dates and corporate gift products.",
+      "real-estate": "Projects, units, viewing requests, and reservations without visual clutter.",
+      "import-export": "A structured entry point for RFQs, shipping, customs, and trade services."
+    },
+    "comingSoon": {
+      "product_store": "Product catalog coming soon.",
+      "wholesale_store": "Wholesale storefront coming soon.",
+      "services_rfq": "Services and RFQs coming soon.",
+      "real_estate": "Real estate experience coming soon.",
+      "content_only": "Content page coming soon.",
+      "hybrid": "Hybrid business unit coming soon."
+    },
+    "featuredProducts": "Featured products",
+    "curatedSelection": "Curated selection.",
+    "wholesalePartner": "Wholesale / Become a partner",
+    "merchLinks": {
+      "collections": "Collections",
+      "giftBoxes": "Gift boxes",
+      "corporateGifts": "Corporate gifts",
+      "seasonal": "Seasonal"
+    }
   }
 }

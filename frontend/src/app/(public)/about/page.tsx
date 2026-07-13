@@ -20,7 +20,7 @@ export default async function AboutPage() {
         <p className="aq-eyebrow">Abu Qasaa</p>
         <h1 className="aq-title">{locale === "ar" ? page.title_ar : (page.title_en ?? page.title_ar)}</h1>
       </div>
-      <SectionRenderer sections={page.sections} />
+      <SectionRenderer sections={page.sections} locale={locale} />
     </section>
   );
 }

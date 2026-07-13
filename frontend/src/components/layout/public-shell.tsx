@@ -22,8 +22,8 @@ export async function PublicShell({ children }: { children: ReactNode }) {
 
   return (
     <div className="aq-shell-bg min-h-screen text-[var(--aq-ink)]">
-      <header className="sticky top-0 z-40 border-b border-[color:var(--aq-line)] bg-white/90 backdrop-blur-xl">
-        <nav className="aq-container flex items-center justify-between gap-4 py-3">
+      <header className="aq-public-header">
+        <nav className="aq-container aq-header-row">
           <Link href="/" className="aq-brand-mark">
             <Image src="/brand/abu-qasaa-oils-logo.jpg" alt="Abu Qasaa Oils logo" width={48} height={48} className="aq-logo" />
             <span className="min-w-0">
@@ -31,27 +31,30 @@ export async function PublicShell({ children }: { children: ReactNode }) {
               <span className="hidden text-xs font-semibold text-[var(--aq-muted)] sm:block">{dictionary.home.eyebrow}</span>
             </span>
           </Link>
-          <div className="hidden items-center gap-1 rounded-full border border-[color:var(--aq-line)] bg-white p-1 text-sm font-bold text-[var(--aq-ink-2)] shadow-sm lg:flex">
+          <div className="aq-nav">
             {menuLinks.map((link) => (
-              <Link key={link.href} href={link.href} className="rounded-full px-3 py-2 transition hover:bg-[var(--aq-soft)]">
+              <Link key={link.href} href={link.href} className="aq-nav-link">
                 {link.label}
               </Link>
             ))}
           </div>
-          <div className="flex items-center gap-2">
+          <div className="aq-header-actions">
             <LanguageSwitcher locale={locale} />
             <Link href="/dashboard" className="aq-btn-secondary hidden sm:inline-flex">
               {dictionary.common.dashboard}
             </Link>
           </div>
         </nav>
-        <div className="aq-container flex gap-2 overflow-x-auto pb-3 text-sm font-bold text-[var(--aq-ink-2)] lg:hidden">
-          {menuLinks.map((link) => (
-            <Link key={link.href} href={link.href} className="shrink-0 rounded-full border border-[color:var(--aq-line)] bg-white px-3 py-2">
-              {link.label}
-            </Link>
-          ))}
-        </div>
+        <details className="aq-container aq-mobile-menu">
+          <summary className="aq-menu-summary">{locale === "ar" ? "القائمة" : "Menu"}</summary>
+          <div className="aq-mobile-menu-panel">
+            {menuLinks.map((link) => (
+              <Link key={link.href} href={link.href} className="aq-nav-link">
+                {link.label}
+              </Link>
+            ))}
+          </div>
+        </details>
       </header>
       <main className="aq-container py-8 sm:py-12">{children}</main>
       <footer className="border-t border-[color:var(--aq-line)] bg-[var(--aq-ink)] text-white">
