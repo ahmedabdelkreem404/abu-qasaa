@@ -118,3 +118,34 @@ Before opening staging to testers:
 - Confirm `APP_DEBUG=false`.
 - Confirm CORS is restricted to the staging frontend origin.
 - Confirm logs are written outside the public web root.
+
+## Issue Classification
+
+P0 blockers:
+
+- Data loss.
+- Payment incorrectly marked paid.
+- Authorization bypass.
+- Cross-business-unit leakage.
+- Secret exposure.
+- Production completely unavailable.
+
+P1 blockers:
+
+- Core checkout broken.
+- Inventory corruption.
+- Real-estate reservation conflict.
+- RFQ submission broken.
+- Admin cannot operate core workflows.
+
+P2 findings:
+
+- Non-critical workflow issue.
+- Layout issue affecting usability.
+- Missing validation message.
+
+P3 findings:
+
+- Cosmetic or documentation issue.
+
+Fix every P0/P1 before production launch. P2 may be fixed before launch or explicitly accepted. P3 may move to post-launch backlog.
