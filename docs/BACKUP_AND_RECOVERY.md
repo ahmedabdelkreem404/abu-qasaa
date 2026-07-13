@@ -18,7 +18,8 @@ export DB_HOST=127.0.0.1
 export DB_PORT=3306
 export DB_DATABASE=abu_qasaa
 export DB_USERNAME=abu_qasaa
-export DB_PASSWORD="set-outside-git"
+read -r -s -p "Database password: " DB_PASSWORD
+export DB_PASSWORD
 export BACKUP_DIR=/secure/backups/abu-qasaa
 
 scripts/backup-database.sh

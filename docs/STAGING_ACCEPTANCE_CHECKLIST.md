@@ -80,6 +80,7 @@ Environment under test:
 | --- | --- | --- | --- | --- |
 | STG-001 | P1 | OPEN | External staging deployment has not been executed from this environment. | Deploy to staging with real server credentials and run this checklist. |
 | STG-002 | P1 | OPEN | Staging smoke tests have not been executed against real URLs. | Record PASS/FAIL results with tested URLs before production launch. |
+| STG-003 | P2 | OPEN | `npm audit --omit=dev` reports two moderate advisories through `next` -> `postcss <8.5.10`; npm recommends a force fix that would apply a breaking dependency change. | Review when a safe Next.js patch is available; do not run `npm audit fix --force` blindly. |
 
 ## Launch Decision
 

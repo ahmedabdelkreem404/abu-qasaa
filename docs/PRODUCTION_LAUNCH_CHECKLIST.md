@@ -82,6 +82,7 @@ Reason: external staging deployment and staging smoke tests have not yet been ex
 | PROD-001 | P1 | Staging deployment has not been executed. | Deploy to staging using the runbook. |
 | PROD-002 | P1 | Staging smoke checklist is pending. | Complete `docs/STAGING_ACCEPTANCE_CHECKLIST.md`. |
 | PROD-003 | P1 | Production environment credentials and server access are not present in this repository environment. | Operator must provide credentials outside Git and execute deployment. |
+| PROD-004 | P2 | `npm audit --omit=dev` reports moderate PostCSS advisories through Next.js. | Review and upgrade through a safe Next.js patch path before or after launch according to risk acceptance. |
 
 ## Launch Decision
 
