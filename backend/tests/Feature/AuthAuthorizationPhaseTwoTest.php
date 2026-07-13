@@ -21,7 +21,7 @@ class AuthAuthorizationPhaseTwoTest extends TestCase
 
         $this->postJson('/api/v1/auth/login', [
             'email' => 'admin@abuqasaa.test',
-            'password' => 'password',
+            'password' => env('SUPER_ADMIN_PASSWORD', 'password'),
         ])
             ->assertOk()
             ->assertJsonPath('success', true)
@@ -49,7 +49,7 @@ class AuthAuthorizationPhaseTwoTest extends TestCase
         $this->seed();
         $token = $this->postJson('/api/v1/auth/login', [
             'email' => 'admin@abuqasaa.test',
-            'password' => 'password',
+            'password' => env('SUPER_ADMIN_PASSWORD', 'password'),
         ])->json('data.token');
 
         $this->withToken($token)->getJson('/api/v1/auth/me')

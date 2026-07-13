@@ -181,7 +181,7 @@ return new class extends Migration
             $table->string('tax_number')->nullable();
             $table->string('commercial_record')->nullable();
             $table->string('approval_status')->nullable();
-            $table->foreignId('price_list_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('price_list_id')->nullable();
             $table->text('notes')->nullable();
             $table->json('metadata_json')->nullable();
             $table->timestamps();
@@ -321,6 +321,10 @@ return new class extends Migration
             $table->boolean('is_active')->default(true);
             $table->timestamps();
             $table->unique(['business_unit_id', 'key']);
+        });
+
+        Schema::table('customers', function (Blueprint $table): void {
+            $table->foreign('price_list_id')->references('id')->on('price_lists')->nullOnDelete();
         });
 
         Schema::create('product_prices', function (Blueprint $table): void {

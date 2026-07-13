@@ -101,6 +101,21 @@ class ProductionReadinessPhaseFourteenTest extends TestCase
         );
     }
 
+    public function test_platform_foundation_migration_adds_customer_price_list_foreign_key_after_price_lists_exist(): void
+    {
+        $migration = file_get_contents(database_path('migrations/2026_07_09_000000_create_platform_foundation_tables.php'));
+
+        $customersCreate = strpos($migration, "Schema::create('customers'");
+        $priceListsCreate = strpos($migration, "Schema::create('price_lists'");
+        $customerPriceListForeignKey = strpos($migration, "Schema::table('customers'", $priceListsCreate);
+
+        $this->assertNotFalse($customersCreate);
+        $this->assertNotFalse($priceListsCreate);
+        $this->assertNotFalse($customerPriceListForeignKey);
+        $this->assertGreaterThan($customersCreate, $priceListsCreate);
+        $this->assertGreaterThan($priceListsCreate, $customerPriceListForeignKey);
+    }
+
     public function test_frontend_uses_local_fonts_only(): void
     {
         $frontendRoot = dirname(__DIR__, 2).'/../frontend/src';

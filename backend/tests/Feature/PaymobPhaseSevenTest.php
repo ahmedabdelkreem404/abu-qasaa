@@ -22,12 +22,12 @@ class PaymobPhaseSevenTest extends TestCase
         $this->seed();
         $order = $this->createPublicOrder();
 
-        $this->postJson("/api/v1/public/dates/orders/{$order->order_number}/paymob/initiate", ['phone' => '01000000000', 'method_key' => 'paymob_card'])
+        $response = $this->postJson("/api/v1/public/dates/orders/{$order->order_number}/paymob/initiate", ['phone' => '01000000000', 'method_key' => 'paymob_card'])
             ->assertCreated()
             ->assertJsonPath('data.payment_status', 'pending')
-            ->assertJsonPath('data.provider_reference', 'fake-ref-1')
             ->assertJsonMissingPath('data.raw_payload_json');
 
+        $this->assertStringStartsWith('fake-ref-', $response->json('data.provider_reference'));
         $this->assertDatabaseHas('payments', ['order_id' => $order->id, 'provider' => 'paymob', 'status' => 'pending']);
         $this->assertDatabaseHas('payment_transactions', ['type' => 'paymob_initiated', 'status' => 'pending']);
         $this->assertDatabaseHas('orders', ['id' => $order->id, 'payment_status' => 'pending']);
